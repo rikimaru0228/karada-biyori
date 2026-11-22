@@ -1,0 +1,1733 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>からだ日和</title>
+<meta name="theme-color" content="#2C5641">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="からだ日和">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<link rel="icon" href="icons/icon-192.png">
+<style>
+:root{color-scheme:light;
+  --bg:#F6F3EC; --surface:#FFFFFF; --surface2:#FBF9F4; --line:#E5DED1; --line2:#D6CEBF;
+  --ink:#1E2923; --ink2:#4F5B54; --ink3:#66706A;
+  --green:#2C5641; --green2:#3B6B53; --greenSoft:#E3ECE5; --greenSoft2:#F0F5F1;
+  --amber:#8A4F1C; --amberSoft:#F6EBDD;
+  --m1:#B5562E; --m2:#D49A6A; --m3:#CDC4B1; --m4:#7FA48C; --m5:#2C5641;
+  --sans:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP","Noto Sans CJK JP","Yu Gothic UI","Yu Gothic","Meiryo",system-ui,sans-serif;
+  --serif:"Hiragino Mincho ProN","Yu Mincho","YuMincho","Noto Serif JP","Noto Serif CJK JP",serif;
+  --r:20px; --shadow:0 1px 2px rgba(40,35,20,.05),0 6px 24px rgba(40,35,20,.06);
+  --tabh:72px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.7;-webkit-font-smoothing:antialiased;-webkit-text-size-adjust:100%}
+button{font:inherit;color:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
+input,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid #8DB39C;outline-offset:2px;border-radius:10px}
+h1,h2,h3,p{margin:0}
+.serif{font-family:var(--serif);font-weight:600;letter-spacing:.02em}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+/* ---------- layout ---------- */
+.app{min-height:100vh}
+.side{display:none}
+main{min-height:100vh;padding-bottom:calc(var(--tabh) + env(safe-area-inset-bottom) + 24px)}
+.topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:8px;height:56px;padding:0 12px 0 16px;background:rgba(246,243,236,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.topbar .brand{font-family:var(--serif);font-weight:600;font-size:18px;letter-spacing:.06em;color:var(--green)}
+.topbar .ttl{font-weight:700;font-size:17px}
+.topbar .sp{flex:1}
+.iconbtn{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border:0;background:transparent;border-radius:14px;color:var(--ink)}
+.iconbtn:hover{background:rgba(0,0,0,.04)}
+.demochip{display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 12px 0 10px;border-radius:999px;border:1px dashed #A88A5E;background:#FBF4E8;color:var(--amber);font-size:13px;font-weight:700}
+.demochip .dot{width:8px;height:8px;border-radius:50%;background:#C98A3E}
+#view{padding:8px 16px 24px;max-width:720px;margin:0 auto}
+.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:30;display:grid;grid-template-columns:repeat(4,1fr);height:calc(var(--tabh) + env(safe-area-inset-bottom));padding-bottom:env(safe-area-inset-bottom);background:rgba(255,255,255,.96);border-top:1px solid var(--line);backdrop-filter:blur(10px)}
+.tab{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;border:0;background:transparent;color:var(--ink3);font-size:12px;font-weight:600}
+.tab[aria-current="page"]{color:var(--green)}
+.tab svg{width:24px;height:24px}
+
+@media (min-width:960px){
+  .app{display:grid;grid-template-columns:280px 1fr}
+  .side{display:flex;flex-direction:column;position:sticky;top:0;height:100vh;padding:28px 20px;border-right:1px solid var(--line);background:var(--surface2);overflow:auto}
+  .tabbar{display:none}
+  main{padding-bottom:40px}
+  .topbar{height:72px;padding:0 40px}
+  .topbar .brand,.topbar .demochip{display:none}
+  .topbar .ttl{font-size:20px}
+  #view{max-width:1100px;padding:8px 40px 48px;margin:0}
+  .home-grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:24px;align-items:start}
+  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start}
+}
+.side .brand{font-family:var(--serif);font-size:24px;font-weight:600;color:var(--green);letter-spacing:.08em}
+.side .brand small{display:block;font-family:var(--sans);font-size:12px;color:var(--ink3);letter-spacing:.02em;font-weight:500;margin-top:2px}
+.snav{display:flex;flex-direction:column;gap:4px;margin:28px 0}
+.snav button{display:flex;align-items:center;gap:12px;height:48px;padding:0 14px;border:0;border-radius:14px;background:transparent;font-weight:600;color:var(--ink2);text-align:left}
+.snav button:hover{background:rgba(0,0,0,.04)}
+.snav button[aria-current="page"]{background:var(--greenSoft);color:var(--green)}
+.snav svg{width:22px;height:22px}
+.demopanel{margin-top:auto;border:1px dashed #C7A877;border-radius:16px;padding:14px;background:#FCF7EE}
+.demopanel h3{font-size:13px;color:var(--amber);display:flex;align-items:center;gap:6px}
+.demopanel p{font-size:12px;color:var(--ink2);line-height:1.6;margin-top:4px}
+
+/* ---------- common ---------- */
+.card{background:var(--surface);border-radius:var(--r);box-shadow:var(--shadow);padding:20px;margin-bottom:16px}
+.card.flat{box-shadow:none;border:1px solid var(--line);background:var(--surface2)}
+.eyebrow{font-size:13px;font-weight:700;color:var(--ink3);letter-spacing:.04em;display:flex;align-items:center;gap:8px}
+.h2{font-size:20px;font-weight:700;line-height:1.5}
+.sub{color:var(--ink2);font-size:15px}
+.small{font-size:13px;color:var(--ink3)}
+.row{display:flex;align-items:center;gap:8px}
+.between{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.stack>*+*{margin-top:12px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 20px;border-radius:14px;border:1px solid transparent;font-weight:700;font-size:16px;background:var(--green);color:#fff;transition:transform .12s, background .2s}
+.btn:active{transform:scale(.98)}
+.btn:hover{background:#234736}
+.btn.sec{background:var(--surface);color:var(--green);border-color:var(--line2)}
+.btn.sec:hover{background:var(--greenSoft2)}
+.btn.ghost{background:transparent;color:var(--green);padding:0 12px}
+.btn.ghost:hover{background:var(--greenSoft2)}
+.btn.danger{background:var(--surface);color:#9A3B1A;border-color:#E3C6B8}
+.btn.block{width:100%}
+.btn[disabled]{opacity:.45;pointer-events:none}
+.link{border:0;background:none;color:var(--green);font-weight:700;padding:10px 4px;min-height:44px;text-decoration:underline;text-underline-offset:4px;text-decoration-thickness:1px}
+.tag{display:inline-flex;align-items:center;gap:4px;height:24px;padding:0 10px;border-radius:999px;font-size:12px;font-weight:700;background:var(--greenSoft);color:var(--green);white-space:nowrap}
+.tag.amber{background:var(--amberSoft);color:var(--amber)}
+.tag.gray{background:#EEEAE2;color:var(--ink2)}
+.tag.demo{background:#FBF1E1;color:var(--amber);border:1px dashed #C7A877}
+.divider{height:1px;background:var(--line);margin:16px 0}
+.fadein{animation:fade .28s ease both}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* ---------- home ---------- */
+.hello{padding:12px 4px 18px}
+.hello .date{font-size:14px;color:var(--ink3);font-weight:600}
+.hello h1{font-size:28px;margin-top:2px}
+.moods{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:16px}
+.mood{display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 2px 10px;min-height:88px;border-radius:16px;border:1px solid var(--line);background:var(--surface2);color:var(--ink2);font-size:13px;font-weight:700;transition:background .15s,border-color .15s,color .15s}
+.mood:hover{border-color:var(--green2);color:var(--green)}
+.mood[aria-pressed="true"]{background:var(--green);border-color:var(--green);color:#fff}
+.hero{padding:22px 20px}
+.hero .h2{font-size:22px}
+.sumgrid{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;margin-top:14px;font-size:15px}
+.sumgrid dt{color:var(--ink3);font-weight:600}
+.sumgrid dd{margin:0}
+.pending{color:var(--ink3)}
+.strip{display:grid;grid-template-columns:repeat(14,1fr);gap:4px;margin-top:14px}
+.strip button{display:flex;flex-direction:column;align-items:center;gap:4px;border:0;background:transparent;padding:4px 0;border-radius:10px;min-height:52px}
+.strip button:hover{background:rgba(0,0,0,.04)}
+.strip .wd{font-size:11px;color:var(--ink3);font-weight:600}
+.dotm{width:18px;height:18px;border-radius:50%}
+.dotm.none{border:1.5px dashed #A79F90;background:transparent}
+.strip .today .wd{color:var(--green);font-weight:800}
+.strip .today .dotm{box-shadow:0 0 0 3px var(--bg),0 0 0 4.5px var(--green)}
+.legend{display:flex;flex-wrap:wrap;gap:12px;margin-top:10px;font-size:12px;color:var(--ink3)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:50%}
+.progress{height:8px;border-radius:99px;background:#ECE6DA;overflow:hidden;margin-top:10px}
+.progress b{display:block;height:100%;background:var(--green2);border-radius:99px}
+.exp-card{background:linear-gradient(0deg,var(--surface),var(--surface));border:1px solid #EAD9C2}
+.checkrow{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.seg{display:flex;flex-wrap:wrap;gap:6px}
+.opt{min-height:44px;padding:0 14px;border-radius:12px;border:1px solid var(--line2);background:var(--surface);font-weight:600;font-size:15px;color:var(--ink2);transition:background .15s,border-color .15s}
+.opt:hover{border-color:var(--green2)}
+.opt[aria-pressed="true"]{background:var(--green);border-color:var(--green);color:#fff}
+.opt.sm{min-height:40px;padding:0 10px;font-size:14px}
+.welcome-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:18px 0 6px}
+.wstep{text-align:center;font-size:12px;color:var(--ink2);font-weight:600}
+.wstep b{display:flex;align-items:center;justify-content:center;margin:0 auto 6px;width:40px;height:40px;border-radius:50%;background:var(--greenSoft);color:var(--green);font-size:15px}
+
+/* ---------- log ---------- */
+.dayrow{display:flex;align-items:center;gap:14px;width:100%;padding:14px 12px;border:0;border-radius:16px;background:transparent;text-align:left;min-height:64px}
+.dayrow:hover{background:rgba(0,0,0,.035)}
+.dayrow .d{width:84px;flex:none;font-weight:700;font-size:15px}
+.dayrow .d small{display:block;font-weight:500;color:var(--ink3);font-size:12px}
+.dayrow .s{flex:1;min-width:0;font-size:14px;color:var(--ink2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gaprow{display:flex;align-items:center;gap:12px;padding:12px;margin:4px 0;border-radius:16px;border:1.5px dashed #CFC7B8;color:var(--ink3);font-size:14px}
+.kv{display:grid;grid-template-columns:7.5em 1fr;gap:8px 12px;font-size:15px}
+.kv dt{color:var(--ink3);font-weight:600}
+.kv dd{margin:0}
+.na{color:var(--ink3);font-size:14px;border:1px dashed #BDB4A4;border-radius:8px;padding:0 6px}
+.none0{color:var(--green);font-weight:600}
+
+/* ---------- insight ---------- */
+.ins-title{font-size:21px;line-height:1.55;margin-top:6px}
+.bigq{font-size:24px;line-height:1.55}
+.dots{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.dots i{width:16px;height:16px;border-radius:50%;border:2px solid var(--green2)}
+.dots i.f{background:var(--green2)}
+.dots.b i{border-color:var(--m1)}
+.dots.b i.f{background:var(--m1)}
+.cmp{display:grid;grid-template-columns:1fr;gap:16px;margin-top:8px}
+.cmp .lab{font-weight:700;font-size:15px}
+.cmp .num{font-size:14px;color:var(--ink2)}
+.sec-h{font-size:16px;font-weight:800;margin:4px 0 8px;display:flex;align-items:center;gap:8px}
+.sec-h .n{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:var(--greenSoft);color:var(--green);font-size:13px}
+ul.plain{margin:0;padding-left:1.2em}
+ul.plain li{margin:4px 0}
+.notice{display:flex;gap:10px;padding:12px 14px;border-radius:14px;background:#FBF4E8;border:1px dashed #C7A877;color:#5E4422;font-size:13px;line-height:1.6;margin-bottom:16px}
+.bars{display:grid;gap:12px;margin-top:10px}
+.bar .t{display:flex;justify-content:space-between;font-size:14px;color:var(--ink2);gap:8px}
+.bar .track{height:14px;border-radius:8px;background:#EEE8DC;overflow:hidden;margin-top:4px}
+.bar .track b{display:block;height:100%;border-radius:8px;background:#A9B9AE}
+.bar.during .track b{background:var(--green2)}
+.cand{display:block;width:100%;text-align:left;padding:14px 16px;border-radius:16px;border:1px solid var(--line2);background:var(--surface);margin-bottom:8px;min-height:64px}
+.cand[aria-pressed="true"]{border:2px solid var(--green);background:var(--greenSoft2);padding:13px 15px}
+.cand b{display:block;font-size:16px}
+.cand small{color:var(--ink3);font-size:13px}
+.calrow{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-top:10px}
+.cal{display:flex;flex-direction:column;align-items:center;font-size:11px;color:var(--ink3);gap:3px}
+.cal i{width:28px;height:28px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-style:normal;font-size:12px;font-weight:700}
+.cal .done{background:var(--green2);color:#fff}
+.cal .part{background:#B9CDBF;color:var(--ink)}
+.cal .no{background:#EED9CB;color:#7A3A1C}
+.cal .unk{border:1.5px dashed #BDB4A4;color:var(--ink3)}
+.cal .fut{background:#F1EDE5;color:#B0A898}
+.cal .tdy{outline:2px solid var(--green);outline-offset:2px}
+
+/* ---------- overlay / sheet ---------- */
+.scrim{position:fixed;inset:0;z-index:50;background:rgba(25,30,27,.38);animation:fade2 .2s ease both}
+@keyframes fade2{from{opacity:0}to{opacity:1}}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:51;display:flex;flex-direction:column;max-height:94vh;height:94vh;background:var(--bg);border-radius:24px 24px 0 0;box-shadow:0 -8px 40px rgba(0,0,0,.18);animation:up .28s cubic-bezier(.2,.8,.2,1) both}
+.sheet.small{height:auto}
+@keyframes up{from{transform:translateY(40px);opacity:.4}to{transform:none;opacity:1}}
+@media (min-width:960px){
+  .sheet{left:50%;top:50%;bottom:auto;right:auto;width:640px;height:min(860px,90vh);max-height:90vh;border-radius:24px;transform:translate(-50%,-50%);animation:pop .24s cubic-bezier(.2,.8,.2,1) both}
+  .sheet.small{height:auto;width:520px}
+  @keyframes pop{from{opacity:0;transform:translate(-50%,-48%) scale(.98)}to{opacity:1;transform:translate(-50%,-50%)}}
+}
+.sh-head{display:flex;align-items:center;gap:8px;padding:10px 10px 4px 20px}
+.sh-head .t{flex:1;font-weight:800;font-size:17px}
+.grab{width:40px;height:5px;border-radius:9px;background:#D3CBBD;margin:8px auto 0}
+@media (min-width:960px){.grab{display:none}}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:6px 20px 10px}
+.stepb{border:0;background:transparent;padding:6px 0 0;text-align:left;font-size:13px;font-weight:700;color:var(--ink3);min-height:44px}
+.stepb i{display:block;height:4px;border-radius:9px;background:#E2DBCD;margin-bottom:6px}
+.stepb[aria-current="step"]{color:var(--green)}
+.stepb[aria-current="step"] i,.stepb.done i{background:var(--green2)}
+.sh-body{flex:1;overflow:auto;padding:6px 20px 24px;-webkit-overflow-scrolling:touch}
+.sh-foot{display:flex;gap:10px;align-items:center;padding:12px 20px calc(12px + env(safe-area-inset-bottom));border-top:1px solid var(--line);background:var(--surface2)}
+.sh-foot .sp{flex:1}
+.q{margin:18px 0 8px;font-weight:800;font-size:16px;display:flex;align-items:baseline;gap:8px}
+.q small{font-weight:600;color:var(--ink3);font-size:13px}
+.symrow{display:grid;grid-template-columns:1fr auto;align-items:center;gap:8px;padding:10px 0;border-bottom:1px solid var(--line)}
+.symrow .nm{font-weight:700;font-size:15px}
+.symrow .st{display:block;font-size:12px;color:var(--ink3);font-weight:600}
+.symrow .seg{flex-wrap:nowrap;gap:4px}
+.symrow .opt{min-height:40px;padding:0 9px;font-size:14px}
+.slots{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;background:#ECE6DA;border-radius:14px;padding:4px}
+.slot{border:0;background:transparent;border-radius:11px;min-height:44px;font-weight:700;color:var(--ink2);display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.2;font-size:15px}
+.slot small{font-size:11px;font-weight:600;color:var(--ink3)}
+.slot[aria-pressed="true"]{background:var(--surface);color:var(--green);box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:0 14px;border-radius:999px;border:1px solid var(--line2);background:var(--surface);font-size:15px;font-weight:600;color:var(--ink)}
+.chip:hover{border-color:var(--green2)}
+.chip.on{background:var(--greenSoft);border-color:#B7CDBE;color:var(--green)}
+.chip .x{display:inline-flex;width:20px;height:20px;align-items:center;justify-content:center;border-radius:50%;background:rgba(44,86,65,.12);font-size:13px}
+.plate{width:22px;height:22px;border-radius:50%;flex:none;box-shadow:inset 0 0 0 3px #fff,0 0 0 1px #E0D8C9}
+.inrow{display:flex;gap:8px}
+.inp{flex:1;min-width:0;height:48px;border-radius:12px;border:1px solid var(--line2);background:var(--surface);padding:0 14px;font-size:16px}
+.inp:focus{outline:2px solid #8DB39C;border-color:transparent}
+textarea.inp{height:88px;padding:10px 14px;resize:vertical}
+.empty-hint{padding:12px 14px;border-radius:12px;background:var(--surface2);border:1px dashed var(--line2);font-size:14px;color:var(--ink2)}
+.orow{display:grid;grid-template-columns:7em 1fr;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid var(--line)}
+.orow .lb{font-weight:700;font-size:15px}
+.orow .lb small{display:block;font-size:12px;color:var(--ink3);font-weight:600}
+@media (max-width:420px){.orow{grid-template-columns:1fr}}
+.weather{display:inline-flex;align-items:center;gap:6px;font-size:14px;color:var(--ink2)}
+.dialog{padding:22px 22px 18px}
+.dialog .h2{font-size:18px}
+.dialog p{margin-top:8px;color:var(--ink2);font-size:15px}
+.dialog .acts{display:flex;gap:10px;justify-content:flex-end;margin-top:20px;flex-wrap:wrap}
+
+/* demo sheet */
+.scn{display:flex;gap:12px;align-items:flex-start;width:100%;text-align:left;padding:14px;border:1px solid var(--line2);border-radius:16px;background:var(--surface);margin-bottom:8px}
+.scn[aria-pressed="true"]{border:2px solid var(--amber);padding:13px;background:#FFFBF4}
+.scn b{display:block;font-size:15px}
+.scn small{display:block;font-size:13px;color:var(--ink3);line-height:1.5}
+.scn .rd{width:20px;height:20px;border-radius:50%;border:2px solid var(--line2);flex:none;margin-top:2px}
+.scn[aria-pressed="true"] .rd{border:6px solid var(--amber)}
+.sidescn{display:flex;flex-direction:column;gap:4px;margin-top:10px}
+.sidescn button{display:flex;align-items:center;gap:8px;text-align:left;border:0;background:transparent;border-radius:10px;padding:8px;font-size:13px;font-weight:600;color:var(--ink2);min-height:40px}
+.sidescn button:hover{background:rgba(0,0,0,.04)}
+.sidescn button[aria-pressed="true"]{background:#F4E4CC;color:#5E3A12}
+.sidescn .rd{width:14px;height:14px;border-radius:50%;border:2px solid #C7A877;flex:none}
+.sidescn button[aria-pressed="true"] .rd{border:4px solid var(--amber)}
+
+/* toast */
+#toast{position:fixed;left:50%;bottom:calc(var(--tabh) + env(safe-area-inset-bottom) + 14px);transform:translateX(-50%);z-index:60;display:none;align-items:center;gap:6px;max-width:calc(100vw - 24px);padding:6px 6px 6px 18px;border-radius:16px;background:#22302A;color:#fff;font-size:15px;box-shadow:0 8px 28px rgba(0,0,0,.25)}
+#toast.show{display:flex;animation:toastin .22s ease both}
+@keyframes toastin{from{opacity:0;transform:translate(-50%,8px)}to{opacity:1;transform:translate(-50%,0)}}
+#toast button{border:0;background:rgba(255,255,255,.12);color:#CFE6D6;font-weight:800;min-height:40px;padding:0 14px;border-radius:12px}
+#toast .msg{padding-right:6px}
+@media (min-width:960px){#toast{bottom:28px;left:calc(50% + 140px)}}
+
+/* --- 調整 --- */
+.eyebrow{white-space:nowrap}
+.eyebrow svg{width:18px;height:18px;flex:none}
+.mood span{white-space:nowrap;font-size:12.5px;letter-spacing:-.03em}
+#toast{width:max-content}
+#toast button{white-space:nowrap;flex:none}
+.topbar .ttl{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.demochip{white-space:nowrap;flex:none;max-width:64vw;overflow:hidden;text-overflow:ellipsis}
+.checkrow .opt{padding:0 6px;font-size:14.5px;white-space:nowrap}
+@media (max-width:420px){.bigq{font-size:21px}.hello h1{font-size:26px}}
+
+/* 段階表示 */
+.ins-layout{display:block}
+@media (min-width:960px){.ins-layout{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:24px;align-items:start}.ins-layout>div:last-child{position:sticky;top:88px}}
+.kf{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px}
+.kf>div{display:flex;flex-direction:column;padding:12px 14px;border-radius:14px;background:var(--surface2);border:1px solid var(--line)}
+.kf b{font-size:30px;line-height:1.3;color:var(--green)}
+.kf>div:last-child b{color:var(--m1)}
+.kf b small{font-size:15px;color:var(--ink2);font-family:var(--sans);font-weight:600}
+.acc-wrap{padding:4px 16px}
+.acc{border-bottom:1px solid var(--line)}
+.acc:last-child{border-bottom:0}
+.acc summary{list-style:none;display:flex;align-items:center;gap:12px;padding:14px 2px;cursor:pointer;min-height:60px}
+.acc summary::-webkit-details-marker{display:none}
+.acc .n{display:inline-flex;align-items:center;justify-content:center;flex:none;width:26px;height:26px;border-radius:50%;background:var(--greenSoft);color:var(--green);font-size:13px;font-weight:800}
+.acc-t{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.5}
+.acc-t b{font-size:16px}
+.acc .chev{display:inline-flex;color:var(--ink3);transition:transform .2s}
+.acc[open] .chev{transform:rotate(90deg)}
+.acc-b{padding:0 2px 18px 38px}
+@media (max-width:420px){.acc-b{padding-left:2px}}
+/* 最近の自分 */
+.rc{display:grid;grid-template-columns:5.5em 1fr;gap:10px 12px;margin-top:12px;font-size:15px;align-items:start}
+.rc dt{color:var(--ink3);font-weight:700;font-size:14px;padding-top:1px}
+.rc dd{margin:0}
+.mbar{display:flex;height:10px;border-radius:6px;overflow:hidden;margin:4px 0 6px;background:#EEE8DC}
+.mbar i{display:block;height:100%}
+.daylink{border:0;background:none;padding:0;color:var(--green);font-weight:700;text-decoration:underline;text-underline-offset:3px;min-height:32px;font-size:15px}
+.q{flex-wrap:wrap;row-gap:0}
+.rc{grid-template-columns:6.8em 1fr}
+
+/* 重なり */
+.tlwrap{overflow-x:auto;margin-top:12px;-webkit-overflow-scrolling:touch}
+.tl{display:grid;gap:3px;min-width:min-content;align-items:center}
+.tl-h{border:0;background:transparent;font-size:12px;font-weight:700;color:var(--ink2);display:flex;flex-direction:column;align-items:center;line-height:1.3;padding:4px 0;border-radius:10px;min-height:44px;justify-content:center;white-space:nowrap}
+.tl-h small{font-weight:500;color:var(--ink3);font-size:11px}
+.tl-h.lab{position:sticky;left:0;background:var(--surface);z-index:1}
+.tl-h.cur{color:var(--amber)}
+.tl-h.sel{background:var(--greenSoft);color:var(--green)}
+.tl-g{grid-column:1/-1;font-size:11px;font-weight:800;color:var(--ink3);letter-spacing:.04em;padding:8px 2px 0;position:sticky;left:0}
+.tl-l{position:sticky;left:0;background:var(--surface);z-index:1;font-size:12px;font-weight:700;color:var(--ink2);line-height:1.3;padding-right:4px}
+.tl-c{display:flex;justify-content:center;padding:2px 0;border-radius:8px}
+.tl-c.cur{background:#FBF1E3}
+.tl-c.sel{box-shadow:inset 0 0 0 2px #9DBBA8}
+.c{display:inline-flex;align-items:center;justify-content:center;min-width:30px;height:28px;padding:0 3px;border-radius:7px;font-size:12px;font-weight:700;color:var(--ink)}
+.c.u{border:1.5px dashed #BDB4A4;background:transparent;width:28px;min-width:28px}
+.c.f{background:#F1EDE5;width:28px;min-width:28px}
+.c.t{background:#F2EEE6}
+.c.t.s{background:#F3DDC8;color:#7A3A1C}
+.c.w{gap:1px;background:transparent}
+.c.w svg{width:15px;height:15px}
+.c.w b{font-size:11px;color:#7A3A1C}
+.whenrow{display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:8px 0 10px;border-bottom:1px solid var(--line)}
+.chip.sm{min-height:36px;padding:0 12px;font-size:14px}
+.ov-row{padding:10px 0;border-top:1px dashed var(--line)}
+.ov-row:first-child{border-top:0}
+.ov-t{font-weight:700;font-size:14px}
+.ov-lags{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin-top:6px}
+.ov-c{display:flex;flex-direction:column;gap:3px;padding:6px;border-radius:10px;background:var(--surface2);border:1px solid var(--line)}
+.ov-c.hi{border:2px solid #C98A3E;padding:5px;background:#FFF8EE}
+.ov-lab{font-size:11px;font-weight:700;color:var(--ink3)}
+.ob{display:block;height:6px;border-radius:4px;background:#ECE6DA;overflow:hidden}
+.ob i{display:block;height:100%}
+.ob.u i{background:#C2703D}
+.ob.c i{background:#8FAE9A}
+.ob.key{display:inline-block;width:18px;vertical-align:middle;margin:0 3px 0 6px}
+.fr{font-size:11px;color:var(--ink2);white-space:nowrap}
+.na2{color:var(--ink3)}
+.dotk{width:12px;height:12px;border-radius:50%;flex:none}
+.dotk.seen{background:#C98A3E}.dotk.nomatch{background:#A9B9AE}.dotk.lack{border:1.5px dashed #A79F90}
+.wk{margin-top:8px;font-size:14px}
+.wk-h,.wk-r{display:grid;grid-template-columns:4.5em 1.4fr 1fr 1fr;gap:6px;padding:7px 0;border-bottom:1px solid var(--line);align-items:center}
+.wk-h{font-size:12px;color:var(--ink3);font-weight:700}
+.wk-r small{color:var(--ink3);font-size:11px;margin-left:3px}
+.recap{padding:0}
+.recap-h{display:flex;flex-direction:column;align-items:flex-start;gap:4px;width:100%;text-align:left;border:0;background:transparent;padding:18px 20px 14px;border-radius:var(--r)}
+.recap-h .mbar{width:100%;margin:6px 0 2px}
+.recap-l{font-size:15px}
+.recap-more{align-self:flex-end;display:inline-flex;align-items:center;gap:2px;color:var(--green);font-weight:700;font-size:14px}
+.recap-more .chev{display:inline-flex;transition:transform .2s}
+.recap-h[aria-expanded="true"] .chev{transform:rotate(90deg)}
+.recap-b{padding:0 20px 20px;border-top:1px solid var(--line)}
+.c.w{white-space:nowrap}
+.c.w b{font-size:10px;letter-spacing:-.05em}
+
+/* 第4版：要約優先 */
+.fold{padding:0;border-bottom:0}
+.fold>summary{padding:16px 18px;min-height:64px}
+.fold-b{padding:0 18px 18px}
+.sumcard .sumlead{font-size:16px;margin-top:6px}
+.sumlist{margin:10px 0 0;padding:0;list-style:none}
+.sumlist li{padding:8px 0;border-top:1px solid var(--line);font-size:15px;line-height:1.6}
+.sumlist li b{display:block;font-size:13px;color:var(--ink3)}
+.daypanel{margin-top:14px;padding:14px;border-radius:14px;background:var(--surface2);border:1px solid var(--line)}
+.c{font-size:11.5px;line-height:1.25;text-align:center;min-height:28px;height:auto;padding:3px 4px}
+.c.w b{font-size:10.5px;display:block;line-height:1.2;color:#7A3A1C}
+.c.w{flex-direction:column;gap:0}
+.tl-l{font-size:11.5px}
+.ov-lags{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media (min-width:960px){.ins-layout{grid-template-columns:minmax(0,1fr) 400px}}
+.ov-c.hb{border:2px solid #C98A3E;padding:5px;background:#FFF8EE}
+.ov-c.hc{border:2px solid #6F9A80;padding:5px;background:#F2F8F4}
+.fr{white-space:normal}
+.wk-r small{margin-left:1px}
+.ob-u i{background:#C2703D}
+.ob-c i{background:#8FAE9A}
+@media (max-width:600px){.fold-b{padding:0 12px 16px}.c{font-size:11px;padding:3px 2px}.tl-l{font-size:11px}}
+.sumnote{margin-top:12px;padding:8px 12px;border-radius:10px;background:#FBF4E8;color:#5E4422;font-size:14px;font-weight:700}
+
+/* 本人用 */
+#banner .bn{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:0 16px 8px;padding:10px 14px;border-radius:14px;font-size:14px;line-height:1.6}
+#banner .bn span{flex:1;min-width:200px}
+#banner .bn.demo{background:#FBF1E1;border:1px dashed #C7A877;color:#5E4422}
+#banner .bn.err{background:#FBE9E4;border:1px solid #E3B6A6;color:#7A2E14}
+#banner .bn.view{background:#EEF3F0;border:1px solid #C9D9CE;color:#234837}
+.btn.sm{min-height:40px;padding:0 14px;font-size:14px}
+@media (min-width:960px){#banner .bn{margin:0 40px 8px;max-width:1100px}}
+body.demo-mode{--bg:#F8F1E5}
+body.demo-mode .topbar{box-shadow:inset 0 3px 0 #C98A3E}
+.bkcard{border-color:#E3D3B8}
+.c.w b.wn{color:var(--ink2);font-weight:600}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="side" aria-label="メニュー">
+    <div class="brand">からだ日和<small>自分の「調子のいい日」を見つける</small></div>
+    <nav class="snav" id="snav"></nav>
+    <div class="demopanel" id="sidedemo"></div>
+  </aside>
+  <main>
+    <header class="topbar" id="topbar"></header>
+    <div id="banner"></div>
+    <div id="view"><p class="small" style="padding:40px 16px">読み込み中…</p></div>
+  </main>
+  <nav class="tabbar" id="tabbar" aria-label="メイン"></nav>
+</div>
+<div id="overlay"></div>
+<div id="toast" role="status" aria-live="polite"></div>
+<input type="file" id="fileIn" accept="application/json,.json" hidden>
+
+<script>
+"use strict";
+/* =========================================================
+   からだ日和 — 触れるモックアップ（デモ）
+   ・架空データのみ。外部送信なし。保存はこのブラウザ内（デモ用）だけ。
+   ・表示する「気づき」はデモ用シナリオ。医学的分析ではありません。
+   ========================================================= */
+const APP_VERSION = '1.0.0（初期版候補）';
+const SCHEMA = 1;                 // 記録の形の版。形を変えるときは MIGRATIONS に変換を足す
+const AUTO_CLASSIFY = false;      // 比較の自動分類・気づきの自動表示（検証が済むまで無効）
+const DEMO_TODAY = '2026-11-22';
+const TZ = 'Asia/Tokyo';          // 日付の区切り：日本時間の午前0時
+function jstToday(){ return new Intl.DateTimeFormat('en-CA',{timeZone:TZ,year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date()); }
+function jstHour(){ return +new Intl.DateTimeFormat('en-US',{timeZone:TZ,hour:'numeric',hourCycle:'h23'}).format(new Date()); }
+let MODE = 'real';                // 'real'＝本人の記録 / 'demo'＝架空データ
+let TODAY = jstToday();
+const WD = '日月火水木金土';
+const pad = n => String(n).padStart(2,'0');
+const toISO = d => d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+const dt = iso => new Date(iso+'T00:00:00');
+const addDays = (iso,n) => { const d=dt(iso); d.setDate(d.getDate()+n); return toISO(d); };
+const diffDays = (a,b) => Math.round((dt(a)-dt(b))/864e5);
+const jp = iso => { const d=dt(iso); return `${d.getMonth()+1}月${d.getDate()}日（${WD[d.getDay()]}）`; };
+const md = iso => { const d=dt(iso); return `${d.getMonth()+1}/${d.getDate()}`; };
+const wd = iso => WD[dt(iso).getDay()];
+const esc = s => String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const clamp = (v,a,b) => Math.max(a,Math.min(b,v));
+const clone = o => JSON.parse(JSON.stringify(o));
+const avg = a => a.length ? a.reduce((x,y)=>x+y,0)/a.length : null;
+function rng(seed){ return function(){ seed|=0; seed=seed+0x6D2B79F5|0; let t=Math.imul(seed^seed>>>15,1|seed); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }
+
+/* ---------- 語彙 ---------- */
+const MOODS = ['','つらい','いまいち','ふつう','よい','とてもよい'];
+const MOODC = ['','var(--m1)','var(--m2)','var(--m3)','var(--m4)','var(--m5)'];
+const WAKE = {good:'すっきり',ok:'ふつう',tired:'だるい'};
+const SYMS = [['shoulder','肩こり'],['tired','疲れ・だるさ'],['nose','鼻づまり'],['skin','肌のかゆみ・荒れ'],['voice','声の出しづらさ']];
+const SHORT = {shoulder:'肩こり',tired:'疲れ',nose:'鼻',skin:'肌',voice:'声'};
+const WHEN = ['朝','日中','夜'];
+const SYML = Object.fromEntries(SYMS);
+const LV = ['なし','軽い','中','強い'];
+const SLOTS = [['b','朝'],['l','昼'],['d','夜'],['s','間食']];
+const SLOTL = Object.fromEntries(SLOTS);
+const DTIMES = [['18:45','〜19時'],['19:30','19〜20時'],['20:30','20〜21時'],['21:30','21時以降']];
+const dtLabel = t => { if(!t) return null; const f=DTIMES.find(x=>x[0]===t); if(f) return f[1]; return t<'19:00'?'〜19時':t<'20:00'?'19〜20時':t<'21:00'?'20〜21時':'21時以降'; };
+const TAGS = ['甘いもの','お酒','揚げ物・脂っこい','麺・パン','乳製品'];
+const SLEEP = [[4.5,'5時間未満'],[5.5,'5〜6時間'],[6.5,'6〜7時間'],[7.5,'7時間以上']];
+const sleepLabel = v => (SLEEP.find(x=>x[0]===v)||[0,'—'])[1];
+const LMH = {low:'軽い',mid:'ふつう',high:'重い'};
+const ACT = {low:'少ない',mid:'ふつう',high:'多い'};
+const MEDS = ['塗り薬','点鼻薬','飲み薬','その他'];
+const WATCH = {wake:'朝の目覚め',mood:'全体の調子',shoulder:'肩こり',tired:'疲れ・だるさ',nose:'鼻づまり',skin:'肌のかゆみ・荒れ',voice:'声の出しづらさ'};
+const CHECK = {done:'できた',part:'少し',no:'できなかった'};
+const VERDICT = {better:'よくなった気がする',same:'変わらない・分からない',worse:'悪くなった気がする'};
+const WEATHERS = [['sun','晴れ'],['cloud','くもり'],['rain','雨']];
+const PLATE = {}; const PLATEC=['#E9D8B8','#D9C3A0','#C9D8BF','#E8C7A8','#D7DCCB','#EBDCC9','#CFC0A4','#E3CFB9'];
+const plateColor = name => { if(PLATE[name]) return PLATE[name]; let h=0; for(const c of name) h=(h*31+c.charCodeAt(0))>>>0; return PLATE[name]=PLATEC[h%PLATEC.length]; };
+
+/* ---------- 架空データ生成 ---------- */
+const MB=['ごはんと味噌汁','納豆ごはん','トーストとコーヒー','ヨーグルトとバナナ'];
+const ML=['社食の定食','コンビニのおにぎり','ざるそば','ラーメン','日替わり弁当'];
+const MD=['焼き魚定食','鶏むね肉と野菜炒め','カレーライス','湯豆腐と鍋','パスタ','居酒屋で外食'];
+const MS=['チョコレート','せんべい','菓子パン','ナッツ'];
+const MEMOS=['会議が長引いた','外が寒かった','よく眠れた気がする','夕方に肩が重かった','早めに帰れた','残業で遅くなった'];
+function blankRec(){ return {mood:null,wake:null,sym:{shoulder:null,tired:null,nose:null,skin:null,voice:null},tiredWhen:[],meals:{b:{items:[],none:false},l:{items:[],none:false},d:{items:[],none:false},s:{items:[],none:false}},dinnerTime:null,tags:[],tagsNo:[],sleep:null,stress:null,activity:null,posture:null,seitai:null,meds:[],medsNone:false,weight:'',memo:'',savedAt:null}; }
+function demoWeather(date){ const r=rng(parseInt(date.replace(/-/g,''),10)); const w=WEATHERS[Math.floor(r()*3)]; const t=Math.round(8+r()*9), pr=r()<.3?'低め':'ふつう'; const hr=r(); return {i:w[0],l:w[1],t,p:pr,h:w[0]==='rain'?'高め':hr<.32?'乾燥':hr<.85?'ふつう':'高め'}; }
+function genDays(seed,fromAgo,toAgo,o={}){
+  const r=rng(seed), days={}; let flare=0; let prev={early:r()<.5,stress:'mid',sweets:false};
+  const P=(k,d)=>o[k]!==undefined?o[k]:d;
+  for(let a=fromAgo;a>=toAgo;a--){
+    const date=addDays(TODAY,-a), dw=dt(date).getDay(), wkend=dw===0||dw===6;
+    const stress = wkend ? (r()<.7?'low':'mid') : (r()<.3?'high':r()<.55?'mid':'low');
+    const early = r() < (stress==='high'?.25:.62);
+    let sleep = 6.0 + (prev.early?.65:0) + (wkend?.35:0) + (r()-.5)*1.5;
+    const sb = sleep<5?4.5:sleep<6?5.5:sleep<7?6.5:7.5;
+    const sc = (prev.early?.75:0) + (sleep-6.5)*.5 + (prev.stress==='high'?-.45:0) + (r()-.5)*2.1;
+    let wake = sc>.6?'good':sc<-.05?'tired':'ok';
+    if(r()<.2) wake = r()<.5?'good':'tired'; // 説明のつかない体調の波
+    const postureP = o.postureP ? o.postureP(date) : .5;
+    const posture = r()<postureP;
+    const shoulder = clamp(Math.round(1.9-(posture?.95:0)+(stress==='high'?.5:0)+(r()-.5)*1.4),0,3);
+    const sweetsP = (o.expSweets && date>=o.expSweets) ? .12 : .42;
+    const sweets = r()<sweetsP;
+    const nose = clamp(Math.round(.7+(prev.sweets?.9:0)+(r()-.5)*1.4),0,3);
+    const voice = clamp(Math.round(1.0+(sweets?.8:0)+(r()-.5)*1.3),0,3);
+    const fatigue = clamp(Math.round(1.6-(sc*.5)+(r()-.5)*1.2),0,3);
+    const dull = wake==='tired'?clamp(Math.round(2+(r()-.5)),1,3):wake==='good'?(r()<.7?0:1):clamp(Math.round(1+(r()-.5)),0,2);
+    r(); // （旧：肌の値。乱数の並びを保つため残す）
+    const r3=rng(seed*104729+a*13+3);
+    const dryRecent=[0,1,2].some(k=>demoWeather(addDays(date,-k)).h==='乾燥');
+    if(flare>0) flare--; else if(r3()<.07) flare=3+Math.floor(r3()*3);
+    const skin = clamp(Math.round(.6+(dryRecent?.8:0)+(flare>0?1.2:0)+(r3()-.5)*1.3),0,3);
+    const tired = clamp(Math.round(.75+(sb<6?.8:0)+(stress==='high'?.6:0)+(prev.stress==='high'?.3:0)-sc*.15+(r3()-.5)*1.7),0,3);
+    const recorded = r() < P('recP',.93);
+    const thisPrev = prev; prev={early,stress,sweets};
+    if(!recorded) continue;
+    const rec=blankRec();
+    rec.mood = clamp(Math.round(3+sc*.8-shoulder*.25+(r()-.5)*.9),1,5);
+    if(r()<P('wakeP',.92)) rec.wake=wake;
+    const s=rec.sym;
+    if(r()<.92) s.shoulder=shoulder; const rt1=r(); r(); if(rt1<P('tiredP',.85)) s.tired=tired;
+    if(s.tired>=1 && r3()<.5) rec.tiredWhen=[WHEN[Math.floor(r3()*3)]];
+    if(r()<P('noseP',.3)) s.nose=nose; if(r()<P('skinP',.75)) s.skin=skin; if(r()<.65) s.voice=voice;
+    if(r()<P('mealP',.88)) rec.meals.b.items=[MB[Math.floor(r()*MB.length)]];
+    if(r()<P('mealP',.85)) rec.meals.l.items=[ML[Math.floor(r()*ML.length)]];
+    if(r()<P('dinnerP',.88)){ const dn=MD[Math.floor(r()*MD.length)]; rec.meals.d.items=[dn];
+      rec.dinnerTime = early ? (r()<.4?'18:45':'19:30') : (r()<.6?'20:30':'21:30'); }
+    if(sweets){ rec.meals.s.items=[r()<.6?'チョコレート':'菓子パン']; } else if(r()<.25){ rec.meals.s.items=[r()<.5?'せんべい':'ナッツ']; }
+    const all=[...rec.meals.b.items,...rec.meals.l.items,...rec.meals.d.items,...rec.meals.s.items].join(' ');
+    if(sweets) rec.tags.push('甘いもの');
+    if(/居酒屋/.test(all)){ rec.tags.push('お酒'); if(r()<.6) rec.tags.push('揚げ物・脂っこい'); }
+    if(/ラーメン|パスタ|トースト|菓子パン|そば/.test(all)) rec.tags.push('麺・パン');
+    if(/ヨーグルト/.test(all)) rec.tags.push('乳製品');
+    { const r2=rng(seed*7919+a); for(const t of TAGS) if(!rec.tags.includes(t) && r2()<(t==='甘いもの'?.5:.3)) rec.tagsNo.push(t); } // 「なかった」と明示した日だけ記録（残りは未記録）
+    if(r()<.88) rec.sleep=sb; if(r()<.75) rec.stress=stress; if(r()<.5) rec.activity=['low','mid','high'][Math.floor(r()*3)];
+    if(r()<.75) rec.posture=posture; if(dw===6) rec.seitai=true;
+    if(r()<(skin>=2?.7:.2)) rec.meds.push('塗り薬'); if(r()<.12) rec.meds.push('点鼻薬'); if(!rec.meds.length && r3()<.55) rec.medsNone=true;
+    if(r()<P('weightP',.35)) rec.weight=(72.4-(fromAgo-a)*.012+(r()-.5)*1.4).toFixed(1);
+    if(r()<.2) rec.memo=MEMOS[Math.floor(r()*MEMOS.length)];
+    rec.savedAt=date+'T21:30';
+    rec._sweetsLatent = sweets; // 取り組み記録の生成用（表示しない）
+    days[date]=rec;
+  }
+  return days;
+}
+function learnHistory(days){
+  const h={b:{},l:{},d:{},s:{}};
+  for(const d of Object.keys(days).sort()) for(const [k] of SLOTS) for(const it of days[d].meals[k].items) h[k][it]=(h[k][it]||0)+1;
+  return h;
+}
+function mkExp(id,title,watch,start,len,status,days,checkFn,extra={}){
+  const check={}; const end=addDays(start,len-1);
+  for(let d=start; d<=end && d<TODAY; d=addDays(d,1)){ if(days[d]) check[d]=checkFn(days[d],d); }
+  return Object.assign({id,title,watch,start,days:len,status,check,verdict:null,note:'',origin:'自分の経験から'},extra);
+}
+function buildScenario(k){
+  const st={days:{},history:{b:{},l:{},d:{},s:{}},experiments:[],plans:[],draft:null,welcomeSeen:false,prefs:{}};
+  if(k==='first') return st;
+  if(k==='normal'){
+    st.days=genDays(11,12,1,{});
+  } else if(k==='sparse'){
+    st.days=genDays(5,29,1,{recP:.3,wakeP:.6,dinnerP:.3,mealP:.5});
+  } else {
+    st.days=genDays(7,62,1,{postureP:d=>d>='2026-10-23'&&d<='2026-11-05'?.9:.42,expSweets:'2026-11-13'});
+    const D=st.days, r=rng(99);
+    st.experiments=[
+      mkExp('e3','夕食後の甘いものを控える',['voice','nose'],'2026-11-13',14,'active',D,rec=>rec._sweetsLatent?(r()<.5?'part':'no'):'done',{origin:'自分の経験から（甘いものをやめるとのどの調子がよい）'}),
+      mkExp('e2','1時間に1回、肩を回して姿勢を直す',['shoulder'],'2026-10-23',14,'done',D,()=>r()<.75?'done':'part',{verdict:'better',note:'仕事中に思い出せた日は、夕方の肩の重さが少なかった気がする。',origin:'自分の経験から（姿勢に気を付けると肩こりが軽くなる）'}),
+      mkExp('e1','寝る前30分はスマホを置く',['wake'],'2026-10-09',14,'done',D,()=>r()<.55?'done':(r()<.5?'part':'no'),{verdict:'same',note:'できた日が半分くらい。よく分からなかった。'}),
+      mkExp('e0','昼休みに10分歩く',['tired'],'2026-09-25',10,'done',D,()=>r()<.6?'done':'part',{verdict:'worse',note:'午後のだるさが増えた気がする。雨の日が多く、仕事も立て込んでいた時期。'})
+    ];
+    st.plans=[];
+    if(k==='return'){ for(let i=1;i<=4;i++){ const d=addDays(TODAY,-i); delete st.days[d]; delete st.experiments[0].check[d]; } }
+  }
+  for(const d in st.days) delete st.days[d]._sweetsLatent;
+  st.history=learnHistory(st.days);
+  return st;
+}
+const SCN = {
+  first:{label:'初回・記録なし',desc:'はじめて開いた状態。履歴も気づきもありません。'},
+  normal:{label:'普段の記録あり',desc:'12日分の記録。今日はまだ未記録。比較にはもう少し必要。'},
+  rich:{label:'比較できる傾向の例',desc:'約2か月分。気づき、取り組み、肌・疲れと生活の重なり（重なりあり／当てはまらない／材料不足）の例があります。'},
+  sparse:{label:'記録不足で判断できない',desc:'記録が飛び飛び。気づきや重なりは「まだ比較できません」「材料不足」と理由を表示。'},
+  return:{label:'数日ぶりに戻ってきた',desc:'最後の記録から4日空いた状態。責めずに今日から再開。'}
+};
+
+/* ---------- 保存（デモ用・このブラウザ内のみ） ---------- */
+/* ===== デモ用の保存（本人の記録とは別。localStorage のみ） ===== */
+const LSKEY='karada-biyori-demo-v3';
+let store={cur:'normal',s:{}};
+try{ const j=localStorage.getItem(LSKEY); if(j){ const o=JSON.parse(j); if(o&&o.s&&SCN[o.cur]) store=o; } }catch(e){}
+function demoPersist(){ try{ localStorage.setItem(LSKEY,JSON.stringify(store)); }catch(e){} }
+
+/* ===== 本人の記録の保存（IndexedDB：karada-real） ===== */
+const DB_REAL='karada-real';
+const R={db:null,state:null,meta:null,weather:{},readOnly:null,saveErr:null,persisted:null,writing:null,pending:false,fatal:null,wx:{state:'idle'}};
+function emptyState(){ return {days:{},history:{b:{},l:{},d:{},s:{}},experiments:[],plans:[],draft:null,welcomeSeen:false,prefs:{}}; }
+function idbOpen(name){ return new Promise((res,rej)=>{ const q=indexedDB.open(name,1);
+  q.onupgradeneeded=()=>{ const db=q.result; if(!db.objectStoreNames.contains('kv')) db.createObjectStore('kv'); if(!db.objectStoreNames.contains('weather')) db.createObjectStore('weather'); if(!db.objectStoreNames.contains('snapshots')) db.createObjectStore('snapshots',{keyPath:'id',autoIncrement:true}); };
+  q.onsuccess=()=>res(q.result); q.onerror=()=>rej(q.error); q.onblocked=()=>rej(new Error('blocked')); }); }
+function idbReq(r){ return new Promise((res,rej)=>{ r.onsuccess=()=>res(r.result); r.onerror=()=>rej(r.error); }); }
+function txDone(tx){ return new Promise((res,rej)=>{ tx.oncomplete=()=>res(); tx.onerror=()=>rej(tx.error); tx.onabort=()=>rej(tx.error||new Error('abort')); }); }
+function kvGet(k){ return idbReq(R.db.transaction('kv').objectStore('kv').get(k)); }
+function kvPut(obj){ const tx=R.db.transaction('kv','readwrite'); const st=tx.objectStore('kv'); for(const [k,v] of Object.entries(obj)) st.put(v,k); return txDone(tx); }
+function saveMeta(){ return kvPut({meta:R.meta}).catch(e=>{ R.saveErr=String(e&&e.message||e); renderBanner(); }); }
+/* 記録の形の変換（版n → 版n+1）。古い記録を初期化する処理は作らない */
+const MIGRATIONS={ };
+async function listSnapshots(){ return idbReq(R.db.transaction('snapshots').objectStore('snapshots').getAll()); }
+async function addSnapshot(reason,state,schema){ const tx=R.db.transaction('snapshots','readwrite'); tx.objectStore('snapshots').add({at:new Date().toISOString(),reason,schema:schema||SCHEMA,state:clone(state)}); await txDone(tx);
+  const all=await listSnapshots(); const extra=all.length-10; if(extra>0){ const tx2=R.db.transaction('snapshots','readwrite'); all.slice(0,extra).forEach(x=>tx2.objectStore('snapshots').delete(x.id)); await txDone(tx2); } }
+async function migrateIfNeeded(){
+  if(R.meta.schema>SCHEMA){ R.readOnly='newer'; return; }
+  if(R.meta.schema===SCHEMA) return;
+  await addSnapshot(`更新の直前（版${R.meta.schema}）`,R.state,R.meta.schema);
+  try{ let st=clone(R.state); for(let v=R.meta.schema; v<SCHEMA; v++){ const f=MIGRATIONS[v]; if(!f) throw new Error(`版${v}から版${v+1}への変換がありません`); st=f(st); }
+    const meta={...R.meta,schema:SCHEMA,migratedAt:new Date().toISOString()}; await kvPut({state:st,meta}); R.state=st; R.meta=meta;
+  }catch(e){ R.readOnly='migrate'; R.migrateError=String(e&&e.message||e); } }
+async function loadReal(){
+  R.db=await idbOpen(DB_REAL);
+  R.meta=await kvGet('meta'); R.state=await kvGet('state');
+  if(!R.meta){ R.meta={schema:SCHEMA,createdAt:new Date().toISOString(),role:null,lastBackupAt:null,firstRecordAt:null}; R.state=emptyState(); await kvPut({meta:R.meta,state:R.state}); }
+  if(!R.state) R.state=emptyState();
+  await migrateIfNeeded();
+  const tx=R.db.transaction('weather'); const ws=tx.objectStore('weather'); const [vals,keys]=await Promise.all([idbReq(ws.getAll()),idbReq(ws.getAllKeys())]); keys.forEach((k,i)=>R.weather[k]=vals[i]);
+  if(!R.readOnly && R.meta.role==='main' && Object.keys(R.state.days).length){ const all=await listSnapshots(); const last=[...all].reverse().find(x=>x.reason==='日ごとの自動の写し'); if(!last||last.at.slice(0,10)!==new Date().toISOString().slice(0,10)) await addSnapshot('日ごとの自動の写し',R.state); }
+}
+let snapDone=null;
+function dailySnapshotSoon(){ const day=new Date().toISOString().slice(0,10); if(snapDone===day) return; snapDone=day;
+  (R.writing||Promise.resolve()).then(()=>listSnapshots()).then(all=>{ const last=[...all].reverse().find(x=>x.reason==='日ごとの自動の写し'); if(!last||last.at.slice(0,10)!==day) return addSnapshot('日ごとの自動の写し',R.state); }).catch(()=>{}); }
+function canWrite(){ return MODE==='real' && R.db && !R.readOnly && R.meta && R.meta.role==='main'; }
+function persist(){ if(MODE==='demo'){ demoPersist(); return; } if(!canWrite()) return; R.pending=true; if(!R.writing) flush(); }
+async function flush(){ while(R.pending){ R.pending=false; const data=clone(R.state);
+    R.writing=kvPut({state:data}).then(()=>{ if(R.saveErr){ R.saveErr=null; renderBanner(); } }).catch(e=>{ R.saveErr=String(e&&e.message||e); renderBanner(); });
+    await R.writing; } R.writing=null; }
+function S(){ if(MODE==='real') return R.state; if(!store.s[store.cur]) store.s[store.cur]=buildScenario(store.cur); return store.s[store.cur]; }
+
+/* ---------- 取り消し ---------- */
+let undoStack=[];
+function snapshot(){ undoStack.push({mode:MODE,cur:store.cur,data:JSON.stringify(S())}); if(undoStack.length>20) undoStack.shift(); }
+function snapshotNoop(){}
+function undo(){ const u=undoStack.pop(); if(!u||u.mode!==MODE) return; const d=JSON.parse(u.data); if(MODE==='demo'){ store.cur=u.cur; store.s[u.cur]=d; } else { R.state=d; } persist(); ui.rec=null; render(); toast('元に戻しました'); }
+
+/* ---------- UI状態 ---------- */
+const ui={tab:'home',stack:[],sheet:null,rec:null,dlg:null,expDraft:null};
+function route(){ return ui.stack.length ? ui.stack[ui.stack.length-1] : {name:ui.tab}; }
+function go(name,params={}){ ui.stack.push(Object.assign({name},params)); render(true); }
+function back(){ ui.stack.pop(); render(true); }
+function setTab(t){ ui.tab=t; ui.stack=[]; render(true); }
+
+/* ---------- アイコン ---------- */
+const I={
+  home:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5 12 4l8 6.5V20a1 1 0 0 1-1 1h-4.5v-6h-5v6H5a1 1 0 0 1-1-1z"/></svg>',
+  log:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="4" y="4.5" width="16" height="16" rx="3"/><path d="M8 2.8v3.4M16 2.8v3.4M4 9.5h16M8 13.5h3M8 17h6"/></svg>',
+  spark:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-3.6 10.8c.6.5 1 1.2 1 2V16h5.2v-.2c0-.8.4-1.5 1-2A6 6 0 0 0 12 3z"/></svg>',
+  leaf:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 19c0-8 5-13 15-14-1 10-6 15-14 15"/><path d="M5 19 13 11"/></svg>',
+  back:'<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>',
+  close:'<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>',
+  chev:'<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>',
+  plus:'<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>',
+  pen:'<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/></svg>',
+  sun:'<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"/></svg>',
+  cloud:'<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M7 18h10a4 4 0 0 0 .5-8 6 6 0 0 0-11.4 1.6A3.3 3.3 0 0 0 7 18z"/></svg>',
+  rain:'<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 15h10a4 4 0 0 0 .5-8 6 6 0 0 0-11.4 1.6A3.3 3.3 0 0 0 7 15z"/><path d="M9 18l-1 2.5M13 18l-1 2.5M17 18l-1 2.5"/></svg>',
+  gear:'<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>',
+  info:'<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true" style="flex:none;margin-top:1px"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 7.6v.4"/></svg>',
+};
+function face(v,size=34){ const c=[0,-5,-2.4,0,2.6,5][v]; return `<svg viewBox="0 0 36 36" width="${size}" height="${size}" aria-hidden="true"><circle cx="18" cy="18" r="15.5" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12.6" cy="15" r="1.7" fill="currentColor"/><circle cx="23.4" cy="15" r="1.7" fill="currentColor"/><path d="M11.5 ${23-c*.25} Q18 ${23+c} 24.5 ${23-c*.25}" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>`; }
+
+/* ---------- 便利関数 ---------- */
+function hasAny(rec){ if(!rec) return false; if(rec.mood||rec.wake) return true; if(Object.values(rec.sym).some(v=>v!==null)) return true; if(SLOTS.some(([k])=>rec.meals[k].items.length||rec.meals[k].none)) return true; return !!(rec.sleep||rec.stress||rec.activity||rec.posture!==null||rec.seitai||rec.meds.length||rec.weight||rec.memo||rec.medsNone||(rec.tiredWhen||[]).length||rec.tags.length||(rec.tagsNo||[]).length); }
+function tagState(rec,t){ if(!rec) return null; if(rec.tags.includes(t)) return 'yes'; if((rec.tagsNo||[]).includes(t)) return 'no'; return null; }
+function activeExp(st){ return st.experiments.find(e=>e.status==='active'); }
+function expEnd(e){ return addDays(e.start,e.days-1); }
+function expDay(e){ return clamp(diffDays(TODAY,e.start)+1,1,e.days); }
+function lastRecorded(st){ const ks=Object.keys(st.days).filter(d=>d<=TODAY).sort(); return ks[ks.length-1]||null; }
+function topItems(st,slot,n){ return Object.entries(st.history[slot]||{}).sort((a,b)=>b[1]-a[1]).slice(0,n).map(x=>x[0]); }
+function mealText(rec,k){ const m=rec.meals[k]; if(m.none) return '食べていない'; if(!m.items.length) return null; return m.items.join('、'); }
+function symSummary(rec){
+  const on=SYMS.filter(([k])=>rec.sym[k]>0).map(([k,l])=>`${l}（${LV[rec.sym[k]]}）`);
+  const none=SYMS.filter(([k])=>rec.sym[k]===0).length;
+  const un=SYMS.filter(([k])=>rec.sym[k]===null).length;
+  if(!on.length && !none) return '<span class="pending">未記録</span>';
+  let s=on.length?esc(on.join('、')):'<span class="none0">気になるところなし</span>';
+  if(on.length && none) s+=`<span class="small">　ほか${none}項目は「なし」</span>`;
+  if(un && (on.length||none)) s+=`<span class="small">　${un}項目は未記録</span>`;
+  return s;
+}
+function weatherFor(date){ return MODE==='demo' ? demoWeather(date) : (R.weather[date]||null); }
+function wxText(w){
+  if(!w) return '天気：未取得';
+  if(w.src==='Open-Meteo'){ const p=[w.l];
+    if(w.tmax!=null) p.push(`${Math.round(w.tmax)}／${Math.round(w.tmin)}℃`);
+    if(w.prec!=null&&w.prec>0) p.push(`降水${w.prec}mm`);
+    if(w.hum!=null) p.push(`湿度${Math.round(w.hum)}%`);
+    if(w.pres!=null) p.push(`気圧${Math.round(w.pres)}hPa${w.dp!=null?`（前日比${w.dp>0?'+':''}${Math.round(w.dp)}）`:''}`);
+    return p.join('・')+(w.prov?'・確定前':''); }
+  return `${w.l}・${w.t}℃・湿度${w.h}・気圧${w.p}（デモ値）`; }
+function weatherChip(date){ const w=weatherFor(date); return `<span class="weather">${w?I[w.i]:''}${esc(wxText(w))}${MODE==='demo'?'<span class="tag demo" style="height:20px;font-size:11px">デモ値</span>':''}</span>`; }
+function weatherChipOld(date){ const w=weatherFor(date); return `<span class="weather">${I[w.i]}${w.l} ${w.t}℃・気圧${w.p}<span class="tag demo" style="height:20px;font-size:11px">デモ値</span></span>`; }
+
+/* =========================================================
+   気づき（デモシナリオ用の簡易集計）
+   ========================================================= */
+const MIN_N=5;
+const QUESTIONS=[
+  {id:'wake', q:'朝の目覚めと、前の晩の夕食の時刻', short:'朝のだるさと夕食の時刻',
+   titleFound:'朝のだるさが軽かった日に、共通点がありました', outName:'朝の目覚め',
+   Alabel:'目覚めが「すっきり」の日', Blabel:'目覚めが「だるい」の日', midLabel:'「ふつう」の日',
+   out:r=>r.wake==='good'?'A':r.wake==='tired'?'B':r.wake?'M':null,
+   fac:(d,D)=>{const p=D[addDays(d,-1)]; return p&&p.dinnerTime ? p.dinnerTime<'20:00' : null;},
+   facLabel:'前の晩の夕食が20時前', facMissing:'前日の夕食時刻が未記録',
+   tryIdx:0},
+  {id:'shoulder', q:'肩こりと、姿勢への取り組み', short:'肩こりと姿勢ケア',
+   titleFound:'肩こりが軽かった日に、共通点がありました', outName:'肩こり',
+   Alabel:'肩こりが「なし・軽い」の日', Blabel:'肩こりが「中・強い」の日', midLabel:'',
+   out:r=>r.sym.shoulder==null?null:r.sym.shoulder<=1?'A':'B',
+   fac:(d,D)=>{const r=D[d]; return r.posture==null?null:r.posture;},
+   facLabel:'姿勢ケアをした', facMissing:'姿勢ケアが未記録', tryIdx:2},
+  {id:'nose', q:'鼻づまりと、前日の甘いもの', short:'鼻づまりと甘いもの',
+   titleFound:'鼻づまりがなかった日に、共通点がありました', outName:'鼻づまり',
+   Alabel:'鼻づまりが「なし」の日', Blabel:'鼻づまりが「中・強い」の日', midLabel:'「軽い」の日',
+   out:r=>r.sym.nose==null?null:r.sym.nose===0?'A':r.sym.nose>=2?'B':'M',
+   fac:(d,D)=>{const p=D[addDays(d,-1)]; return tagState(p,'甘いもの')==null?null:tagState(p,'甘いもの')==='yes';},
+   facLabel:'前日に甘いものを食べた', facMissing:'前日の甘いものが未記録（前日自体の未記録を含む）', tryIdx:1}
+];
+function analyze(st,q){
+  const win=[]; for(let i=29;i>=1;i--) win.push(addDays(TODAY,-i)); if(st.days[TODAY]) win.push(TODAY);
+  const rec=win.filter(d=>st.days[d]);
+  const A=[],B=[]; let M=0,noOut=0,noFac=0; const all=[];
+  for(const d of rec){ const r=st.days[d]; const o=q.out(r); if(o==null){noOut++;continue;}
+    const f=q.fac(d,st.days); if(f==null){noFac++;continue;}
+    const p=st.days[addDays(d,-1)];
+    const it={d,f,sleep:r.sleep,stress:(q.id==='shoulder'?r.stress:(p&&p.stress))||null,wk:[0,6].includes(dt(d).getDay())};
+    all.push(it); if(o==='A')A.push(it); else if(o==='B')B.push(it); else M++; }
+  const rate=g=>g.length?g.filter(x=>x.f).length/g.length:0;
+  const ra=rate(A), rb=rate(B);
+  let status = !rec.length ? 'empty' : (A.length<MIN_N||B.length<MIN_N) ? 'insufficient' : Math.abs(ra-rb)<.25 ? 'nodiff' : 'found';
+  return {q,win,rec,A,B,M,noOut,noFac,ra,rb,status,all,from:win[0],to:win[win.length-1]};
+}
+function insightTitle(a){ const q=a.q;
+  if(a.status==='found') return q.titleFound;
+  if(a.status==='nodiff') return `${q.short}：はっきりした違いは見られません`;
+  return `${q.short}：まだ比較できません`; }
+function insightLead(a){ const q=a.q;
+  if(a.status==='found') return `${q.Alabel}は、「${q.facLabel}」日が${a.ra>a.rb?'多め':'少なめ'}でした。`;
+  if(a.status==='nodiff') return `比べてみましたが、「${q.facLabel}」の割合に大きな差はありませんでした。`;
+  if(a.status==='empty') return '記録がまだありません。記録が増えると、ここで比べられるようになります。';
+  return `比べるための記録がまだ足りません。`; }
+function insufficientReasons(a){ const q=a.q, out=[];
+  out.push(`直近29日のうち、記録のある日：${a.rec.length}日`);
+  out.push(`${q.Alabel}：${a.A.length}日（目安 ${MIN_N}日以上）`);
+  out.push(`${q.Blabel}：${a.B.length}日（目安 ${MIN_N}日以上）`);
+  if(a.noOut) out.push(`記録はあるが「${q.outName}」が未記録の日：${a.noOut}日`);
+  if(a.noFac) out.push(`${q.facMissing}の日：${a.noFac}日`);
+  return out; }
+function allAnalyses(st){ const order={found:0,nodiff:1,insufficient:2,empty:3}; return QUESTIONS.map(q=>analyze(st,q)).sort((x,y)=>order[x.status]-order[y.status]); }
+
+/* =========================================================
+   描画
+   ========================================================= */
+const view=document.getElementById('view');
+function render(scrollTop){
+  const r=route();
+  const V=VIEWS[r.name]||VIEWS.home;
+  view.innerHTML=`<div class="fadein">${V(r)}</div>`;
+  renderChrome(r);
+  renderOverlay();
+  if(scrollTop) window.scrollTo(0,0);
+}
+const TABS=[['home','今日',I.home],['log','記録',I.log],['insights','振り返り',I.spark],['try','試す',I.leaf]];
+const TITLES={settings:'設定',look:'重なりを振り返る',home:'今日',log:'記録',insights:'振り返り',try:'試す',day:'この日の記録',insight:'気づきの中身',expNew:'一つ試す',exp:'取り組み'};
+function renderChrome(r){
+  const sub=ui.stack.length>0;
+  const right = MODE==='demo' ? demoChip(sub) : `${R.meta&&R.meta.role==='viewer'?'<span class="tag gray">閲覧専用</span>':''}${r.name==='settings'?'':`<button class="iconbtn" data-a="settings" aria-label="設定">${I.gear}</button>`}`;
+  document.getElementById('topbar').innerHTML = sub
+    ? `<button class="iconbtn" data-a="back" aria-label="戻る">${I.back}</button><span class="ttl">${TITLES[r.name]||''}</span><span class="sp"></span>${right}`
+    : `<span class="brand">からだ日和</span><span class="ttl" style="display:none" data-pc-title>${TITLES[r.name]}</span><span class="sp"></span>${right}`;
+  if(window.matchMedia('(min-width:960px)').matches && !sub){ const t=document.querySelector('[data-pc-title]'); if(t) t.style.display=''; }
+  const cur=ui.tab;
+  document.getElementById('tabbar').innerHTML=TABS.map(([k,l,ic])=>`<button class="tab" data-a="tab" data-to="${k}" ${cur===k?'aria-current="page"':''}>${ic}<span>${l}</span></button>`).join('');
+  document.getElementById('snav').innerHTML=TABS.map(([k,l,ic])=>`<button data-a="tab" data-to="${k}" ${cur===k?'aria-current="page"':''}>${ic}<span>${l}</span></button>`).join('')+`<button data-a="settings" ${r.name==='settings'?'aria-current="page"':''}>${I.gear}<span>設定</span></button>`;
+  const sd=document.getElementById('sidedemo');
+  if(MODE==='demo'){ sd.style.display=''; sd.innerHTML=`<h3><span style="width:8px;height:8px;border-radius:50%;background:#C98A3E;display:inline-block"></span>デモ表示中</h3>
+    <p>架空データです。あなたの記録ではありません。</p>
+    <div class="sidescn">${Object.entries(SCN).map(([k,v])=>`<button data-a="scn" data-k="${k}" aria-pressed="${store.cur===k}"><span class="rd"></span>${v.label}</button>`).join('')}</div>
+    <button class="btn sec" style="margin-top:10px;width:100%" data-a="exitDemo">自分の記録に戻る</button>`; }
+  else sd.style.display='none';
+  renderBanner();
+  if(r.name==='settings' && MODE==='real' && R.db) listSnapshots().then(a=>{ const el=document.getElementById('snapCount'); if(el) el.textContent=a.length?`${a.length}件（最新 ${fmtDT(a[a.length-1].at)}）`:'まだありません（記録のある日に1日1回作ります）'; });
+}
+function renderBanner(){ const b=document.getElementById('banner'); if(!b) return; const out=[];
+  if(MODE==='demo') out.push(`<div class="bn demo"><span><b>デモ表示中：</b>架空データです。あなたの記録ではありません。</span><button class="btn sec sm" data-a="exitDemo">自分の記録に戻る</button></div>`);
+  else if(R.meta){
+    if(R.readOnly==='newer') out.push(`<div class="bn err"><span><b>この端末の記録は、新しい版のアプリで作られています。</b>記録を守るため、この版では変更しません。アプリを更新してから開いてください。</span></div>`);
+    if(R.readOnly==='migrate') out.push(`<div class="bn err"><span><b>記録の形の変換に失敗したため、変更せずに表示しています。</b>記録は更新前の形のまま残っています。（${esc(R.migrateError||'')}）</span></div>`);
+    if(R.saveErr) out.push(`<div class="bn err"><span><b>保存できませんでした。</b>入力は画面に残っています。空き容量を確認して、もう一度操作してください。（${esc(R.saveErr)}）</span></div>`);
+    if(R.meta.role==='viewer') out.push(`<div class="bn view"><span><b>閲覧専用：</b>${R.meta.viewerLoadedAt?`${fmtDT(R.meta.viewerLoadedAt)}に読み込んだ記録です（バックアップ作成 ${fmtDT(R.meta.viewerExportedAt)}）。それ以降の記録は、次に読み込むまで表示されません。`:'まだ記録を読み込んでいません。'}</span><button class="btn sec sm" data-a="importPick">読み込む</button></div>`);
+  }
+  b.innerHTML=out.join(''); }
+function fmtDT(iso){ if(!iso) return '—'; const d=new Date(iso); const f=new Intl.DateTimeFormat('ja-JP',{timeZone:TZ,month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'}); return f.format(d); }
+function demoChip(short){ return `<button class="demochip" data-a="demo" aria-label="デモの状態を切り替える（現在：${SCN[store.cur].label}）"><span class="dot"></span>${short?'デモ':'デモ：'+SCN[store.cur].label}</button>`; }
+
+/* ---------- 今日 ---------- */
+function greet(){ const h=jstHour(); return h<10?'おはようございます':h<17?'こんにちは':'おつかれさまです'; }
+const VIEWS={};
+VIEWS.home=()=>{
+  const st=S(); const rec=st.days[TODAY]; const ex=activeExp(st);
+  const last=lastRecorded(st); const gap=last?diffDays(TODAY,last):null;
+  let hero='';
+  const draft=st.draft;
+  if(MODE==='real' && !R.meta.role){
+    const ios=/iPhone|iPad|iPod/.test(navigator.userAgent);
+    hero=`<div class="card hero"><div class="eyebrow">はじめに</div>
+      <h2 class="h2" style="margin-top:4px">この端末の使い方を選んでください</h2>
+      <p class="sub" style="margin:4px 0 12px">記録はこの端末の中に保存します。あとから設定で変えられます。</p>
+      <button class="cand" data-a="setRole" data-v="main"><b>この端末で記録する ${ios?'<span class="tag">おすすめ</span>':''}</b><small>iPhone向け。記録・修正・バックアップの書き出しを行います</small></button>
+      <button class="cand" data-a="setRole" data-v="viewer"><b>記録を見るだけ ${!ios?'<span class="tag">PCならこちら</span>':''}</b><small>PC向け。iPhoneで書き出したバックアップを読み込んで閲覧します（記録・修正はできません）</small></button></div>`;
+  } else if(MODE==='real' && R.meta.role==='viewer'){
+    hero=`<div class="card hero"><div class="eyebrow">閲覧専用（PC）</div>
+      <h2 class="h2" style="margin-top:4px">${R.meta.viewerLoadedAt?`${fmtDT(R.meta.viewerLoadedAt)}に読み込んだ記録を表示しています`:'まだ記録を読み込んでいません'}</h2>
+      <p class="sub" style="margin-top:4px">記録・修正はiPhoneで行います。新しい記録を見るには、iPhoneで書き出したバックアップを読み込んでください。</p>
+      <button class="btn" style="margin-top:14px" data-a="importPick">バックアップを読み込む</button></div>`;
+  } else if(draft && hasContent(draft)){
+    hero=`<div class="card hero">
+      <div class="eyebrow">書きかけ</div>
+      <h2 class="h2" style="margin-top:4px">${draft.date===TODAY?'今日':jp(draft.date)}の${draft.isEdit?'修正':'記録'}が途中です</h2>
+      <p class="sub" style="margin-top:4px">入力した内容はそのまま残っています。</p>
+      <div class="row" style="margin-top:16px;flex-wrap:wrap"><button class="btn" data-a="resume">続きから</button><button class="btn ghost" data-a="draftDiscard">書きかけを消す</button></div></div>`;
+  } else if(!Object.keys(st.days).length && !rec){
+    hero=`<div class="card hero">
+      <div class="eyebrow">はじめまして</div>
+      <h2 class="serif bigq" style="margin-top:6px">自分の「調子のいい日」の条件を、記録から見つけていきましょう。</h2>
+      <div class="welcome-steps" aria-label="使い方の流れ">
+        <div class="wstep"><b>1</b>記録</div><div class="wstep"><b>2</b>前後を見る</div><div class="wstep"><b>3</b>一つ試す</div><div class="wstep"><b>4</b>振り返る</div></div>
+      <p class="sub" style="margin-top:8px">まずは今日の調子をひとつ選ぶだけ。食事の写真や毎日の全項目入力は必要ありません。</p>
+      ${moodButtons()}</div>`;
+  } else if(!rec){
+    const back = gap && gap>=3;
+    hero=`<div class="card hero">
+      ${back?`<div class="eyebrow">おかえりなさい</div>
+        <h2 class="h2" style="margin-top:4px">今日から、また始めましょう</h2>
+        <p class="sub" style="margin-top:4px">最後の記録は${jp(last)}。空いた日は「未記録」のままで大丈夫です。</p>`
+      :`<h2 class="h2">今日の調子は？</h2>
+        <p class="sub" style="margin-top:2px">ひとつ選ぶだけで記録できます。ほかは必要なときだけ。</p>`}
+      ${moodButtons()}
+      ${back?`<button class="link" data-a="tab" data-to="log" style="margin-top:6px">空いた日をさかのぼって残す（任意）</button>`:''}
+    </div>`;
+  } else {
+    const miss=[]; if(!mealText(rec,'d')&&jstHour()>=14) miss.push('夕食');
+    hero=`<div class="card hero">
+      <div class="between"><h2 class="h2">今日の記録</h2><span class="tag">記録済み</span></div>
+      <dl class="sumgrid">
+        <dt>調子</dt><dd>${rec.mood?`<span class="row" style="gap:6px"><span class="dotm" style="width:12px;height:12px;background:${MOODC[rec.mood]}"></span>${MOODS[rec.mood]}</span>`:'<span class="pending">未記録</span>'}</dd>
+        <dt>目覚め</dt><dd>${rec.wake?WAKE[rec.wake]:'<span class="pending">未記録</span>'}</dd>
+        <dt>気になる</dt><dd>${symSummary(rec)}</dd>
+        <dt>食事</dt><dd>${SLOTS.slice(0,3).map(([k,l])=>`${l}：${mealText(rec,k)?esc(mealText(rec,k)):'<span class="pending">まだ</span>'}`).join('<br>')}</dd>
+      </dl>
+      <div class="row" style="margin-top:16px;flex-wrap:wrap"><button class="btn sec" data-a="openRec" data-date="${TODAY}" data-step="${miss.length?2:1}">${I.pen}追加・修正する</button>${miss.length?`<span class="small">夕食を食べたら、あとから足せます</span>`:''}</div>
+    </div>`;
+  }
+  const expCard = ex ? expMini(st,ex) : '';
+  const a=AUTO_CLASSIFY?allAnalyses(st):null; const top=a?a[0]:{status:'off'};
+  const insCard = AUTO_CLASSIFY ? insightMini(top, a) : (Object.keys(st.days).length?lookEntry(st):'');
+  const bk = backupCard();
+  const strip = weekStrip(st);
+  const tip = !ex && Object.keys(st.days).length ? `<div class="card flat"><div class="eyebrow">${I.leaf} 一つ試す</div><p class="sub" style="margin-top:6px">負担の小さい取り組みを一つ選んで、前後の調子を振り返れます。</p><button class="link" data-a="tab" data-to="try">試せることを見る</button></div>`:'';
+  const recap = recentCard(st);
+  const right = top.status==='found' ? insCard+strip+recap+tip : recap+insCard+strip+tip;
+  return `<section class="hello"><p class="date">${jp(TODAY)}</p><h1 class="serif">${greet()}</h1></section>
+  <div class="home-grid"><div>${hero}${bk}${expCard}</div><div>${right}</div></div>`;
+};
+function recentCard(st){
+  let span=14, ds=[]; for(let i=span-1;i>=0;i--) ds.push(addDays(TODAY,-i));
+  let rec=ds.filter(d=>st.days[d]);
+  if(rec.length<3){ span=30; ds=[]; for(let i=span-1;i>=0;i--) ds.push(addDays(TODAY,-i)); rec=ds.filter(d=>st.days[d]); }
+  if(!rec.length) return '';
+  const R=d=>st.days[d];
+  const cnt=[0,0,0,0,0,0]; rec.forEach(d=>{ if(R(d).mood) cnt[R(d).mood]++; });
+  const nm=cnt.reduce((x,y)=>x+y,0);
+  const moodLine=[5,4,3,2,1].filter(v=>cnt[v]).map(v=>`${MOODS[v]} ${cnt[v]}日`).join('・');
+  const bar=nm?`<div class="mbar" aria-hidden="true">${[5,4,3,2,1].filter(v=>cnt[v]).map(v=>`<i style="width:${cnt[v]/nm*100}%;background:${MOODC[v]}"></i>`).join('')}</div>`:'';
+  const sy=SYMS.map(([k,l])=>[l,rec.filter(d=>R(d).sym[k]>=2).length,rec.filter(d=>R(d).sym[k]!=null).length]).filter(x=>x[1]>0).sort((a,b)=>b[1]-a[1]).slice(0,2);
+  const wm=rec.filter(d=>R(d).mood);
+  const best=[...wm].sort((a,b)=>R(b).mood-R(a).mood||b.localeCompare(a))[0];
+  const worst=[...wm].sort((a,b)=>R(a).mood-R(b).mood||b.localeCompare(a))[0];
+  const facts=d=>{const r=R(d), p=[]; if(r.wake) p.push('目覚め'+WAKE[r.wake]); if(r.sleep) p.push('睡眠'+sleepLabel(r.sleep)); const pv=st.days[addDays(d,-1)]; if(pv&&pv.dinnerTime) p.push('前夜の夕食'+dtLabel(pv.dinnerTime)); if(r.stress) p.push('仕事'+LMH[r.stress]); if(r.memo) p.push('「'+r.memo+'」'); return p.slice(0,3).join('・')||'ほかの記録なし';};
+  const dayRowR=(lab,d)=>`<dt>${lab}</dt><dd><button class="daylink" data-a="day" data-date="${d}">${jp(d)}・${MOODS[R(d).mood]}</button><div class="small">${esc(facts(d))}</div></dd>`;
+  let days='';
+  if(best&&worst&&R(best).mood!==R(worst).mood) days=dayRowR('よかった日',best)+dayRowR('つらかった日',worst);
+  else if(best) days=dayRowR(wm.length===1?'記録した日':'最近の日',best);
+  const sy2=['skin','tired'].map(k=>[SHORT[k],rec.filter(d=>R(d).sym[k]>=2).length]).filter(x=>x[1]>0);
+  const op=!!ui.recapOpen;
+  return `<div class="card recap"><button class="recap-h" data-a="recapToggle" aria-expanded="${op}"><span class="between" style="width:100%"><span class="eyebrow">最近の自分</span><span class="small">直近${span}日・記録${rec.length}日</span></span>
+  ${bar}<span class="recap-l">${moodLine||'調子は未記録'}</span>
+  <span class="recap-l small">${sy2.length?'中以上だった日：'+sy2.map(([l,n])=>`${l} ${n}日`).join('・'):'肌・疲れが中以上の日はありません'}</span>
+  <span class="recap-more">${op?'閉じる':'くわしく'} <span class="chev" aria-hidden="true">${I.chev}</span></span></button>
+  ${op?`<div class="recap-b"><dl class="rc"><dt>調子</dt><dd>${bar}${moodLine||'<span class="pending">未記録</span>'}</dd>
+  <dt>気になった</dt><dd>${sy.length?sy.map(([l,n,t])=>`${l}：中以上 ${n}日<span class="small">（記録${t}日）</span>`).join('<br>'):'中以上の記録はありません'}</dd>
+  ${days}</dl>
+  <button class="btn sec block" style="margin-top:14px" data-a="look">肌・疲れと生活の重なりを見る ${I.chev}</button>
+  <p class="small" style="margin-top:10px">記録した日の様子を並べたものです。原因の判断はしていません。</p></div>`:''}</div>`;
+}
+function moodButtons(sel){ return `<div class="moods" role="group" aria-label="今の調子">${[1,2,3,4,5].map(v=>`<button class="mood" data-a="quickMood" data-v="${v}" aria-pressed="${sel===v}">${face(v)}<span>${MOODS[v]}</span></button>`).join('')}</div>`; }
+function weekStrip(st){
+  const ds=[]; for(let i=13;i>=0;i--) ds.push(addDays(TODAY,-i));
+  const n=ds.filter(d=>st.days[d]).length;
+  return `<div class="card"><div class="between"><div class="eyebrow">この2週間</div><span class="small">記録 ${n}日</span></div>
+  <div class="strip">${ds.map(d=>{const r=st.days[d]; const c=r&&r.mood?MOODC[r.mood]:null;
+    return `<button data-a="${d===TODAY&&!r?'openRec':'day'}" data-date="${d}" class="${d===TODAY?'today':''}" aria-label="${jp(d)}：${r?(r.mood?MOODS[r.mood]:'記録あり'):'未記録'}"><span class="wd">${wd(d)}</span><span class="dotm ${r?'':'none'}" style="${r?`background:${c||'#B9C7BD'}`:''}"></span></button>`;}).join('')}</div>
+  <div class="legend"><span><i style="background:var(--m5)"></i>よい</span><span><i style="background:var(--m3)"></i>ふつう</span><span><i style="background:var(--m1)"></i>つらい</span><span><i style="border:1.5px dashed #A79F90"></i>未記録（症状なしとは別）</span></div></div>`;
+}
+function insightMini(a,all){
+  if(a.status==='found'){
+    return `<div class="card"><div class="between"><div class="eyebrow">${I.spark} 見えてきたこと</div><span class="tag demo">デモシナリオ</span></div>
+    <h3 class="serif ins-title">${insightTitle(a)}</h3>
+    <p class="sub" style="margin-top:6px">${esc(insightLead(a))}</p>
+    <p class="small" style="margin-top:6px">弱い手がかりです。別の説明も考えられます。</p>
+    <button class="btn sec block" style="margin-top:14px" data-a="insight" data-id="${a.q.id}">根拠と、当てはまらない日を見る ${I.chev}</button></div>`;
+  }
+  const got=Math.min(a.A.length,MIN_N)+Math.min(a.B.length,MIN_N);
+  return `<div class="card"><div class="between"><div class="eyebrow">${I.spark} 発見</div><span class="tag gray">まだ比較できません</span></div>
+    <p class="sub" style="margin-top:8px">${a.status==='empty'?'記録が増えると、調子のよい日とそうでない日を比べられるようになります。':`「${esc(a.q.short)}」を比べるには、もう少し記録が必要です。`}</p>
+    <div class="progress" aria-label="比較に必要な記録の進み具合"><b style="width:${got/(MIN_N*2)*100}%"></b></div>
+    <p class="small" style="margin-top:6px">比べる材料 ${got} / ${MIN_N*2}（このデモでの仮の目安）</p>
+    <button class="link" data-a="tab" data-to="insights">理由を見る</button></div>`;
+}
+function expMini(st,e){
+  const c=e.check[TODAY]; const d=expDay(e); const ended=TODAY>expEnd(e);
+  const missing=[]; for(let x=e.start;x<TODAY&&x<=expEnd(e);x=addDays(x,1)) if(!e.check[x]) missing.push(x);
+  return `<div class="card exp-card"><div class="between"><div class="eyebrow" style="color:var(--amber)">${I.leaf} 取り組み中</div><span class="small">${d}日目 / ${e.days}日</span></div>
+  <h3 class="h2" style="margin-top:4px">${esc(e.title)}</h3>
+  <div class="progress"><b style="width:${d/e.days*100}%;background:#B07A45"></b></div>
+  <p class="sub" style="margin-top:12px">今日はできましたか？</p>
+  <div class="checkrow">${Object.entries(CHECK).map(([k,l])=>`<button class="opt" data-a="expCheck" data-id="${e.id}" data-v="${k}" aria-pressed="${c===k}">${l}</button>`).join('')}</div>
+  ${missing.length>=2?`<p class="small" style="margin-top:10px">記録のない日が${missing.length}日あります。振り返りでは「未記録」として扱います。</p>`:''}
+  <button class="link" data-a="exp" data-id="${e.id}">${ended?'振り返る':'経過を見る'}</button></div>`;
+}
+
+/* ---------- 記録一覧 ---------- */
+VIEWS.log=()=>{
+  const st=S(); const first=Object.keys(st.days).sort()[0];
+  const from = first ? (diffDays(TODAY,first)>29?addDays(TODAY,-29):first) : TODAY;
+  const ds=[]; for(let d=TODAY; d>=from; d=addDays(d,-1)) ds.push(d);
+  let html=''; let i=0;
+  while(i<ds.length){
+    const d=ds[i]; const r=st.days[d];
+    if(r){ html+=dayRow(d,r); i++; continue; }
+    if(d===TODAY){ html+=`<button class="dayrow" data-a="openRec" data-date="${d}"><span class="d">今日<small>${md(d)}（${wd(d)}）</small></span><span class="dotm none"></span><span class="s">まだ記録していません</span><span class="tag">記録する</span></button>`; i++; continue; }
+    let j=i; while(j<ds.length && !st.days[ds[j]] && ds[j]!==TODAY) j++;
+    const n=j-i; const a=ds[j-1], b=ds[i];
+    html+= n===1
+      ? `<button class="dayrow" data-a="day" data-date="${d}"><span class="d">${md(d)}<small>${wd(d)}曜</small></span><span class="dotm none"></span><span class="s" style="color:var(--ink3)">未記録</span></button>`
+      : `<div class="gaprow"><span class="dotm none" style="width:14px;height:14px"></span><span style="flex:1">${md(a)}〜${md(b)}　未記録（${n}日）</span><button class="link" style="padding:4px;font-size:14px" data-a="day" data-date="${b}">さかのぼる（任意）</button></div>`;
+    i=j;
+  }
+  if(!first) html+=`<div class="empty-hint" style="margin-top:12px">記録はまだありません。今日の分から始められます。</div>`;
+  return `<div class="hello"><h1 class="serif">記録</h1><p class="sub">直近30日。空いた日は「未記録」として扱い、「症状なし」とは区別しています。</p></div><div class="card" style="padding:8px">${html}</div>`;
+};
+function dayRow(d,r){
+  const sy=SYMS.filter(([k])=>r.sym[k]>=2).map(([,l])=>l);
+  const meals=SLOTS.map(([k])=>mealText(r,k)).filter(Boolean).length;
+  const s=[r.mood?MOODS[r.mood]:'調子は未記録', r.wake?`目覚め${WAKE[r.wake]}`:null, sy.length?sy.join('・')+'が気になる':null, `食事${meals}件`].filter(Boolean).join('　');
+  return `<button class="dayrow" data-a="day" data-date="${d}"><span class="d">${d===TODAY?'今日':md(d)}<small>${d===TODAY?md(d)+'（'+wd(d)+'）':wd(d)+'曜'}</small></span><span class="dotm" style="background:${r.mood?MOODC[r.mood]:'#B9C7BD'}"></span><span class="s">${esc(s)}</span>${I.chev}</button>`;
+}
+VIEWS.day=({date})=>{
+  const st=S(); const r=st.days[date];
+  if(!r) return `<div class="hello"><p class="date">${jp(date)}</p><h1 class="serif">未記録の日</h1></div>
+    <div class="card"><p class="sub">この日は記録がありません。分析では「未記録」として扱い、「症状なし」とはみなしません。</p>
+    <p class="sub" style="margin-top:8px">思い出せることがあれば、覚えている範囲だけ残せます。無理に埋める必要はありません。</p>
+    <div class="row" style="margin-top:16px;flex-wrap:wrap;gap:10px"><button class="btn sec" data-a="openRec" data-date="${date}">${I.plus}覚えている範囲で残す</button><button class="btn ghost" data-a="look" data-date="${date}">前後の日と並べて見る</button></div></div>`;
+  const syms=SYMS.map(([k,l])=>`<dt>${l}</dt><dd>${r.sym[k]===null?'<span class="na">未記録</span>':r.sym[k]===0?'<span class="none0">なし</span>':LV[r.sym[k]]}</dd>`).join('')+((r.tiredWhen||[]).length?`<dt>疲れの時間帯</dt><dd>${r.tiredWhen.join('・')}</dd>`:'');
+  const meals=SLOTS.map(([k,l])=>`<dt>${l}${k==='d'&&r.dinnerTime?`<small style="display:block;font-weight:500">${dtLabel(r.dinnerTime)}</small>`:''}</dt><dd>${mealText(r,k)?esc(mealText(r,k)):'<span class="na">未記録</span>'}</dd>`).join('');
+  const ex=st.experiments.find(e=>e.check[date]);
+  const un='<span class="na">未記録</span>';
+  return `<div class="hello"><p class="date">${weatherChip(date)}</p><h1 class="serif">${jp(date)}</h1></div>
+  <div class="twocol"><div>
+  <div class="card"><div class="eyebrow">体調</div><dl class="kv" style="margin-top:10px">
+    <dt>調子</dt><dd>${r.mood?MOODS[r.mood]:un}</dd><dt>朝の目覚め</dt><dd>${r.wake?WAKE[r.wake]:un}</dd>${syms}</dl></div>
+  <div class="card"><div class="eyebrow">食事</div><dl class="kv" style="margin-top:10px">${meals}
+    ${TAGS.map(t=>{const ts=tagState(r,t); return `<dt>${t}</dt><dd>${ts==='yes'?'あった':ts==='no'?'<span class="none0">なかった</span>':un}</dd>`;}).join('')}</dl></div></div><div>
+  <div class="card"><div class="eyebrow">生活</div><dl class="kv" style="margin-top:10px">
+    <dt>睡眠</dt><dd>${r.sleep?sleepLabel(r.sleep):un}</dd><dt>仕事・ストレス</dt><dd>${r.stress?LMH[r.stress]:un}</dd>
+    <dt>活動</dt><dd>${r.activity?ACT[r.activity]:un}</dd><dt>姿勢ケア</dt><dd>${r.posture===null?un:r.posture?'した':'していない'}</dd>
+    <dt>整体</dt><dd>${r.seitai?'行った':un}</dd><dt>薬・塗り薬</dt><dd>${r.meds.length?esc(r.meds.join('、')):r.medsNone?'使っていない':un}</dd>
+    <dt>体重</dt><dd>${r.weight?esc(r.weight)+' kg':un}</dd>${ex?`<dt>取り組み</dt><dd>${esc(ex.title)}：${CHECK[ex.check[date]]}</dd>`:''}
+    ${r.memo?`<dt>メモ</dt><dd>${esc(r.memo)}</dd>`:''}</dl></div>
+  <button class="btn sec block" style="margin-bottom:12px" data-a="look" data-date="${date}">前後の日と並べて見る ${I.chev}</button>
+  <div class="row" style="flex-wrap:wrap;gap:10px"><button class="btn" data-a="openRec" data-date="${date}">${I.pen}修正する</button><button class="btn danger" data-a="askDelete" data-date="${date}">この日の記録を削除</button></div>
+  </div></div>`;
+};
+
+/* ---------- 発見 ---------- */
+VIEWS.insights=()=>{
+  const st=S();
+  if(!AUTO_CLASSIFY) return `<div class="hello"><h1 class="serif">振り返り</h1><p class="sub">記録した日の前後を並べて見られます。</p></div>
+    <div class="notice">${I.info}<div>比較の自動分類（条件ごとに多い・少ないを判定する表示）と気づきの自動表示は、検証が済むまで表示しません。表と件数は記録をそのまま数えたものです。医学的な判断ではありません。</div></div>
+    ${lookEntry(st)}`;
+  const a=allAnalyses(st);
+  return `<div class="hello"><h1 class="serif">発見</h1><p class="sub">記録から見えてきた「調子のよい日」の共通点。原因の断定ではなく、試してみる手がかりです。</p></div>
+  <div class="notice">${I.info}<div><b>デモ表示です。</b>架空データでの表示例で、実際の分析機能が動いた結果ではありません。医学的な判断でもありません。</div></div>
+  ${lookEntry(st)}
+  <div class="twocol">${a.map(x=>insightCard(x)).join('')}</div>
+  <div class="card flat"><div class="eyebrow">見ている問い</div><ul class="plain" style="margin-top:8px;color:var(--ink2)">
+    <li>どのような食事をすると調子がよいか</li><li>何を食べたとき、その後や翌日の体調はどうだったか</li><li>睡眠・活動・ストレス・姿勢・天候はどう関わるか</li></ul>
+    <p class="small" style="margin-top:8px">比べ方は自動で選びます。条件の設定は不要です。</p></div>`;
+};
+function insightCard(a){
+  const tag={found:'<span class="tag demo">デモシナリオ</span>',nodiff:'<span class="tag gray">違いは不明瞭</span>',insufficient:'<span class="tag gray">まだ比較できません</span>',empty:'<span class="tag gray">まだ比較できません</span>'}[a.status];
+  const got=Math.min(a.A.length,MIN_N)+Math.min(a.B.length,MIN_N);
+  return `<div class="card"><div class="between"><span class="small">${esc(a.q.q)}</span>${tag}</div>
+  <h3 class="${a.status==='found'?'serif ins-title':'h2'}" style="margin-top:6px;${a.status==='found'?'':'font-size:17px'}">${insightTitle(a)}</h3>
+  <p class="sub" style="margin-top:6px">${esc(insightLead(a))}</p>
+  ${a.status==='insufficient'||a.status==='empty'?`<div class="progress"><b style="width:${got/(MIN_N*2)*100}%"></b></div><p class="small" style="margin-top:6px">比べる材料 ${got} / ${MIN_N*2}</p>`:''}
+  <button class="btn sec block" style="margin-top:14px" data-a="insight" data-id="${a.q.id}">${a.status==='found'?'根拠と、当てはまらない日を見る':'理由を見る'} ${I.chev}</button></div>`;
+}
+VIEWS.insight=({id})=>{
+  const st=S(); const q=QUESTIONS.find(x=>x.id===id); const a=analyze(st,q);
+  const head=`<div class="notice">${I.info}<div><b>デモシナリオ：</b>架空データで集計した表示例です。実際の分析結果ではなく、医学的な判断でもありません。</div></div>
+    <div class="hello" style="padding-top:0"><span class="small">${esc(q.q)}</span><h1 class="serif ins-title" style="font-size:24px">${insightTitle(a)}</h1>
+    <p class="sub" style="margin-top:6px">${esc(insightLead(a))}</p></div>`;
+  if(a.status==='insufficient'||a.status==='empty'){
+    return head+`<div class="card"><div class="sec-h">なぜ、まだ比較できないのか</div><ul class="plain">${insufficientReasons(a).map(x=>`<li>${esc(x)}</li>`).join('')}</ul>
+    <p class="small" style="margin-top:10px">件数が少ないまま比べると、偶然の偏りを「傾向」と取り違えやすくなります。そのため、ここでは発見を表示しません。</p></div>
+    <div class="card flat"><div class="sec-h">記録が増えると見られること</div><p class="sub">${esc(q.Alabel)}と${esc(q.Blabel)}で、「${esc(q.facLabel)}」の割合を比べます。毎日でなくても、記録した日が増えれば比べられます。</p>
+    ${q.id==='wake'?'<p class="small" style="margin-top:8px">朝の目覚めは、記録の1問目でひと押しするだけで残せます。夕食の時刻は「夜」の欄でおおまかに選べます。</p>':''}</div>`;
+  }
+  const n=x=>x.length;
+  const fa=a.A.filter(x=>x.f).length, fb=a.B.filter(x=>x.f).length;
+  const dots=(g,cls)=>`<div class="dots ${cls}" aria-hidden="true">${g.map(x=>`<i class="${x.f?'f':''}" title="${md(x.d)}"></i>`).join('')}</div>`;
+  const misA=a.A.filter(x=>!x.f), misB=a.B.filter(x=>x.f);
+  const note=x=>{const r=st.days[x.d]; const p=[]; if(x.sleep) p.push('睡眠'+sleepLabel(x.sleep)); if(x.stress) p.push((q.id==='shoulder'?'':'前日の')+'仕事'+LMH[x.stress]); if(r&&r.memo) p.push('メモ「'+r.memo+'」'); return p.join('・')||'—';};
+  const sl=g=>{const v=g.map(x=>x.sleep).filter(Boolean); return v.length?avg(v):null;};
+  const sA=sl(a.A), sB=sl(a.B);
+  const stA=a.A.filter(x=>x.stress==='high').length/Math.max(1,a.A.filter(x=>x.stress).length), stB=a.B.filter(x=>x.stress==='high').length/Math.max(1,a.B.filter(x=>x.stress).length);
+  const wkA=a.A.filter(x=>x.wk).length/n(a.A), wkB=a.B.filter(x=>x.wk).length/n(a.B);
+  const alt=[];
+  if(sA&&sB) alt.push(Math.abs(sA-sB)>=.4 ? `睡眠：${q.Alabel}は平均${sA.toFixed(1)}時間、${q.Blabel}は${sB.toFixed(1)}時間でした。睡眠の長さが関わっている可能性もあり、記録上は区別できません。` : `睡眠：平均${sA.toFixed(1)}時間と${sB.toFixed(1)}時間で、大きな差はありませんでした。`);
+  if(Math.abs(stA-stB)>=.15) alt.push(`仕事の重さ：${q.id==='shoulder'?'その日':'前日'}の仕事が「重い」だった割合は、${Math.round(stA*100)}% と ${Math.round(stB*100)}% でした。忙しい日は${q.id==='wake'?'夕食も遅くなりやすく':'ケアの余裕もなく'}、両方が重なっているかもしれません。`);
+  if(Math.abs(wkA-wkB)>=.15) alt.push(`曜日：休日の割合が ${Math.round(wkA*100)}% と ${Math.round(wkB*100)}% で異なります。休日かどうかの影響も考えられます。`);
+  alt.push('天候や季節、体調の波そのものなど、記録していない要因の可能性もあります。');
+  if(q.id==='wake'){ const e=a.all.filter(x=>x.f&&x.sleep), l=a.all.filter(x=>!x.f&&x.sleep); if(e.length&&l.length&&avg(e.map(x=>x.sleep))-avg(l.map(x=>x.sleep))>=.3) alt.unshift(`夕食が早かった翌朝は、睡眠も長め（平均${avg(e.map(x=>x.sleep)).toFixed(1)}時間 / 遅かった翌朝 ${avg(l.map(x=>x.sleep)).toFixed(1)}時間）でした。夕食の時刻と睡眠のどちらが効いているかは、まだ分かりません。`); }
+  const cand=CANDS[q.tryIdx];
+  const unk=['これが原因なのか、たまたま重なっただけなのか','約1か月分の記録のため、季節や仕事の時期による違い'];
+  if(q.id==='wake') unk.push('夕食の時刻と、夕食の中身・量のどちらが関わるのか');
+  if(q.id==='nose') unk.push('甘いものの種類や量による違い');
+  unk.push('件数が少ないため、数日分の記録で結果が変わりうること');
+  const open=ui.insOpen||{};
+  const sec=(key,num,title,preview,body)=>`<details class="acc" data-k="${key}" ${open[key]?'open':''}><summary><span class="n">${num}</span><span class="acc-t"><b>${title}</b><span class="small">${preview}</span></span><span class="chev" aria-hidden="true">${I.chev}</span></summary><div class="acc-b">${body}</div></details>`;
+  const b1=`<p class="sub">${md(a.from)}〜${md(a.to)}の${a.win.length}日のうち、記録のある${a.rec.length}日を見ました。</p>
+    <div class="cmp">
+      <div><div class="lab">${esc(q.Alabel)}　${n(a.A)}日</div>${dots(a.A,'')}<div class="num" style="margin-top:4px">「${esc(q.facLabel)}」は <b>${fa}日 / ${n(a.A)}日（${Math.round(a.ra*100)}%）</b></div></div>
+      <div><div class="lab">${esc(q.Blabel)}　${n(a.B)}日</div>${dots(a.B,'b')}<div class="num" style="margin-top:4px">「${esc(q.facLabel)}」は <b>${fb}日 / ${n(a.B)}日（${Math.round(a.rb*100)}%）</b></div></div>
+    </div><p class="small" style="margin-top:10px">● 塗りつぶし＝${esc(q.facLabel)}　○ 白抜き＝そうでない日</p>`;
+  const b2=`<ul class="plain"><li>比較：${esc(q.Alabel)}（${n(a.A)}日）と ${esc(q.Blabel)}（${n(a.B)}日）</li>
+    ${a.M?`<li>${esc(q.midLabel)}（${a.M}日）は比較から外しました</li>`:''}
+    ${a.noOut?`<li>「${esc(q.outName)}」が未記録の日（${a.noOut}日）は含めていません</li>`:''}
+    ${a.noFac?`<li>${esc(q.facMissing)}の日（${a.noFac}日）は含めていません</li>`:''}
+    <li>未記録を「症状なし」や「食べなかった」としては数えていません</li></ul>`;
+  const b3=(misA.length||misB.length)?`<ul class="plain">${misA.slice(0,4).map(x=>`<li>${md(x.d)}（${wd(x.d)}）：${esc(q.Alabel.replace('の日',''))}なのに、${esc(q.facLabel)}ではなかった<br><span class="small">${esc(note(x))}</span></li>`).join('')}${misB.slice(0,4).map(x=>`<li>${md(x.d)}（${wd(x.d)}）：${esc(q.facLabel)}だったのに、${esc(q.Blabel.replace('の日',''))}<br><span class="small">${esc(note(x))}</span></li>`).join('')}</ul>${misA.length+misB.length>8?`<p class="small" style="margin-top:6px">ほか${misA.length+misB.length-8}日</p>`:''}`:'<p class="sub">今回の期間では見当たりませんでした。</p>';
+  const b4=`<ul class="plain">${alt.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`;
+  const b5=`<ul class="plain">${unk.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`;
+  const keys=['ev','cnt','mis','alt','unk']; const allOpen=keys.every(k=>open[k]);
+  return head+`<div class="ins-layout"><div>
+  <div class="card keyfacts"><div class="eyebrow">ひと目で</div>
+    <div class="kf">
+      <div><span class="small">${esc(q.Alabel)}</span><b class="serif">${fa}<small> / ${n(a.A)}日</small></b><span class="small">が「${esc(q.facLabel)}」</span></div>
+      <div><span class="small">${esc(q.Blabel)}</span><b class="serif">${fb}<small> / ${n(a.B)}日</small></b><span class="small">が「${esc(q.facLabel)}」</span></div>
+    </div>
+    <p class="small" style="margin-top:10px">手がかりの強さ：<b>弱い</b>　件数が少なく、偶然の可能性があります。原因とは限りません。</p></div>
+  <div class="between" style="margin:20px 4px 6px"><span class="eyebrow">くわしく見る（タップで開く）</span><button class="link" style="font-size:14px" data-a="insAll">${allOpen?'すべて閉じる':'すべて開く'}</button></div>
+  <div class="card acc-wrap">
+    ${sec('ev',1,'根拠になった記録',`${esc(q.Alabel)} ${n(a.A)}日と、${esc(q.Blabel)} ${n(a.B)}日`,b1)}
+    ${sec('cnt',2,'比べたものと件数',`記録のある${a.rec.length}日のうち${n(a.A)+n(a.B)}日で比較、${a.M+a.noOut+a.noFac}日は除外`,b2)}
+    ${sec('mis',3,'当てはまらない日',(misA.length+misB.length)?`${misA.length+misB.length}日あります`:'見当たりません',b3)}
+    ${sec('alt',4,'別の説明の可能性',`${alt.length}つ（睡眠・仕事量など）`,b4)}
+    ${sec('unk',5,'まだ分からないこと',`${unk.length}つ`,b5)}
+  </div></div><div>
+  <div class="card exp-card"><div class="eyebrow" style="color:var(--amber)">${I.leaf} 確かめるなら</div>
+    <p class="sub" style="margin-top:6px">負担の小さい形で、一つだけ試して前後を振り返る方法があります。試すかどうかは自由です。</p>
+    <p style="margin-top:8px;font-weight:700">例：${esc(cand.title)}</p>
+    <div class="row" style="margin-top:14px;flex-wrap:wrap"><button class="btn" data-a="tryFrom" data-i="${q.tryIdx}">これを試してみる</button><button class="btn ghost" data-a="back">今はやめておく</button></div></div>
+  </div></div>`;
+};
+
+
+/* =========================================================
+   設定・バックアップ・天気（本人用）
+   ========================================================= */
+const WX_LOC={name:'岡山県岡山市',lat:34.6617,lon:133.9350};
+function backupDue(){ if(MODE!=='real'||!R.meta||R.meta.role!=='main') return null; const n=Object.keys(R.state.days).length; if(!n) return null;
+  const ref=R.meta.lastBackupAt||R.meta.firstRecordAt||R.meta.createdAt; const days=Math.floor((Date.now()-new Date(ref))/864e5);
+  return days>=7?{days,never:!R.meta.lastBackupAt,n}:null; }
+function backupCard(){ const d=backupDue(); if(!d) return '';
+  return `<div class="card flat bkcard"><div class="eyebrow">バックアップ</div>
+  <p class="sub" style="margin-top:4px">${d.never?`まだバックアップがありません（記録${d.n}日分）。`:`前回のバックアップから${d.days}日たちました。`}端末の不具合や機種変更に備えて、ファイルを手元に残せます。</p>
+  <button class="btn sec" style="margin-top:10px" data-a="exportBackup">いま書き出す</button></div>`; }
+VIEWS.settings=()=>{
+  if(MODE==='demo') return `<div class="hello"><h1 class="serif">設定</h1></div><div class="card"><p class="sub">デモ表示中です。設定は自分の記録に戻ってから変更できます。</p><button class="btn" style="margin-top:12px" data-a="exitDemo">自分の記録に戻る</button></div>`;
+  const m=R.meta, n=Object.keys(R.state.days).length, viewer=m.role==='viewer';
+  const ks=Object.keys(R.state.days).sort();
+  const wxDates=Object.keys(R.weather).sort(); const wl=wxDates.length?R.weather[wxDates[wxDates.length-1]]:null;
+  const wst={idle:'未取得',loading:'取得中…',ok:'取得済み',error:'取得できませんでした（次に開いた時に取り直します）',offline:'通信できないため待機中'}[R.wx.state]||'';
+  return `<div class="hello"><h1 class="serif">設定</h1><p class="small">からだ日和 ${APP_VERSION}・記録の形 版${SCHEMA}</p></div>
+  <div class="twocol"><div>
+  <div class="card"><div class="eyebrow">バックアップ</div>
+    ${viewer?`<p class="sub" style="margin-top:6px">${m.viewerLoadedAt?`${fmtDT(m.viewerLoadedAt)}に読み込んだ記録（${n}日分）を表示しています。`:'まだ読み込んでいません。'}PCでは閲覧だけで、記録・修正はできません。</p>
+      <button class="btn" style="margin-top:12px" data-a="importPick">バックアップを読み込む</button>`
+    :`<p class="sub" style="margin-top:6px">記録 ${n}日分${ks.length?`（${md(ks[0])}〜${md(ks[ks.length-1])}）`:''}。前回の書き出し：${m.lastBackupAt?fmtDT(m.lastBackupAt):'まだありません'}</p>
+      <div class="row" style="margin-top:12px;flex-wrap:wrap;gap:10px"><button class="btn" data-a="exportBackup" ${n?'':'disabled'}>書き出す</button><button class="btn sec" data-a="importPick">バックアップから復元</button></div>
+      <p class="small" style="margin-top:8px">復元すると、今の記録をファイルの内容に置き換えます。直前の記録は写しとして残り、「復元前に戻す」で戻せます。7日ごとに書き出しをご案内します。</p>
+      ${m.lastRestoreAt?`<button class="link" data-a="undoRestore">復元前に戻す（${fmtDT(m.lastRestoreAt)}の復元）</button>`:''}`}
+  </div>
+  <div class="card"><div class="eyebrow">この端末の使い方</div>
+    <p class="sub" style="margin-top:6px">${viewer?'記録を見るだけ（PC向け・閲覧専用）':'この端末で記録する（iPhone向け）'}</p>
+    <button class="link" data-a="${viewer?'roleToMain':'roleToViewer'}">${viewer?'この端末で記録するように切り替える':'閲覧専用に切り替える'}</button></div>
+  <div class="card"><div class="eyebrow">天気</div>
+    <dl class="kv" style="margin-top:8px"><dt>地域</dt><dd>${WX_LOC.name}（代表地点）</dd><dt>状態</dt><dd>${wst}${R.wx.at?`（${fmtDT(R.wx.at)}）`:''}</dd><dt>取得済み</dt><dd>${wxDates.length}日分</dd></dl>
+    ${R.wx.state==='error'&&R.wx.msg?`<p class="small">理由：${esc(R.wx.msg)}</p>`:''}
+    <button class="btn sec" style="margin-top:10px" data-a="wxRefresh">いま取得する</button>
+    <p class="small" style="margin-top:8px">天気データ：<a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a>（CC BY 4.0）。地点と日付だけを送ります。取得できなくても記録はできます。</p></div>
+  </div><div>
+  <div class="card"><div class="eyebrow">保存の状態</div>
+    <dl class="kv" style="margin-top:8px"><dt>保存場所</dt><dd>この端末の中（外部には送りません）</dd>
+    <dt>保存の優先</dt><dd>${R.persisted===true?'ブラウザに認められています':R.persisted===false?'認められていません':'不明'}<div class="small">認められていても、端末の容量不足などで消える可能性は残ります</div></dd>
+    <dt>自動の写し</dt><dd><span id="snapCount">確認中…</span></dd></dl></div>
+  <div class="card"><div class="eyebrow">デモ</div><p class="sub" style="margin-top:6px">架空データで画面の動きを確かめられます。あなたの記録とは別に保存され、混ざりません。</p><button class="btn sec" style="margin-top:10px" data-a="enterDemo">デモを見る（架空データ）</button></div>
+  <div class="card flat"><div class="eyebrow">このアプリについて</div><ul class="plain" style="margin-top:6px;color:var(--ink2);font-size:14px">
+    <li>医学的な判断はしません。記録上の重なりは、行動のおすすめではありません。</li>
+    <li>比較の自動分類は、検証が済むまで表示しません。</li>
+    <li>端末の不具合や紛失、操作の誤りで記録を失う可能性があります。定期的なバックアップをおすすめします。</li></ul></div>
+  </div></div>`;
+};
+/* ---- バックアップ ---- */
+async function sha256(str){ const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(str)); return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join(''); }
+async function makeBackup(){ const st=R.state; const data={days:st.days,history:st.history,experiments:st.experiments,plans:st.plans,prefs:st.prefs};
+  const body=JSON.stringify({data,weather:R.weather}); const ks=Object.keys(st.days).sort();
+  return {format:'karada-biyori-backup',kind:'real',schema:SCHEMA,appVersion:APP_VERSION,exportedAt:new Date().toISOString(),summary:{days:ks.length,from:ks[0]||null,to:ks[ks.length-1]||null},checksum:await sha256(body),body}; }
+async function exportBackup(){ if(!canWrite()) return toast('この端末では書き出せません');
+  const b=await makeBackup(); const name=`karada-backup-${TODAY}.json`; const file=new File([JSON.stringify(b)],name,{type:'application/json'});
+  let done=false;
+  if(/iPhone|iPad|iPod/.test(navigator.userAgent) && navigator.canShare && navigator.canShare({files:[file]})){
+    try{ await navigator.share({files:[file],title:'からだ日和のバックアップ'}); done=true; }catch(e){ if(e&&e.name==='AbortError'){ toast('書き出しを取りやめました'); return; } } }
+  if(!done){ const a=document.createElement('a'); a.href=URL.createObjectURL(file); a.download=name; document.body.appendChild(a); a.click(); setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); },2000); }
+  R.meta.lastBackupAt=new Date().toISOString(); await saveMeta(); render(); toast(`バックアップを書き出しました（${b.summary.days}日分）`); return b; }
+async function readBackupText(text){
+  let o; try{ o=JSON.parse(text); }catch(e){ throw new Error('ファイルを読み取れませんでした（形式が違います）'); }
+  if(!o||o.format!=='karada-biyori-backup') throw new Error('からだ日和のバックアップファイルではありません');
+  if(o.kind!=='real') throw new Error('デモのデータは読み込めません');
+  if(typeof o.schema!=='number'||o.schema>SCHEMA) throw new Error('新しい版のアプリで作られたファイルです。アプリを更新してから読み込んでください');
+  if(typeof o.body!=='string'||await sha256(o.body)!==o.checksum) throw new Error('ファイルが壊れているか、途中で書き換えられています');
+  const p=JSON.parse(o.body); if(!p.data||typeof p.data.days!=='object') throw new Error('記録が見つかりません');
+  let data=p.data; for(let v=o.schema; v<SCHEMA; v++){ const f=MIGRATIONS[v]; if(!f) throw new Error(`版${v}のファイルを変換できません`); data=f(data); }
+  return {head:o,data,weather:p.weather||{}}; }
+let pendingImport=null;
+async function onFileChosen(file){ if(!file) return;
+  try{ const r=await readBackupText(await file.text()); pendingImport=r; const h=r.head, sm=h.summary||{};
+    const cur=Object.keys(R.state.days); const overlap=Object.keys(r.data.days).filter(d=>R.state.days[d]).length; const viewer=R.meta.role==='viewer';
+    ui.dlg={title:viewer?'このバックアップを読み込みますか？':'このバックアップから復元しますか？',
+      body:`ファイル：${sm.days}日分（${sm.from?md(sm.from):'—'}〜${sm.to?md(sm.to):'—'}）・作成 ${fmtDT(h.exportedAt)}<br>今の記録：${cur.length}日分${viewer?'':`（ファイルと重なる日 ${overlap}日）`}<br>${viewer?'読み込んだ時点の記録を閲覧専用で表示します。':'今の記録をファイルの内容に置き換えます。直前の記録は写しとして残り、「復元前に戻す」で戻せます。'}`,
+      acts:[{l:'やめる',a:'dlgClose',cls:'ghost'},{l:viewer?'読み込む':'置き換えて復元',a:'doImport'}]}; renderOverlay();
+  }catch(e){ ui.dlg={title:'読み込めませんでした',body:esc(e.message||String(e))+'<br>今の記録は変更していません。',acts:[{l:'閉じる',a:'dlgClose'}]}; renderOverlay(); } }
+async function doImport(){ const r=pendingImport; if(!r) return; pendingImport=null; const viewer=R.meta.role==='viewer';
+  const next={...emptyState(),...clone(r.data),draft:null};
+  try{
+    if(!viewer){ await addSnapshot('復元の直前',R.state); R.meta.lastRestoreAt=new Date().toISOString(); }
+    else { R.meta.viewerLoadedAt=new Date().toISOString(); R.meta.viewerExportedAt=r.head.exportedAt; }
+    const tx=R.db.transaction(['kv','weather'],'readwrite'); tx.objectStore('kv').put(next,'state'); tx.objectStore('kv').put(R.meta,'meta');
+    for(const [k,v] of Object.entries(r.weather)) tx.objectStore('weather').put(v,k); await txDone(tx);
+    R.state=next; Object.assign(R.weather,r.weather); undoStack=[];
+    ui.dlg=null; ui.stack=[]; ui.tab='home'; render(true);
+    if(viewer) toast(`${Object.keys(next.days).length}日分の記録を読み込みました（閲覧専用）`); else toast(`${Object.keys(next.days).length}日分を復元しました`,{a:'undoRestore',l:'復元前に戻す'});
+  }catch(e){ ui.dlg={title:'復元できませんでした',body:esc(e.message||String(e))+'<br>今の記録は変更していません。',acts:[{l:'閉じる',a:'dlgClose'}]}; renderOverlay(); } }
+async function undoRestore(){ const all=await listSnapshots(); const snap=[...all].reverse().find(x=>x.reason==='復元の直前'); if(!snap) return toast('戻せる写しがありません');
+  await addSnapshot('「復元前に戻す」の直前',R.state); await kvPut({state:snap.state}); R.state=snap.state; R.meta.lastRestoreAt=null; await saveMeta(); undoStack=[]; render(true); toast('復元前の記録に戻しました'); }
+/* ---- 天気（Open-Meteo） ---- */
+const WMO=c=> c===0?['sun','晴れ']: c<=2?['sun','晴れ時々くもり']: c===3?['cloud','くもり']: c<=48?['cloud','霧']: c<=67?['rain','雨']: c<=77?['cloud','雪']: c<=82?['rain','にわか雨']: c<=86?['cloud','雪']: ['rain','雷雨'];
+function parseWx(j,today){ const d=j.daily, h=j.hourly||{time:[]}; const out={};
+  d.time.forEach((t,i)=>{ const idx=[]; h.time.forEach((x,k)=>{ if(x.slice(0,10)===t) idx.push(k); });
+    const mean=a=>{ if(!a) return null; const v=idx.map(k=>a[k]).filter(x=>x!=null); return v.length?Math.round(v.reduce((p,q)=>p+q,0)/v.length*10)/10:null; };
+    const code=d.weather_code?d.weather_code[i]:null; const [ic,l]=code==null?['cloud','—']:WMO(code);
+    out[t]={src:'Open-Meteo',i:ic,l,code,tmax:d.temperature_2m_max?d.temperature_2m_max[i]:null,tmin:d.temperature_2m_min?d.temperature_2m_min[i]:null,prec:d.precipitation_sum?d.precipitation_sum[i]:null,hum:mean(h.relative_humidity_2m),pres:mean(h.surface_pressure),prov:t>=today,at:new Date().toISOString()}; });
+  return out; }
+function wxNeeded(){ const need=new Set(); for(let i=0;i<14;i++) need.add(addDays(TODAY,-i));
+  for(const d of Object.keys(R.state.days)) if(diffDays(TODAY,d)<=91&&d<=TODAY) need.add(d);
+  return [...need].filter(d=>{ const w=R.weather[d]; return !w||w.prov&&d<TODAY||w.prov&&d===TODAY&&Date.now()-new Date(w.at)>3*3600e3; }).sort(); }
+let wxBusy=false, wxLastTry=0;
+async function fetchWeather(force){ if(MODE!=='real'||!R.db||wxBusy) return; if(!force&&Date.now()-wxLastTry<5*60e3) return;
+  const miss=wxNeeded(); if(!miss.length){ if(force){ R.wx={state:'ok',at:new Date().toISOString()}; if(route().name==='settings') render(); } return; }
+  if(!navigator.onLine){ R.wx={state:'offline'}; return; }
+  wxBusy=true; wxLastTry=Date.now(); R.wx={state:'loading'};
+  const past=Math.min(92,Math.max(0,diffDays(TODAY,miss[0])));
+  const url=`https://api.open-meteo.com/v1/forecast?latitude=${WX_LOC.lat}&longitude=${WX_LOC.lon}&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum&hourly=relative_humidity_2m,surface_pressure&timezone=Asia%2FTokyo&past_days=${past}&forecast_days=1`;
+  try{ const res=await fetch(url,{cache:'no-store'}); if(!res.ok) throw new Error('通信エラー '+res.status); const j=await res.json(); if(!j.daily||!j.daily.time) throw new Error('想定と違う応答です');
+    const got=parseWx(j,TODAY); const merged={...R.weather};
+    for(const [k,v] of Object.entries(got)) if(k<=TODAY) merged[k]=v;
+    for(const k of Object.keys(got)){ const cur=merged[k], prev=merged[addDays(k,-1)]; if(cur&&prev&&cur.pres!=null&&prev.pres!=null) cur.dp=Math.round((cur.pres-prev.pres)*10)/10; else if(cur) cur.dp=null; }
+    const tx=R.db.transaction('weather','readwrite'); for(const k of Object.keys(got)) if(merged[k]) tx.objectStore('weather').put(merged[k],k); await txDone(tx);
+    R.weather=merged; R.wx={state:'ok',at:new Date().toISOString()};
+  }catch(e){ R.wx={state:'error',msg:String(e&&e.message||e),at:new Date().toISOString()}; }
+  finally{ wxBusy=false; if(!ui.sheet&&!ui.dlg) render(); } }
+
+/* ---------- 肌・疲れと生活の重なり（第4版：両方向・要約優先） ---------- */
+const LOOK_SYMS={skin:'肌のかゆみ・荒れ',tired:'疲れ・だるさ'};
+const LAGS=[[0,'当日'],[1,'前日'],[2,'2日前'],[3,'3日前']];
+const LOOK_N=42, MIN_O=5, TH=.3, SIM=.2;
+const FACTORS=[
+  {id:'sleep',l:'睡眠6時間未満（前夜）',v:(D,d)=>{const r=D[d]; return !r||r.sleep==null?null:r.sleep<6;}},
+  {id:'sleepLong',l:'睡眠7時間以上（前夜）',v:(D,d)=>{const r=D[d]; return !r||r.sleep==null?null:r.sleep>=7;}},
+  {id:'work',l:'仕事が「重い」',v:(D,d)=>{const r=D[d]; return !r||!r.stress?null:r.stress==='high';}},
+  {id:'late',l:'夕食が21時以降',v:(D,d)=>{const r=D[d]; return !r||!r.dinnerTime?null:r.dinnerTime>='21:00';}},
+  {id:'sweets',l:'甘いものがあった',v:(D,d)=>{const t=tagState(D[d],'甘いもの'); return t==null?null:t==='yes';}},
+  {id:'alcohol',l:'お酒があった',v:(D,d)=>{const t=tagState(D[d],'お酒'); return t==null?null:t==='yes';}},
+  {id:'dry',l:'空気が乾燥（天気・デモ値）',v:(D,d)=>{const w=weatherFor(d); return !w||w.h==null?null:w.h==='乾燥';}},
+  {id:'humid',l:'湿度が高め（天気・デモ値）',v:(D,d)=>{const w=weatherFor(d); return !w||w.h==null?null:w.h==='高め';}},
+  {id:'pres',l:'気圧が低め（天気・デモ値）',v:(D,d)=>{const w=weatherFor(d); return !w||w.p==null?null:w.p==='低め';}}
+];
+function lookRange(){ const a=[]; for(let i=LOOK_N;i>=1;i--) a.push(addDays(TODAY,-i)); a.push(TODAY); return a; }
+function badDays(st,sym){ return lookRange().filter(d=>st.days[d]&&st.days[d].sym[sym]>=2).reverse(); }
+function lagText(labs){ // 連続した遅れは「当日〜2日前」のようにまとめる
+  const idx=labs.map(l=>LAGS.findIndex(x=>x[1]===l)).sort((a,b)=>a-b);
+  const cont=idx.every((v,i)=>i===0||v===idx[i-1]+1);
+  return idx.length>=3&&cont ? `${LAGS[idx[0]][1]}〜${LAGS[idx[idx.length-1]][1]}` : idx.map(i=>LAGS[i][1]).join('・'); }
+function overlap(st,sym){
+  const ds=lookRange().filter(d=>st.days[d]&&st.days[d].sym[sym]!=null);
+  const U=ds.filter(d=>st.days[d].sym[sym]>=2), C=ds.filter(d=>st.days[d].sym[sym]<=1);
+  const rec=lookRange().filter(d=>st.days[d]);
+  const rows=FACTORS.map(f=>{
+    const lags=LAGS.map(([L,lab])=>{ const g=set=>{const v=set.map(d=>f.v(st.days,addDays(d,-L))).filter(x=>x!==null); return {n:v.length,k:v.filter(Boolean).length};};
+      const u=g(U), c=g(C), ok=u.n>=MIN_O&&c.n>=MIN_O; const ru=u.n?u.k/u.n:0, rc=c.n?c.k/c.n:0; return {L,lab,u,c,ok,ru,rc,diff:ru-rc}; });
+    const okL=lags.filter(x=>x.ok);
+    const bad=okL.some(x=>x.diff>=TH), calm=okL.some(x=>x.diff<=-TH);
+    const cls=!okL.length?'lack':bad&&calm?'mixed':bad?'bad':calm?'calm':'nodiff';
+    const dir=cls==='bad'?1:cls==='calm'?-1:0;
+    const sim=dir?okL.filter(x=>x.diff*dir>=SIM):[];       // 同じ向きの差がある日
+    const lackL=lags.filter(x=>!x.ok).map(x=>x.lab);
+    let say='';
+    if(dir){ say = sim.length>=2 ? `${lagText(sim.map(x=>x.lab))}で、同じ向きの差` : `${sim[0].lab}に差（ほかの日は差が小さい）`;
+      const miss=dir>0 ? Math.min(...sim.map(x=>x.u.n-x.u.k)) : Math.min(...sim.map(x=>x.c.n-x.c.k));
+      say += `。${dir>0?'不調の日':'落ち着いた日'}にも、当てはまらない日が少なくとも${miss}日あります`; }
+    if(cls==='mixed') say=`${lagText(okL.filter(x=>x.diff>=TH).map(x=>x.lab))}は不調の日に多く、${lagText(okL.filter(x=>x.diff<=-TH).map(x=>x.lab))}は落ち着いた日に多い`;
+    if(cls==='nodiff'){ const mx=Math.max(...okL.map(x=>Math.abs(x.diff))); say = mx>=SIM ? `差はあるが目安（${Math.round(TH*100)}ポイント）より小さい` : 'どの日も、割合の差は小さい'; }
+    if(cls==='lack') say='記録が少なく比べられない';
+    if(lackL.length&&cls!=='lack') say+=`（${lagText(lackL)}は材料不足）`;
+    const short = dir ? (sim.length>=2?lagText(sim.map(x=>x.lab)):sim[0].lab+'のみ') : cls==='mixed'?'日によって向きが違う':'';
+    return {f,lags,cls,sim,say,short};
+  });
+  return {ds,U,C,rec,rows,enough:U.length>=MIN_O&&C.length>=MIN_O};
+}
+const GROUPS=[
+  ['bad','不調の日に多かった条件','#C2703D'],
+  ['calm','落ち着いた日に多かった条件','#3B6B53'],
+  ['mixed','日によって向きが違う条件','#8A7A5C'],
+  ['nodiff','はっきりした差が見えない条件','#A9B9AE'],
+  ['lack','材料不足の条件','']
+];
+function lookEntry(st){
+  const k=badDays(st,'skin').length, t=badDays(st,'tired').length;
+  return `<div class="card"><div class="between"><div class="eyebrow">${I.leaf} 肌・疲れと生活の重なり</div><span class="tag gray">原因は決めません</span></div>
+  <p class="sub" style="margin-top:6px">不調の日を選ぶと、その前後の食事・睡眠・仕事・天気・薬を同じ時間軸で見られます。</p>
+  <p class="small" style="margin-top:6px">直近6週で「中・強」の日：肌 ${k}日・疲れ ${t}日</p>
+  <div class="row" style="margin-top:12px;flex-wrap:wrap;gap:8px"><button class="btn sec" data-a="look" data-sym="skin">肌の調子</button><button class="btn sec" data-a="look" data-sym="tired">疲れ・だるさ</button></div></div>`;
+}
+/* 表のセル：略語を使わず言葉で表示 */
+const LVC=['#E4EDE6','#F1DFC4','#E2AC7E','#B5562E'];
+const uCell='<span class="c u" title="未記録" aria-label="未記録"></span>';
+function lvCell(v){ return v==null?uCell:`<span class="c" style="background:${LVC[v]};${v===3?'color:#fff':''}">${LV[v]}</span>`; }
+function tCell(t,strong){ return t==null?uCell:`<span class="c t${strong?' s':''}">${t}</span>`; }
+const SLEEP_W={4.5:'5未満',5.5:'5〜6',6.5:'6〜7',7.5:'7以上'};
+const DT_W={'18:45':'19時前','19:30':'19時台','20:30':'20時台','21:30':'21時〜'};
+const MED_W={'塗り薬':'塗り薬','点鼻薬':'点鼻','飲み薬':'飲み薬','その他':'その他'};
+const LANES=[
+  ['g','体調'],
+  ['肌',(r)=>lvCell(r&&r.sym.skin)],
+  ['疲れ・だるさ',(r)=>lvCell(r&&r.sym.tired)],
+  ['朝の目覚め',(r)=>!r||!r.wake?uCell:tCell(WAKE[r.wake],r.wake==='tired')],
+  ['g','生活'],
+  ['睡眠（前夜・時間）',(r)=>!r||r.sleep==null?uCell:tCell(SLEEP_W[r.sleep],r.sleep<6)],
+  ['仕事',(r)=>!r||!r.stress?uCell:tCell(LMH[r.stress],r.stress==='high')],
+  ['夕食の時刻',(r)=>!r?uCell:r.meals.d.none?tCell('食べず'):!r.dinnerTime?uCell:tCell(DT_W[r.dinnerTime]||dtLabel(r.dinnerTime),r.dinnerTime>='21:00')],
+  ['甘いもの',(r)=>{const t=tagState(r,'甘いもの'); return t==null?uCell:tCell(t==='yes'?'あり':'なし',t==='yes');}],
+  ['お酒',(r)=>{const t=tagState(r,'お酒'); return t==null?uCell:tCell(t==='yes'?'あり':'なし',t==='yes');}],
+  ['g','天気・薬・体重'],
+  ['天気・湿度・気圧の前日差',(r,d)=>{const w=weatherFor(d); if(!w) return uCell;
+    if(w.src==='Open-Meteo'){ const f=[w.hum!=null?Math.round(w.hum)+'%':'', w.dp!=null?(w.dp>0?'+':'')+Math.round(w.dp)+'hPa':''].filter(Boolean); return `<span class="c t w">${I[w.i]}${f.length?`<b class="wn">${f.join('<br>')}</b>`:''}</span>`; }
+    const f=[w.h==='乾燥'?'乾燥':w.h==='高め'?'湿度高':'',w.p==='低め'?'低気圧':''].filter(Boolean); return `<span class="c t w">${I[w.i]}${f.length?`<b>${f.join('<br>')}</b>`:''}</span>`;}],
+  ['薬・塗り薬',(r)=>!r?uCell:r.meds.length?tCell(r.meds.map(m=>MED_W[m]).join('<br>')):r.medsNone?tCell('使わず'):uCell],
+  ['体重（kg）',(r)=>!r||!r.weight?uCell:tCell(r.weight),'w']
+];
+function offLabel(center,d){ const n=diffDays(center,d); return n===0?'当日':n===1?'前日':n===-1?'翌日':n>0?`${n}日前`:`${-n}日後`; }
+function fold(key,title,sub,body,openDef){ const o=(ui.insOpen&&key in ui.insOpen)?ui.insOpen[key]:openDef;
+  return `<details class="card fold acc" data-k="${key}" ${o?'open':''}><summary><span class="acc-t"><b>${title}</b>${sub?`<span class="small">${sub}</span>`:''}</span><span class="chev" aria-hidden="true">${I.chev}</span></summary><div class="fold-b">${body}</div></details>`; }
+VIEWS.look=(rt)=>{
+  const st=S(); const sym=rt.sym||'skin'; const bds=badDays(st,sym);
+  const date=rt.date||bds[0]||lastRecorded(st)||TODAY; const span=rt.span||3; const sel=rt.sel||date;
+  const hideW=!!(st.prefs&&st.prefs.hideWeight); const wide=window.matchMedia('(min-width:960px)').matches;
+  const ov=overlap(st,sym); const SN=LOOK_SYMS[sym];
+  // ---- 1) 短い要約 ----
+  const pick=c=>ov.rows.filter(x=>x.cls===c);
+  const line=(c,lab)=>{ const rs=pick(c); return rs.length?`<li><b>${lab}</b>${rs.map(x=>`${esc(x.f.l.replace(/（.*?）/,''))}<span class="small">（${esc(x.short)}）</span>`).join('、')}</li>`:''; };
+  const summary = !AUTO_CLASSIFY ? `<div class="card sumcard"><div class="eyebrow">まとめ（直近6週）</div>
+    <p class="sumlead">${SN}が「中・強」の日 <b>${ov.U.length}日</b>、「なし・軽い」の日 <b>${ov.C.length}日</b>、${SN}が未記録 <b>${LOOK_N+1-ov.ds.length}日</b></p>
+    <p class="sub" style="margin-top:8px">比較の自動分類は、検証が済むまで表示しません。下の「日付から前後を見る」で、1日ずつの様子を確かめられます。</p>
+    <p class="sumnote">記録上の重なりで、行動のおすすめではありません。</p></div>`
+  : `<div class="card sumcard"><div class="eyebrow">まとめ（直近6週）</div>
+    <p class="sumlead">${SN}が「中・強」の日 <b>${ov.U.length}日</b>、「なし・軽い」の日 <b>${ov.C.length}日</b></p>
+    ${!ov.enough?`<p class="sub" style="margin-top:8px">比べる材料が足りません（どちらも${MIN_O}日以上が目安）。下の「日付から前後を見る」で、1日ずつの様子は見られます。</p>`
+    :`<ul class="sumlist">${line('bad','不調の日に多かった：')}${line('calm','落ち着いた日に多かった：')}${pick('mixed').length?`<li><b>日によって向きが違う：</b>${pick('mixed').map(x=>esc(x.f.l.replace(/（.*?）/,''))).join('、')}</li>`:''}
+      ${pick('nodiff').length?`<li><b>差が小さい：</b>${pick('nodiff').length}項目</li>`:''}${pick('lack').length?`<li><b>材料不足：</b>${pick('lack').map(x=>esc(x.f.l.replace(/（.*?）/,''))).join('、')}</li>`:''}</ul>
+      ${!pick('bad').length&&!pick('calm').length&&!pick('mixed').length?'<p class="sub" style="margin-top:6px">どの条件も、はっきりした差は見えませんでした。</p>':''}`}
+    <p class="sumnote">記録上の重なりで、行動のおすすめではありません。</p>
+    <p class="small" style="margin-top:6px">（　）は差が見られた日。複数の日で似ている場合はまとめて示しています。原因かどうか、どの日が関係するかは決めていません。</p></div>`;
+  // ---- 2) 日付から前後を見る ----
+  const cols=[]; for(let i=span;i>=-1;i--) cols.push(addDays(date,-i));
+  const lanes=LANES.filter(l=>!(hideW&&l[2]==='w'));
+  const grid=`<div class="tlwrap"><div class="tl" style="grid-template-columns:${span>3?84:72}px repeat(${cols.length},minmax(${span>3?50:48}px,1fr))">
+    <div class="tl-h lab"></div>${cols.map(d=>`<button class="tl-h ${d===date?'cur':''} ${d===sel?'sel':''}" data-a="lookSel" data-date="${d}" aria-pressed="${d===sel}">${offLabel(date,d)}<small>${md(d)}</small></button>`).join('')}
+    ${lanes.map(l=>l[0]==='g'?`<div class="tl-g">${l[1]}</div>`:`<div class="tl-l">${l[0]}</div>${cols.map(d=>`<div class="tl-c ${d===date?'cur':''} ${d===sel?'sel':''}">${d>TODAY?'<span class="c f"></span>':l[1](st.days[d],d)}</div>`).join('')}`).join('')}
+  </div></div>
+  <p class="small" style="margin-top:8px"><span class="c u" style="display:inline-block;vertical-align:middle;width:22px;min-width:22px;height:18px"></span> 点線は未記録（「なし」とは別）。${span>3?'横に動かすと前の日も見られます。':''}</p>`;
+  const r=st.days[sel]; const w=weatherFor(sel); const un='<span class="na">未記録</span>';
+  const dayPanel=`<div class="daypanel"><div class="between"><b>${md(sel)}（${wd(sel)}）・${offLabel(date,sel)}の様子</b>${r?`<button class="link" style="padding:4px;font-size:14px" data-a="day" data-date="${sel}">記録を開く</button>`:''}</div>
+    ${!r?`<p class="sub" style="margin-top:6px">${sel>TODAY?'まだ来ていない日です。':'この日は未記録です。「何もなかった」とは扱いません。'}</p>`:`<dl class="kv" style="margin-top:8px">
+    <dt>肌</dt><dd>${r.sym.skin==null?un:LV[r.sym.skin]}</dd><dt>疲れ・だるさ</dt><dd>${r.sym.tired==null?un:LV[r.sym.tired]}${(r.tiredWhen||[]).length?`（${r.tiredWhen.join('・')}）`:''}</dd>
+    <dt>食事</dt><dd>${SLOTS.map(([k,l])=>mealText(r,k)?`${l}：${esc(mealText(r,k))}`:null).filter(Boolean).join('<br>')||un}</dd>
+    <dt>睡眠（前夜）</dt><dd>${r.sleep?sleepLabel(r.sleep):un}</dd><dt>仕事</dt><dd>${r.stress?LMH[r.stress]:un}</dd>
+    <dt>薬・塗り薬</dt><dd>${r.meds.length?esc(r.meds.join('、')):r.medsNone?'使っていない':un}</dd>
+    ${hideW?'':`<dt>体重</dt><dd>${r.weight?esc(r.weight)+' kg':un}</dd>`}${r.memo?`<dt>メモ</dt><dd>${esc(r.memo)}</dd>`:''}</dl>`}
+    <p class="small" style="margin-top:8px">天気：${esc(wxText(w))}</p></div>`;
+  const daysBody=`<div class="eyebrow" style="margin-bottom:8px">不調の日（中・強）</div>
+    ${bds.length?`<div class="chips">${bds.slice(0,12).map(d=>`<button class="chip ${d===date?'on':''}" data-a="lookDay" data-date="${d}" aria-pressed="${d===date}">${md(d)}（${wd(d)}）</button>`).join('')}</div>`:`<p class="sub">直近6週に「中・強」の日はありません。</p>`}
+    <div class="between" style="margin-top:16px"><span class="eyebrow">${md(date)}の前後</span><div class="seg">${[[3,'3日前まで'],[7,'7日前まで']].map(([v,l])=>`<button class="opt sm" data-a="lookSpan" data-v="${v}" aria-pressed="${span===v}">${l}</button>`).join('')}</div></div>
+    ${grid}<p class="small">日付を押すと、その日の様子が下に出ます。</p>${dayPanel}`;
+  // ---- 3) 条件ごとの比較 ----
+  const cell=x=>`<div class="ov-c ${x.ok&&Math.abs(x.diff)>=SIM?(x.diff>0?'hb':'hc'):''}"><span class="ov-lab">${x.lab}</span>${x.ok?`
+     <span class="ob ob-u"><i style="width:${x.ru*100}%"></i></span><span class="fr">不調の日 ${x.u.k}/${x.u.n}</span>
+     <span class="ob ob-c"><i style="width:${x.rc*100}%"></i></span><span class="fr">落ち着いた日 ${x.c.k}/${x.c.n}</span>`:'<span class="fr na2">材料不足</span>'}</div>`;
+  const cmpBody = !ov.enough
+    ? `<ul class="plain"><li>直近6週で記録のある日：${ov.rec.length}日</li><li>${SN}が「中・強」の日：${ov.U.length}日（目安 ${MIN_O}日以上）</li><li>「なし・軽い」の日：${ov.C.length}日（目安 ${MIN_O}日以上）</li>${ov.rec.length>ov.ds.length?`<li>記録はあるが${SN}が未記録の日：${ov.rec.length-ov.ds.length}日</li>`:''}</ul><p class="small" style="margin-top:8px">材料が足りないため、条件ごとの比較は表示しません。</p>`
+    : `<p class="small" style="margin-bottom:8px">それぞれの日（当日〜3日前）に、その条件があった日の数。<span class="ob ob-u key"><i style="width:100%"></i></span>不調の日（中・強）<span class="ob ob-c key"><i style="width:100%"></i></span>落ち着いた日（なし・軽い）。枠は差が${Math.round(SIM*100)}ポイント以上の日（オレンジ＝不調の日に多い、緑＝落ち着いた日に多い）。</p>`
+      + GROUPS.map(([c,t,col])=>{ const rows=pick(c); if(!rows.length) return '';
+        const key='ov_'+c; const o=(ui.insOpen&&key in ui.insOpen)?ui.insOpen[key]:false;
+        return `<details class="acc" data-k="${key}" ${o?'open':''}><summary><span class="dotk" style="${col?`background:${col}`:'border:1.5px dashed #A79F90'}"></span><span class="acc-t"><b>${t}（${rows.length}）</b><span class="small">${rows.map(x=>esc(x.f.l.replace(/（.*?）/,''))).join('、')}</span></span><span class="chev" aria-hidden="true">${I.chev}</span></summary><div class="acc-b" style="padding-left:2px">
+          ${rows.map(x=>`<div class="ov-row"><div class="ov-t">${esc(x.f.l)}</div><p class="small" style="margin:2px 0 6px">${esc(x.say)}</p><div class="ov-lags">${x.lags.map(cell).join('')}</div></div>`).join('')}</div></details>`; }).join('');
+  const notes=`<ul class="plain">
+    <li>当日・前日・数日前のどれが関係するか（遅れの長さは決めず、並べて見るだけです）</li>
+    <li>薬・塗り薬の効果や、使う・やめるの判断（使用状況を表示するだけで、比べる対象にも入れていません）</li>
+    <li>記録していない要因（汗、入浴、寝具、季節の変わり目など）の影響</li>
+    <li>差があっても、それが原因かどうか</li></ul>
+    <p class="small" style="margin-top:8px">比べ方の目安（仮）：不調の日・落ち着いた日とも記録${MIN_O}日以上、割合の差${Math.round(TH*100)}ポイント以上で「多かった」に分類。</p>`;
+  const sumBad=pick('bad').length, sumCalm=pick('calm').length;
+  return `<div class="hello" style="padding-bottom:8px"><h1 class="serif" style="font-size:24px">肌・疲れと生活の重なり</h1></div>
+  <div class="slots" style="margin-bottom:12px" role="group" aria-label="見る項目">${Object.entries(LOOK_SYMS).map(([k,l])=>`<button class="slot" style="grid-column:span 2" data-a="lookSym" data-v="${k}" aria-pressed="${sym===k}">${l}</button>`).join('')}</div>
+  <div class="ins-layout"><div>
+  ${summary}
+  ${fold('f_days','日付から前後を見る',`不調の日 ${bds.length}日・いまは${md(date)}を中心に表示`,daysBody,wide)}
+  </div><div>
+  ${!AUTO_CLASSIFY?'':fold('f_cmp','条件ごとの比較',ov.enough?`不調の日に多い ${sumBad}・落ち着いた日に多い ${sumCalm}・ほか ${ov.rows.length-sumBad-sumCalm}`:'材料不足',cmpBody,wide)}
+  ${fold('f_w','体重と体調（週ごと・任意）',hideW?'非表示中':'6週間の週平均と体調',weightBody(st),false)}
+  ${fold('f_note','この画面で決めていないこと','原因・遅れ・薬の判断はしません',notes,false)}
+  <p class="small" style="margin:4px 4px 16px">デモ表示：架空データの例です。医学的な判断ではありません。天気は架空の値です。</p>
+  </div></div>`;
+};
+function weightBody(st){
+  const hide=!!(st.prefs&&st.prefs.hideWeight);
+  if(hide) return `<p class="sub">体重は非表示にしています。記録は残っています。</p><button class="btn sec" style="margin-top:10px" data-a="hideWeight">表示する</button>`;
+  const weeks=[]; for(let w=5;w>=0;w--){ const end=addDays(TODAY,-w*7), start=addDays(end,-6); const ds=[]; for(let d=start; d<=end; d=addDays(d,1)) ds.push(d);
+    const rs=ds.map(d=>st.days[d]).filter(Boolean); const ws=rs.map(r=>parseFloat(r.weight)).filter(x=>!isNaN(x));
+    const cnt=k=>{const v=rs.filter(r=>r.sym[k]!=null); return {k:v.filter(r=>r.sym[k]>=2).length,n:v.length};};
+    weeks.push({start,wn:ws.length,wa:ws.length>=2?avg(ws):null,t:cnt('tired'),s:cnt('skin')}); }
+  const ok=weeks.filter(x=>x.wa!=null);
+  const f=x=>x.n?`${x.k}日<small>／${x.n}日</small>`:'—';
+  return `<div class="wk"><div class="wk-h"><span>週</span><span>体重の平均</span><span>疲れ 中以上</span><span>肌 中以上</span></div>
+  ${weeks.map(x=>`<div class="wk-r"><span>${md(x.start)}〜</span><span>${x.wa!=null?x.wa.toFixed(1)+' kg':`<span class="na2">${x.wn?'記録'+x.wn+'日':'記録なし'}</span>`}</span><span>${f(x.t)}</span><span>${f(x.s)}</span></div>`).join('')}</div>
+  <p class="small" style="margin-top:8px">${ok.length<3?'体重の記録が少ない週が多く、並べて見るには材料不足です。':'日々の増減は水分などで揺れるため、記録2日以上の週の平均で並べています。'}目標や良し悪しの判定は表示しません。</p>
+  <button class="link" style="font-size:14px" data-a="hideWeight">体重を非表示にする</button>`;
+}
+
+/* ---------- 試す ---------- */
+const CANDS=[
+  {title:'夕食を20時までに済ませる',watch:['wake'],why:'生活リズムの小さな工夫'},
+  {title:'夕食後の甘いものを控える',watch:['voice','nose'],why:'自分の経験から（甘いものをやめるとのどの調子がよい）'},
+  {title:'1時間に1回、肩を回して姿勢を直す',watch:['shoulder'],why:'自分の経験から（姿勢に気を付けると肩こりが軽くなる）'},
+  {title:'寝る前30分はスマホを置く',watch:['wake','tired'],why:'睡眠を整える小さな工夫'}
+];
+VIEWS.try=()=>{
+  const st=S(); const ex=activeExp(st); const past=st.experiments.filter(e=>e.status!=='active');
+  return `<div class="hello"><h1 class="serif">試す</h1><p class="sub">負担の小さい取り組みを一つ選び、前後の調子を振り返ります。一度に一つだけにすると、違いが分かりやすくなります。</p></div>
+  <div class="twocol"><div>
+  ${ex?expMini(st,ex):`<div class="card"><div class="eyebrow">${I.leaf} 今は取り組みなし</div><p class="sub" style="margin-top:6px">試してみたいことがあれば、ひとつ選んで始められます。</p><button class="btn" style="margin-top:14px" data-a="expNew">${I.plus}一つ試す</button></div>`}
+  ${st.plans.length?`<div class="card flat"><div class="eyebrow">次に試したいこと</div><ul class="plain" style="margin-top:6px">${st.plans.map(p=>`<li>${esc(p)}</li>`).join('')}</ul></div>`:''}
+  </div><div>
+  <div class="card"><div class="eyebrow">これまでの振り返り</div>
+  ${past.length?past.map(e=>`<button class="dayrow" data-a="exp" data-id="${e.id}"><span style="flex:1;min-width:0"><b style="display:block">${esc(e.title)}</b><span class="small">${md(e.start)}〜${md(expEnd(e))}・${e.status==='stopped'?'途中で終了':''}${e.verdict?VERDICT[e.verdict]:'振り返り未記入'}</span></span>${I.chev}</button>`).join(''):'<p class="sub" style="margin-top:6px">まだありません。改善・悪化・変化不明、どの結果も残せます。</p>'}</div>
+  </div></div>
+  <div class="notice" style="margin-top:4px">${I.info}<div>このアプリは、食材を大きく除くこと、薬をやめる・変えること、症状を確かめるために合わないものをあえて食べることは提案しません。気になる場合は医師に相談してください。</div></div>`;
+};
+VIEWS.expNew=()=>{
+  const d=ui.expDraft; const st=S();
+  return `<div class="hello"><h1 class="serif">一つ試す</h1><p class="sub">自分で選んだ、続けやすいものを一つ。</p></div>
+  <div class="twocol"><div>
+  <div class="q">何を試しますか？</div>
+  ${CANDS.map((c,i)=>`<button class="cand" data-a="expPick" data-i="${i}" aria-pressed="${d.pick===i}"><b>${esc(c.title)}</b><small>${esc(c.why)}</small></button>`).join('')}
+  <button class="cand" data-a="expPick" data-i="-1" aria-pressed="${d.pick===-1}"><b>自分で書く</b><small>短い言葉で大丈夫です</small></button>
+  ${d.pick===-1?`<input class="inp" id="expCustom" style="width:100%;margin-top:4px" placeholder="例：昼食後に5分だけ目を閉じる" value="${esc(d.custom)}" maxlength="40" aria-label="試すこと">
+    <div id="expWarn">${riskNote(d.custom)}</div>`:''}
+  </div><div>
+  <div class="q">何の変化を見ますか？ <small>1〜2つ</small></div>
+  <div class="chips">${Object.entries(WATCH).map(([k,l])=>`<button class="chip ${d.watch.includes(k)?'on':''}" data-a="expWatch" data-k="${k}" aria-pressed="${d.watch.includes(k)}">${l}</button>`).join('')}</div>
+  <div class="q">期間</div>
+  <div class="seg">${[[7,'1週間'],[14,'2週間']].map(([v,l])=>`<button class="opt" data-a="expLen" data-v="${v}" aria-pressed="${d.len===v}">${l}</button>`).join('')}</div>
+  <p class="small" style="margin-top:8px">期間中は、ホームで「できた・少し・できなかった」を押すだけです。</p>
+  <div class="card flat" style="margin-top:18px"><p class="small">振り返りでは、始める前の同じ日数と比べます。前後の差だけでは原因は断定できないため、睡眠などの違いも一緒に表示します。</p></div>
+  ${!d.watch.length?'<p class="small" style="margin-top:4px">見る変化を1つ選ぶと始められます。</p>':''}
+  <button class="btn block" style="margin-top:8px" data-a="expStart" ${(d.pick===null||(d.pick===-1&&!d.custom.trim())||!d.watch.length)?'disabled':''}>${addDaysLabel(d.len)}で始める</button>
+  </div></div>`;
+};
+function addDaysLabel(len){ return `今日から${md(addDays(TODAY,len-1))}まで`; }
+function riskNote(t){ if(!t) return ''; if(/(薬|くすり|ステロイド|塗り薬).*(やめ|止め|中止|減ら|変え|抜)/.test(t)||/(断つ|完全に|一切|抜く|除去|全部やめ)/.test(t)) return `<div class="notice" style="margin-top:10px">${I.info}<div>薬をやめる・変えることや、食材を大きく除くことは、ここでは扱っていません。医師や薬剤師に相談してから決めてください。もっと小さな形（量や時間を少し変える等）にすることもできます。</div></div>`; return ''; }
+VIEWS.exp=({id})=>{
+  const st=S(); const e=st.experiments.find(x=>x.id===id); if(!e) return '<p>見つかりません</p>';
+  const end=expEnd(e); const ds=[]; for(let d=e.start; d<=end; d=addDays(d,1)) ds.push(d);
+  const cal=`<div class="calrow">${ds.map(d=>{const c=e.check[d]; const fut=d>TODAY; const cls=fut?'fut':c?c:'unk'; const sym={done:'✓',part:'△',no:'×'}[c]||''; return `<div class="cal"><i class="${cls} ${d===TODAY?'tdy':''}" aria-label="${md(d)} ${fut?'これから':c?CHECK[c]:'未記録'}">${fut?'':sym}</i>${md(d)}</div>`;}).join('')}</div>
+    <div class="legend"><span><i style="background:var(--green2);border-radius:3px"></i>できた</span><span><i style="background:#B9CDBF;border-radius:3px"></i>少し</span><span><i style="background:#EED9CB;border-radius:3px"></i>できなかった</span><span><i style="border:1.5px dashed #BDB4A4;border-radius:3px"></i>未記録</span></div>`;
+  const cmp=compareExp(st,e);
+  const active=e.status==='active'; const ended=TODAY>end;
+  const showReview = !active || ended || ui.reviewOpen===e.id;
+  const counts=Object.values(e.check).reduce((m,v)=>(m[v]=(m[v]||0)+1,m),{});
+  return `<div class="hello"><span class="tag ${active?'amber':'gray'}">${active?`取り組み中・${expDay(e)}日目 / ${e.days}日`:e.status==='stopped'?'途中で終了':'振り返り済み'}</span>
+    <h1 class="serif" style="font-size:24px;margin-top:8px">${esc(e.title)}</h1><p class="small">${md(e.start)}〜${md(end)}・見る変化：${e.watch.map(w=>WATCH[w]).join('、')}${e.origin?`・${esc(e.origin)}`:''}</p></div>
+  <div class="twocol"><div>
+  <div class="card"><div class="eyebrow">取り組めた日</div>${cal}
+    <p class="small" style="margin-top:8px">できた ${counts.done||0}日・少し ${counts.part||0}日・できなかった ${counts.no||0}日・未記録 ${ds.filter(d=>d<TODAY&&!e.check[d]).length}日</p>
+    ${active?`<div class="divider"></div><p class="sub">今日はできましたか？</p><div class="checkrow">${Object.entries(CHECK).map(([k,l])=>`<button class="opt" data-a="expCheck" data-id="${e.id}" data-v="${k}" aria-pressed="${e.check[TODAY]===k}">${l}</button>`).join('')}</div>`:''}
+  </div>
+  ${active&&!showReview?`<div class="row" style="flex-wrap:wrap;gap:10px"><button class="btn sec" data-a="reviewOpen" data-id="${e.id}">途中だけど振り返る</button><button class="btn ghost" data-a="askStop" data-id="${e.id}">ここでやめる</button></div>`:''}
+  </div><div>
+  ${showReview?reviewBlock(st,e,cmp):`<div class="card flat"><p class="sub">${md(end)}に振り返りをお知らせします（デモでは通知しません）。途中で見ることもできます。</p></div>`}
+  </div></div>`;
+};
+function metric(r,k){ if(!r) return null; if(k==='wake') return r.wake?{good:1,ok:.5,tired:0}[r.wake]:null; if(k==='mood') return r.mood; const v=r.sym[k]; return v==null?null:v; }
+function compareExp(st,e){
+  const len=e.days; const end=expEnd(e)<TODAY?expEnd(e):addDays(TODAY,-1);
+  const bef=[],dur=[]; for(let i=len;i>=1;i--) bef.push(addDays(e.start,-i)); for(let d=e.start; d<=end; d=addDays(d,1)) dur.push(d);
+  if(st.days[TODAY] && TODAY<=expEnd(e)) dur.push(TODAY);
+  const res={}; for(const w of e.watch){ const f=ds=>{const v=ds.map(d=>metric(st.days[d],w)).filter(x=>x!==null); return {n:v.length,total:ds.length,avg:avg(v),good:w==='wake'?ds.filter(d=>st.days[d]&&st.days[d].wake==='good').length:null};}; res[w]={b:f(bef),d:f(dur)}; }
+  const sl=ds=>avg(ds.map(d=>st.days[d]&&st.days[d].sleep).filter(Boolean));
+  const hs=ds=>ds.filter(d=>st.days[d]&&st.days[d].stress==='high').length;
+  return {res,bef,dur,sb:sl(bef),sd:sl(dur),hb:hs(bef),hd:hs(dur)};
+}
+function reviewBlock(st,e,c){
+  const bars=e.watch.map(w=>{const {b,d}=c.res[w];
+    const fmt=x=>x.avg==null?'記録なし':w==='wake'?`すっきり ${x.good}日 / 記録${x.n}日`:w==='mood'?`平均 ${x.avg.toFixed(1)}（1〜5）`:`平均 ${x.avg.toFixed(1)}（0なし〜3強い）`;
+    const pct=x=>x.avg==null?0:w==='wake'?(x.n?x.good/x.n:0)*100:w==='mood'?x.avg/5*100:x.avg/3*100;
+    let verdict='記録が少なく、比べられません';
+    if(b.n>=3&&d.n>=3){ const bv=w==='wake'?b.good/b.n:b.avg, dv=w==='wake'?d.good/d.n:d.avg; const lowerBetter=!['wake','mood'].includes(w); const th=w==='wake'?.15:w==='mood'?.3:.3; const diff=dv-bv;
+      verdict = Math.abs(diff)<th ? '記録上は、ほぼ同じでした' : ((diff<0)===lowerBetter ? `記録上は、取り組み中のほうが${lowerBetter?'軽め':'よさそう'}でした` : `記録上は、取り組み中のほうが${lowerBetter?'重め':'よくなさそう'}でした`); }
+    return `<div style="margin-top:6px"><div class="lab" style="font-weight:800">${WATCH[w]}${!['wake','mood'].includes(w)?'<span class="small">（短いほど軽い）</span>':''}</div><div class="bars">
+      <div class="bar"><div class="t"><span>始める前（${md(c.bef[0])}〜）</span><span>${fmt(b)}</span></div><div class="track"><b style="width:${pct(b)}%"></b></div></div>
+      <div class="bar during"><div class="t"><span>取り組み中</span><span>${fmt(d)}</span></div><div class="track"><b style="width:${pct(d)}%"></b></div></div></div>
+      ${AUTO_CLASSIFY?`<p class="sub" style="margin-top:6px">${verdict}</p>`:''}</div>`;}).join('<div class="divider"></div>');
+  const cav=[]; if(c.sb&&c.sd&&Math.abs(c.sb-c.sd)>=.3) cav.push(`睡眠が平均${c.sb.toFixed(1)}時間 → ${c.sd.toFixed(1)}時間と変わっています。`);
+  if(c.hb!==c.hd) cav.push(`仕事が「重い」日は ${c.hb}日 → ${c.hd}日でした。`);
+  cav.push('前後の差だけでは、この取り組みが原因かどうかは分かりません。');
+  const vs=ui.verdict&&ui.verdict.id===e.id?ui.verdict:{id:e.id,v:e.verdict,note:e.note};
+  const editable=e.status==='active'||ui.reVerdict===e.id;
+  return `<div class="card"><div class="sec-h">前後の比較</div>${bars}
+    <div class="notice" style="margin-top:14px;margin-bottom:0">${I.info}<div>${cav.map(esc).join('<br>')}</div></div></div>
+  <div class="card"><div class="sec-h">あなたの実感</div>
+    ${editable?`<div class="stack">${Object.entries(VERDICT).map(([k,l])=>`<button class="opt" style="width:100%;text-align:left" data-a="verdict" data-id="${e.id}" data-v="${k}" aria-pressed="${vs.v===k}">${l}</button>`).join('')}</div>
+      <textarea class="inp" id="vnote" style="width:100%;margin-top:12px" placeholder="メモ（任意）例：忙しい週だった" aria-label="振り返りメモ">${esc(vs.note||'')}</textarea>
+      ${e.status==='active'?`<div class="row" style="margin-top:14px;flex-wrap:wrap;gap:10px"><button class="btn" data-a="finish" data-id="${e.id}" data-next="end" ${vs.v?'':'disabled'}>振り返って終える</button><button class="btn sec" data-a="finish" data-id="${e.id}" data-next="extend" ${vs.v?'':'disabled'}>1週間延ばす</button></div>`
+      :`<button class="btn" style="margin-top:14px" data-a="saveVerdict" data-id="${e.id}" ${vs.v?'':'disabled'}>保存する</button>`}`
+    :`<p style="font-weight:800;font-size:17px">${e.verdict?VERDICT[e.verdict]:'未記入'}</p>${e.note?`<p class="sub" style="margin-top:6px">「${esc(e.note)}」</p>`:''}<button class="link" data-a="reVerdict" data-id="${e.id}">実感を修正する</button>`}
+  </div>`;
+}
+
+/* =========================================================
+   記録シート
+   ========================================================= */
+function openRec(date,{mood,step}={}){
+  const st=S();
+  if(st.draft && st.draft.date===date){ ui.rec=clone(st.draft); if(mood) ui.rec.data.mood=mood; }
+  else {
+    const exist=st.days[date];
+    ui.rec={date,data:exist?clone(exist):blankRec(),step:1,slot:defaultSlot(),isEdit:!!exist,dirty:false,pending:{b:'',l:'',d:'',s:''}};
+    if(mood){ ui.rec.data.mood=mood; ui.rec.dirty=true; }
+  }
+  if(!ui.rec.pending) ui.rec.pending={b:'',l:'',d:'',s:''};
+  if(step) ui.rec.step=step;
+  if(ui.rec.dirty) saveDraft();
+  ui.sheet='rec'; renderOverlay();
+}
+function pendingList(R){ return R&&R.pending ? SLOTS.filter(([k])=>(R.pending[k]||'').trim()).map(([k,l])=>[k,l,R.pending[k].trim()]) : []; }
+function hasContent(R){ return !!R && (hasAny(R.data) || pendingList(R).length>0); }
+function defaultSlot(){ const h=jstHour(); return h<10?'b':h<15?'l':'d'; }
+function saveDraft(){ const st=S(); st.draft=clone(ui.rec); persist(); }
+function closeRec(){
+  const st=S();
+  if(ui.rec && ui.rec.dirty && hasContent(ui.rec)){ saveDraft(); ui.sheet=null; ui.rec=null; render(); toast('書きかけを残しました。続きはホームから'); }
+  else { if(st.draft && ui.rec && st.draft.date===ui.rec.date && !hasContent(st.draft)) st.draft=null; persist(); ui.sheet=null; ui.rec=null; render(); }
+}
+function saveRec(){
+  const st=S(); const R=ui.rec;
+  const pl=pendingList(R);
+  if(pl.length){ ui.dlg={title:'まだ追加されていない食事があります',body:pl.map(([k,l,t])=>`${l}：「${esc(t)}」`).join('<br>')+'<br>追加してから保存しますか？',acts:[{l:'入力に戻る',a:'dlgClose',cls:'ghost'},{l:'入れずに保存',a:'savePendingSkip',cls:'sec'},{l:'追加して保存',a:'savePendingAdd'}]}; renderOverlay(); return; }
+  if(!hasAny(R.data)){ toast('まだ何も入力されていません'); return; }
+  snapshot();
+  R.data.savedAt=new Date().toISOString();
+  st.days[R.date]=clone(R.data);
+  for(const [k] of SLOTS) for(const it of R.data.meals[k].items){ st.history[k][it]=(st.history[k][it]||0)+1; }
+  st.draft=null; persist();
+  if(MODE==='real'){ if(!window.__R.meta.firstRecordAt){ window.__R.meta.firstRecordAt=new Date().toISOString(); saveMeta(); } dailySnapshotSoon(); }
+  const isEdit=R.isEdit; const d=R.date;
+  ui.sheet=null; ui.rec=null; render();
+  toast(`${d===TODAY?'今日':md(d)}の記録を${isEdit?'修正':'保存'}しました`,true);
+}
+function recSheet(){
+  const R=ui.rec; const r=R.data; const st=S(); const ex=activeExp(st);
+  const stepNames=['体調','食事','ほか（任意）'];
+  const done=[!!(r.mood||r.wake||Object.values(r.sym).some(v=>v!==null)), SLOTS.some(([k])=>r.meals[k].items.length||r.meals[k].none), !!(r.sleep||r.stress||r.activity||r.posture!==null||r.meds.length||r.medsNone||r.weight||r.memo||r.seitai)];
+  let body='';
+  if(R.step===1){
+    body=`<div class="q">今の調子は？</div>
+    <div class="moods" style="margin-top:0" role="group" aria-label="今の調子">${[1,2,3,4,5].map(v=>`<button class="mood" data-a="set" data-k="mood" data-v="${v}" aria-pressed="${r.mood===v}">${face(v)}<span>${MOODS[v]}</span></button>`).join('')}</div>
+    <div class="q">今朝の目覚め <small>任意・朝のだるさはここで</small></div>
+    <div class="seg" role="group" aria-label="今朝の目覚め">${Object.entries(WAKE).map(([k,l])=>`<button class="opt" data-a="set" data-k="wake" data-v="${k}" aria-pressed="${r.wake===k}">${l}</button>`).join('')}</div>
+    <div class="q between" style="display:flex"><span>気になるところ <small>任意・触れていない項目は「未記録」</small></span></div>
+    <p class="small" style="margin:-4px 0 4px">1日1回、思い出したときで大丈夫です。朝と夜に分けて入力する必要はありません。</p>
+    <div>${SYMS.map(([k,l])=>`<div class="symrow"><div><span class="nm">${l}</span><span class="st">${r.sym[k]===null?'未記録':r.sym[k]===0?'なし':LV[r.sym[k]]}</span></div>
+      <div class="seg" role="group" aria-label="${l}">${LV.map((x,i)=>`<button class="opt" data-a="set" data-k="sym.${k}" data-v="${i}" aria-pressed="${r.sym[k]===i}">${x}</button>`).join('')}</div></div>${k==='tired'&&r.sym.tired>=1?`<div class="whenrow"><span class="small">いつ頃？（任意）</span>${WHEN.map(w=>`<button class="chip sm ${(r.tiredWhen||[]).includes(w)?'on':''}" data-a="whenT" data-v="${w}" aria-pressed="${(r.tiredWhen||[]).includes(w)}">${w}</button>`).join('')}</div>`:''}`).join('')}</div>
+    ${SYMS.some(([k])=>r.sym[k]===null)?`<button class="link" data-a="allNone">残りの項目をすべて「なし」にする</button>`:''}`;
+  } else if(R.step===2){
+    const k=R.slot; const m=r.meals[k];
+    const fav=topItems(st,k,6).filter(x=>!m.items.includes(x));
+    const other=Object.keys(st.history[k]||{}).filter(x=>!fav.includes(x)&&!m.items.includes(x));
+    body=`<div class="q" style="margin-top:12px">食べたもの <small>写真は不要・ざっくりで大丈夫</small></div>
+    <div class="slots" role="group" aria-label="食事の時間帯">${SLOTS.map(([s,l])=>{const mm=r.meals[s]; const st2=(R.pending[s]||'').trim()?'入力中':mm.none?'なし':mm.items.length?mm.items.length+'件':'—'; return `<button class="slot" data-a="slot" data-v="${s}" aria-pressed="${k===s}">${l}<small>${st2}</small></button>`;}).join('')}</div>
+    <div style="margin-top:14px">
+      ${m.items.length?`<div class="chips" style="margin-bottom:12px">${m.items.map((x,i)=>`<button class="chip on" data-a="delItem" data-i="${i}" aria-label="${esc(x)}を外す"><span class="plate" style="background:${plateColor(x)}"></span>${esc(x)}<span class="x" aria-hidden="true">×</span></button>`).join('')}</div>`:''}
+      <div class="eyebrow" style="margin-bottom:8px">いつもの</div>
+      ${fav.length?`<div class="chips">${fav.map(x=>`<button class="chip" data-a="addItem" data-name="${esc(x)}"><span class="plate" style="background:${plateColor(x)}"></span>${esc(x)}</button>`).join('')}</div>`
+        :`<div class="empty-hint">記録すると、よく食べるものがここに並び、次からはタップだけで残せます。</div>`}
+      ${other.length?`<details style="margin-top:10px"><summary class="small" style="cursor:pointer;min-height:36px;display:flex;align-items:center">ほかの履歴（${other.length}）</summary><div class="chips" style="margin-top:6px">${other.map(x=>`<button class="chip" data-a="addItem" data-name="${esc(x)}">${esc(x)}</button>`).join('')}</div></details>`:''}
+      <div class="inrow" style="margin-top:14px"><input class="inp" id="mealIn" placeholder="短く入力（例：そば、焼き魚）" maxlength="30" enterkeyhint="done" value="${esc(R.pending[k]||'')}" aria-label="${SLOTL[k]}に食べたものを入力"><button class="btn sec" data-a="addText">追加</button></div>
+      <p class="small" id="pendHint" style="margin-top:4px;${(R.pending[k]||'').trim()?'':'display:none'}">入力中の内容は、「追加」を押す前でも下書きとして残ります。</p>
+      <button class="opt sm" style="margin-top:10px" data-a="mealNone" aria-pressed="${m.none}">${SLOTL[k]}は食べていない</button>
+      ${k==='d'?`<div class="q">夕食の時刻 <small>おおまかに</small></div><div class="seg">${DTIMES.map(([t,l])=>`<button class="opt sm" data-a="set" data-k="dinnerTime" data-v="${t}" aria-pressed="${r.dinnerTime===t||(r.dinnerTime&&dtLabel(r.dinnerTime)===l&&!DTIMES.some(x=>x[0]===r.dinnerTime))}">${l}</button>`).join('')}</div>`:''}
+    </div>
+    <div class="q">今日の食事で、あったもの・なかったもの <small>任意・押していない項目は「未記録」</small></div>
+    <div>${TAGS.map(t=>{const ts=tagState(r,t); return `<div class="symrow"><div><span class="nm">${t}</span><span class="st">${ts==='yes'?'あった':ts==='no'?'なかった':'未記録'}</span></div>
+      <div class="seg" role="group" aria-label="${t}"><button class="opt" data-a="tag3" data-t="${t}" data-v="yes" aria-pressed="${ts==='yes'}">あった</button><button class="opt" data-a="tag3" data-t="${t}" data-v="no" aria-pressed="${ts==='no'}">なかった</button></div></div>`;}).join('')}</div>
+    ${TAGS.some(t=>tagState(r,t)==null)?`<button class="link" data-a="tagsRestNo">残りの項目をすべて「なかった」にする</button>`:''}
+    <p class="small" style="margin-top:4px">「未記録」は分析で「食べなかった」とは数えません。</p>`;
+  } else {
+    const seg=(key,opts,val)=>`<div class="seg">${opts.map(([v,l])=>`<button class="opt sm" data-a="set" data-k="${key}" data-v="${v}" aria-pressed="${String(val)===String(v)}">${l}</button>`).join('')}</div>`;
+    body=`<p class="sub" style="margin-top:12px">分かることだけで大丈夫です。空欄は「未記録」として扱います。</p>
+    ${ex?`<div class="orow" style="background:var(--amberSoft);border-radius:14px;padding:12px;border:0;margin-top:10px"><div class="lb">取り組み<small>${esc(ex.title)}</small></div><div class="seg">${Object.entries(CHECK).map(([k,l])=>`<button class="opt sm" data-a="recCheck" data-v="${k}" aria-pressed="${ex.check[R.date]===k}">${l}</button>`).join('')}</div></div>`:''}
+    <div class="orow"><div class="lb">睡眠<small>昨夜</small></div>${seg('sleep',SLEEP,r.sleep)}</div>
+    <div class="orow"><div class="lb">仕事・ストレス</div>${seg('stress',Object.entries(LMH),r.stress)}</div>
+    <div class="orow"><div class="lb">活動・歩いた量</div>${seg('activity',Object.entries(ACT),r.activity)}</div>
+    <div class="orow"><div class="lb">姿勢ケア<small>ストレッチ・姿勢を直す等</small></div>${seg('posture',[['true','した'],['false','していない']],r.posture)}</div>
+    <div class="orow"><div class="lb">整体</div>${seg('seitai',[['true','行った']],r.seitai)}</div>
+    <div class="orow"><div class="lb">薬・塗り薬<small>使ったもの</small></div><div class="chips">${MEDS.map(m=>`<button class="chip ${r.meds.includes(m)?'on':''}" data-a="med" data-v="${m}" aria-pressed="${r.meds.includes(m)}">${m}</button>`).join('')}<button class="chip ${r.medsNone?'on':''}" data-a="medNone" aria-pressed="${!!r.medsNone}">使っていない</button></div></div>
+    <div class="orow"><div class="lb">体重<small>任意</small></div><div class="inrow" style="max-width:220px"><input class="inp" id="wIn" inputmode="decimal" placeholder="例：72.4" value="${esc(r.weight)}" aria-label="体重（kg）"><span style="align-self:center">kg</span></div></div>
+    <div class="orow"><div class="lb">天気</div><div>${weatherChip(R.date)}<div class="small">自動で記録（このデモでは架空の値）</div></div></div>
+    <div class="q">メモ <small>任意</small></div>
+    <textarea class="inp" id="memoIn" style="width:100%" placeholder="気づいたことがあれば" aria-label="メモ">${esc(r.memo)}</textarea>`;
+  }
+  const title = `${R.date===TODAY?'今日':jp(R.date)}の${R.isEdit?'記録を修正':'記録'}`;
+  const foot = R.step===1
+    ? `<button class="btn ghost" data-a="saveRec" ${hasContent(R)?'':'disabled'}>ここまでで保存</button><span class="sp"></span><button class="btn" data-a="step" data-v="2">次へ：食事</button>`
+    : R.step===2
+    ? `<button class="btn ghost" data-a="step" data-v="1">戻る</button><span class="sp"></span><button class="btn sec" data-a="saveRec" ${hasContent(R)?'':'disabled'}>保存</button><button class="btn" data-a="step" data-v="3">次へ</button>`
+    : `<button class="btn ghost" data-a="step" data-v="2">戻る</button><span class="sp"></span><button class="btn" data-a="saveRec" ${hasContent(R)?'':'disabled'}>保存する</button>`;
+  return `<div class="scrim" data-a="closeRec"></div>
+  <section class="sheet" role="dialog" aria-modal="true" aria-label="${title}">
+    <div class="grab" aria-hidden="true"></div>
+    <div class="sh-head"><span class="t">${title}</span><span class="small" style="margin-right:4px">${R.dirty?'自動で下書き保存中':''}</span><button class="iconbtn" data-a="closeRec" aria-label="閉じる（入力内容は残ります）">${I.close}</button></div>
+    <div class="steps">${stepNames.map((n,i)=>`<button class="stepb ${done[i]?'done':''}" data-a="step" data-v="${i+1}" ${R.step===i+1?'aria-current="step"':''}><i></i>${n}</button>`).join('')}</div>
+    <div class="sh-body" id="shBody">${body}</div>
+    <div class="sh-foot">${foot}</div>
+  </section>`;
+}
+
+/* ---------- デモ切替シート / ダイアログ ---------- */
+function demoSheet(){
+  return `<div class="scrim" data-a="closeSheet"></div><section class="sheet" role="dialog" aria-modal="true" aria-label="デモの状態">
+  <div class="grab" aria-hidden="true"></div>
+  <div class="sh-head"><span class="t">デモの状態を切り替える</span><button class="iconbtn" data-a="closeSheet" aria-label="閉じる">${I.close}</button></div>
+  <div class="sh-body">
+    <div class="notice">${I.info}<div>この画面は確認用です。データはすべて架空で、外部には送信しません。操作した内容はこのブラウザ内に、状態ごとに別々に残ります。</div></div>
+    ${Object.entries(SCN).map(([k,v])=>`<button class="scn" data-a="scn" data-k="${k}" aria-pressed="${store.cur===k}"><span class="rd"></span><span><b>${v.label}</b><small>${v.desc}</small></span></button>`).join('')}
+    <div class="row" style="margin-top:8px;flex-wrap:wrap"><button class="btn sec" data-a="resetCur">この状態を初期化</button><button class="btn ghost" data-a="resetAll">すべて初期化</button></div>
+    <div class="card flat" style="margin-top:16px"><div class="eyebrow">1分で確かめる手順</div><ol style="margin:8px 0 0;padding-left:1.3em;color:var(--ink2);font-size:15px">
+      <li>「普段の記録あり」でホームの顔を一つ押す → 食事で「いつもの」をタップ → 保存 → 「取り消す」</li>
+      <li>「比較できる傾向の例」→ 発見カード →「根拠と、当てはまらない日を見る」</li>
+      <li>そのまま「これを試してみる」→ 取り組み中の扱いを確認 → 試すタブで振り返りを見る</li>
+      <li>「比較できる傾向の例」→ 発見タブ「肌・疲れと生活の重なり」→ 不調の日を押し、前日・数日前を並べて見る</li>
+      <li>「記録不足で判断できない」→ 発見タブで理由を確認</li>
+      <li>「数日ぶりに戻ってきた」→ ホームの「おかえりなさい」と記録タブの空白表示を確認</li></ol></div>
+  </div></section>`;
+}
+function dialog(){ const d=ui.dlg; return `<div class="scrim" data-a="dlgClose"></div><section class="sheet small" role="alertdialog" aria-modal="true" aria-label="${esc(d.title)}"><div class="dialog"><h2 class="h2">${esc(d.title)}</h2><p>${d.body}</p><div class="acts">${d.acts.map(a=>`<button class="btn ${a.cls||''}" data-a="${a.a}" ${a.id?`data-id="${a.id}"`:''}>${esc(a.l)}</button>`).join('')}</div></div></section>`; }
+function renderOverlay(){
+  const o=document.getElementById('overlay'); let keep=null;
+  const b=document.getElementById('shBody'); if(b) keep=b.scrollTop;
+  if(ui.dlg) o.innerHTML=dialog();
+  else if(ui.sheet==='rec'&&ui.rec) o.innerHTML=recSheet();
+  else if(ui.sheet==='demo') o.innerHTML=demoSheet();
+  else o.innerHTML='';
+  const nb=document.getElementById('shBody'); if(nb&&keep!=null&&ui._sameSheet) nb.scrollTop=keep;
+  ui._sameSheet=false;
+  document.body.style.overflow=o.innerHTML?'hidden':'';
+  const mi=document.getElementById('mealIn'); if(mi){ mi.addEventListener('keydown',e=>{ if(e.key==='Enter'&&!e.isComposing){ e.preventDefault(); A.addText(); } });
+    mi.addEventListener('input',e=>{ ui.rec.pending[ui.rec.slot]=e.target.value; ui.rec.dirty=true; saveDraft(); const h=document.getElementById('pendHint'); if(h) h.style.display=e.target.value.trim()?'':'none'; const sv=document.querySelectorAll('.sh-foot [data-a="saveRec"]'); sv.forEach(b=>b.disabled=!hasContent(ui.rec)); }); }
+  const wi=document.getElementById('wIn'); if(wi) wi.addEventListener('input',e=>{ ui.rec.data.weight=e.target.value.trim(); ui.rec.dirty=true; saveDraft(); });
+  const me=document.getElementById('memoIn'); if(me) me.addEventListener('input',e=>{ ui.rec.data.memo=e.target.value; ui.rec.dirty=true; saveDraft(); });
+}
+function rerenderSheet(){ ui._sameSheet=true; renderOverlay(); }
+
+/* ---------- トースト ---------- */
+let toastT=null;
+function toast(msg,act){ const t=document.getElementById('toast'); const b=act===true?{a:'undo',l:'取り消す'}:(act||null); t.innerHTML=`<span class="msg">${esc(msg)}</span>${b?`<button data-a="${b.a}">${esc(b.l)}</button>`:''}`; t.classList.remove('show'); void t.offsetWidth; t.classList.add('show'); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('show'),b?8000:3200); }
+
+/* =========================================================
+   操作
+   ========================================================= */
+const A={
+  tab:d=>setTab(d.to), back:()=>back(),
+  day:d=>go('day',{date:d.date}), insight:d=>{ ui.insOpen={}; go('insight',{id:d.id}); }, exp:d=>{ui.reviewOpen=null;ui.verdict=null;ui.reVerdict=null;go('exp',{id:d.id});},
+  quickMood:d=>openRec(TODAY,{mood:+d.v}),
+  openRec:d=>openRec(d.date,{step:d.step?+d.step:undefined}),
+  resume:()=>{ const dr=S().draft; ui.rec=clone(dr); ui.sheet='rec'; renderOverlay(); },
+  draftDiscard:()=>{ snapshot(); S().draft=null; persist(); render(); toast('書きかけを消しました',true); },
+  closeRec:()=>closeRec(),
+  step:d=>{ ui.rec.step=+d.v; renderOverlay(); const b=document.getElementById('shBody'); if(b) b.scrollTop=0; },
+  set:d=>{ const r=ui.rec.data; const k=d.k; let v=d.v;
+    if(['mood'].includes(k)||k.startsWith('sym.')) v=+v; if(k==='sleep') v=+v; if(k==='posture'||k==='seitai') v=(v==='true');
+    if(k.startsWith('sym.')){ const s=k.slice(4); r.sym[s]= r.sym[s]===v?null:v; } else { r[k]= r[k]===v?null:v; }
+    ui.rec.dirty=true; saveDraft(); rerenderSheet(); },
+  allNone:()=>{ for(const [k] of SYMS) if(ui.rec.data.sym[k]===null) ui.rec.data.sym[k]=0; ui.rec.dirty=true; saveDraft(); rerenderSheet(); },
+  slot:d=>{ ui.rec.slot=d.v; rerenderSheet(); },
+  addItem:d=>{ const m=ui.rec.data.meals[ui.rec.slot]; if(!m.items.includes(d.name)) m.items.push(d.name); m.none=false; ui.rec.dirty=true; saveDraft(); rerenderSheet(); },
+  addText:()=>{ const el=document.getElementById('mealIn'); const v=(el&&el.value||'').trim(); if(!v){ el&&el.focus(); return; } const m=ui.rec.data.meals[ui.rec.slot]; if(!m.items.includes(v)) m.items.push(v); m.none=false; ui.rec.pending[ui.rec.slot]=''; ui.rec.dirty=true; saveDraft(); rerenderSheet(); const n=document.getElementById('mealIn'); if(n) n.focus(); },
+  delItem:d=>{ ui.rec.data.meals[ui.rec.slot].items.splice(+d.i,1); ui.rec.dirty=true; saveDraft(); rerenderSheet(); },
+  mealNone:()=>{ const m=ui.rec.data.meals[ui.rec.slot]; m.none=!m.none; if(m.none) m.items=[]; ui.rec.dirty=true; saveDraft(); rerenderSheet(); },
+  tag3:d=>{ const r=ui.rec.data; r.tagsNo=r.tagsNo||[]; const cur=tagState(r,d.t); r.tags=r.tags.filter(x=>x!==d.t); r.tagsNo=r.tagsNo.filter(x=>x!==d.t); if(cur!==d.v){ (d.v==='yes'?r.tags:r.tagsNo).push(d.t); } ui.rec.dirty=true; saveDraft(); rerenderSheet(); },
+  tagsRestNo:()=>{ const r=ui.rec.data; r.tagsNo=r.tagsNo||[]; for(const t of TAGS) if(tagState(r,t)==null) r.tagsNo.push(t); ui.rec.dirty=true; saveDraft(); rerenderSheet(); },
+  tag:d=>{ const t=ui.rec.data.tags; const i=t.indexOf(d.v); i>=0?t.splice(i,1):t.push(d.v); ui.rec.dirty=true; saveDraft(); rerenderSheet(); },
+  whenT:d=>{ const r=ui.rec.data; r.tiredWhen=r.tiredWhen||[]; const i=r.tiredWhen.indexOf(d.v); i>=0?r.tiredWhen.splice(i,1):r.tiredWhen.push(d.v); ui.rec.dirty=true; saveDraft(); rerenderSheet(); },
+  medNone:()=>{ const r=ui.rec.data; r.medsNone=!r.medsNone; if(r.medsNone) r.meds=[]; ui.rec.dirty=true; saveDraft(); rerenderSheet(); },
+  med:d=>{ ui.rec.data.medsNone=false; const t=ui.rec.data.meds; const i=t.indexOf(d.v); i>=0?t.splice(i,1):t.push(d.v); ui.rec.dirty=true; saveDraft(); rerenderSheet(); },
+  recCheck:d=>{ const ex=activeExp(S()); if(!ex) return; ex.check[ui.rec.date]= ex.check[ui.rec.date]===d.v?undefined:d.v; if(!ex.check[ui.rec.date]) delete ex.check[ui.rec.date]; ui.rec.dirty=true; persist(); rerenderSheet(); },
+  saveRec:()=>saveRec(),
+  settings:()=>{ if(route().name==='settings') return; ui.stack=[]; go('settings'); listSnapshots&&MODE==='real'&&R.db&&listSnapshots().then(a=>{ const el=document.getElementById('snapCount'); if(el) el.textContent=a.length?`${a.length}件（最新 ${fmtDT(a[a.length-1].at)}）`:'まだありません'; }); },
+  setRole:d=>{ R.meta.role=d.v; saveMeta(); render(true); },
+  roleToViewer:()=>{ if(Object.keys(R.state.days).length){ ui.dlg={title:'閲覧専用にはできません',body:'この端末には記録があります。閲覧専用にすると、読み込んだバックアップで記録が置き換わるため、切り替えは記録のない端末（PC）だけで行えます。',acts:[{l:'閉じる',a:'dlgClose'}]}; renderOverlay(); return; } R.meta.role='viewer'; saveMeta(); render(true); },
+  roleToMain:()=>{ ui.dlg={title:'この端末で記録するように切り替えますか？',body:'読み込んだ記録をもとに、この端末で記録を始めます。iPhoneの記録とは別になり、自動ではそろいません。主に使う端末は1台にしてください。',acts:[{l:'やめる',a:'dlgClose',cls:'ghost'},{l:'切り替える',a:'doRoleMain'}]}; renderOverlay(); },
+  doRoleMain:()=>{ R.meta.role='main'; R.meta.viewerLoadedAt=null; saveMeta(); ui.dlg=null; render(true); },
+  exportBackup:()=>{ exportBackup(); },
+  importPick:()=>{ const f=document.getElementById('fileIn'); f.value=''; f.click(); },
+  doImport:()=>{ doImport(); },
+  undoRestore:()=>{ document.getElementById('toast').classList.remove('show'); undoRestore(); },
+  wxRefresh:()=>{ wxLastTry=0; fetchWeather(true).then(()=>render()); render(); },
+  enterDemo:()=>{ if(ui.rec&&ui.rec.dirty) saveDraft(); MODE='demo'; TODAY=DEMO_TODAY; document.body.classList.add('demo-mode'); ui.sheet=null; ui.rec=null; ui.stack=[]; ui.tab='home'; undoStack=[]; render(true); toast('デモ表示に切り替えました（架空データ）'); },
+  exitDemo:()=>{ MODE='real'; TODAY=jstToday(); document.body.classList.remove('demo-mode'); ui.sheet=null; ui.rec=null; ui.stack=[]; ui.tab='home'; undoStack=[]; render(true); toast('自分の記録に戻りました'); fetchWeather(); },
+  look:d=>{ let sym=d.sym; if(!sym&&d.date){ const r=S().days[d.date]; sym=r&&(r.sym.tired||0)>(r.sym.skin||0)?'tired':'skin'; } ui.insOpen={}; go('look',{sym:sym||'skin',date:d.date||null,sel:d.date||null,span:3}); },
+  lookSym:d=>{ const r=route(); r.sym=d.v; r.date=null; r.sel=null; render(); },
+  lookDay:d=>{ const r=route(); r.date=d.date; r.sel=d.date; render(); },
+  lookSpan:d=>{ const r=route(); r.span=+d.v; render(); },
+  lookSel:d=>{ const r=route(); r.sel=d.date; render(); },
+  hideWeight:()=>{ snapshot(); const st=S(); st.prefs=st.prefs||{}; st.prefs.hideWeight=!st.prefs.hideWeight; persist(); render(); toast(st.prefs.hideWeight?'体重を非表示にしました':'体重を表示しました',true); snapshotNoop(); },
+  recapToggle:()=>{ ui.recapOpen=!ui.recapOpen; render(); },
+  insAll:()=>{ const keys=['ev','cnt','mis','alt','unk']; const o=ui.insOpen||{}; const all=keys.every(k=>o[k]); ui.insOpen={}; keys.forEach(k=>ui.insOpen[k]=!all); render(); },
+  savePendingAdd:()=>{ const R=ui.rec; for(const [k,,t] of pendingList(R)){ const m=R.data.meals[k]; if(!m.items.includes(t)) m.items.push(t); m.none=false; R.pending[k]=''; } ui.dlg=null; saveRec(); },
+  savePendingSkip:()=>{ const R=ui.rec; R.pending={b:'',l:'',d:'',s:''}; ui.dlg=null; if(!hasAny(R.data)){ saveDraft(); renderOverlay(); toast('まだ何も入力されていません'); return; } saveRec(); },
+  undo:()=>{ document.getElementById('toast').classList.remove('show'); undo(); },
+  askDelete:d=>{ ui.dlg={title:`${md(d.date)}の記録を削除しますか？`,body:'削除した直後なら「取り消す」で元に戻せます。',acts:[{l:'やめる',a:'dlgClose',cls:'sec'},{l:'削除する',a:'doDelete',cls:'danger',id:d.date}]}; renderOverlay(); },
+  doDelete:d=>{ snapshot(); delete S().days[d.id]; persist(); ui.dlg=null; ui.stack.pop(); render(true); toast('記録を削除しました',true); },
+  dlgClose:()=>{ ui.dlg=null; renderOverlay(); },
+  demo:()=>{ ui.sheet='demo'; renderOverlay(); }, closeSheet:()=>{ ui.sheet=null; renderOverlay(); },
+  scn:d=>{ if(MODE!=='demo'){ MODE='demo'; TODAY=DEMO_TODAY; document.body.classList.add('demo-mode'); } if(ui.rec&&ui.rec.dirty) saveDraft(); store.cur=d.k; persist(); ui.sheet=null; ui.rec=null; ui.stack=[]; ui.tab='home'; undoStack=[]; render(true); toast(`デモ：「${SCN[d.k].label}」に切り替えました`); },
+  resetCur:()=>{ store.s[store.cur]=buildScenario(store.cur); persist(); undoStack=[]; ui.sheet=null; ui.stack=[]; ui.tab='home'; render(true); toast('この状態を初期化しました'); },
+  resetAll:()=>{ store={cur:store.cur,s:{}}; persist(); undoStack=[]; ui.sheet=null; ui.stack=[]; ui.tab='home'; render(true); toast('すべて初期化しました'); },
+  expCheck:d=>{ const e=S().experiments.find(x=>x.id===d.id); snapshot(); const prev=e.check[TODAY]; if(prev===d.v) delete e.check[TODAY]; else e.check[TODAY]=d.v; persist(); render(); toast(e.check[TODAY]?`今日は「${CHECK[d.v]}」と残しました`:'今日のチェックを外しました',true); },
+  expNew:()=>{ const st=S(); if(activeExp(st)){ A.tryFrom({i:'-9'}); return; } ui.expDraft={pick:null,custom:'',watch:[],len:14}; go('expNew'); },
+  tryFrom:d=>{ const st=S(); const ex=activeExp(st); const i=+d.i; const c=CANDS[i];
+    if(ex){ ui.dlg={title:'いまは別の取り組み中です',body:`「${esc(ex.title)}」を試しています。一度に一つにすると、変化を振り返りやすくなります。`,acts:[{l:'閉じる',a:'dlgClose',cls:'ghost'},...(c?[{l:'次に試したいことに入れる',a:'addPlan',cls:'sec',id:String(i)}]:[]),{l:'今の取り組みを見る',a:'goExp',id:ex.id}]}; renderOverlay(); return; }
+    ui.expDraft={pick:i,custom:'',watch:[...c.watch],len:14}; go('expNew'); },
+  addPlan:d=>{ const st=S(); const t=CANDS[+d.id].title; if(!st.plans.includes(t)){ snapshot(); st.plans.push(t); persist(); } ui.dlg=null; render(); toast('「次に試したいこと」に入れました',true); },
+  goExp:d=>{ ui.dlg=null; ui.tab='try'; ui.stack=[]; A.exp({id:d.id}); },
+  expPick:d=>{ const i=+d.i; ui.expDraft.pick=i; if(i>=0) ui.expDraft.watch=[...CANDS[i].watch]; render(); if(i===-1){ const el=document.getElementById('expCustom'); if(el){ el.focus(); } } },
+  expWatch:d=>{ const w=ui.expDraft.watch; const i=w.indexOf(d.k); if(i>=0) w.splice(i,1); else { if(w.length>=2) w.shift(); w.push(d.k); } render(); },
+  expLen:d=>{ ui.expDraft.len=+d.v; render(); },
+  expStart:()=>{ const st=S(); const d=ui.expDraft; const title=d.pick===-1?d.custom.trim():CANDS[d.pick].title; snapshot();
+    const e={id:'e'+Date.now(),title,watch:[...d.watch],start:TODAY,days:d.len,status:'active',check:{},verdict:null,note:'',origin:d.pick===-1?'自分で決めた取り組み':CANDS[d.pick].why};
+    st.experiments.unshift(e); st.plans=st.plans.filter(p=>p!==title); persist(); ui.tab='home'; ui.stack=[]; render(true); toast(`「${title}」を始めました`,true); },
+  reviewOpen:d=>{ ui.reviewOpen=d.id; render(); },
+  verdict:d=>{ const n=document.getElementById('vnote'); ui.verdict={id:d.id,v:d.v,note:n?n.value:''}; render(); },
+  finish:d=>{ const st=S(); const e=st.experiments.find(x=>x.id===d.id); const n=document.getElementById('vnote'); snapshot();
+    if(d.next==='extend'){ e.days+=7; e.verdict=null; e.note=n?n.value:''; ui.reviewOpen=null; ui.verdict=null; persist(); render(); toast(`${md(expEnd(e))}まで延ばしました`,true); return; }
+    e.status=TODAY>expEnd(e)?'done':'stopped'; if(e.status==='stopped'){ e.days=Math.max(1,diffDays(TODAY,e.start)+1); e.status='done'; }
+    e.verdict=ui.verdict&&ui.verdict.id===e.id?ui.verdict.v:e.verdict; e.note=n?n.value:''; ui.verdict=null; ui.reviewOpen=null; persist(); render(); toast('振り返りを残しました',true); },
+  reVerdict:d=>{ ui.reVerdict=d.id; render(); },
+  saveVerdict:d=>{ const st=S(); const e=st.experiments.find(x=>x.id===d.id); const n=document.getElementById('vnote'); snapshot(); if(ui.verdict&&ui.verdict.id===e.id) e.verdict=ui.verdict.v; e.note=n?n.value:e.note; ui.reVerdict=null; ui.verdict=null; persist(); render(); toast('実感を修正しました',true); },
+  askStop:d=>{ ui.dlg={title:'この取り組みをやめますか？',body:'ここまでの記録は残ります。やめた理由をメモしたい場合は「途中だけど振り返る」から終えられます。',acts:[{l:'続ける',a:'dlgClose',cls:'sec'},{l:'やめる',a:'doStop',cls:'danger',id:d.id}]}; renderOverlay(); },
+  doStop:d=>{ const e=S().experiments.find(x=>x.id===d.id); snapshot(); e.status='stopped'; e.days=Math.max(1,diffDays(TODAY,e.start)+1); persist(); ui.dlg=null; render(); toast('取り組みを終えました',true); },
+};
+const EDIT_ACTS=new Set(['quickMood','openRec','resume','draftDiscard','askDelete','doDelete','expCheck','expNew','tryFrom','addPlan','expStart','reviewOpen','verdict','finish','reVerdict','saveVerdict','askStop','doStop','hideWeight','exportBackup','setRole']);
+document.addEventListener('click',e=>{ const t=e.target.closest('[data-a]'); if(!t) return; const a=t.dataset.a; const f=A[a]; if(!f) return; e.preventDefault();
+  if(MODE==='real' && EDIT_ACTS.has(a) && a!=='setRole' && a!=='exportBackup' && R.meta && (R.meta.role!=='main'||R.readOnly)){ toast(R.readOnly?'記録を守るため、この版では変更できません':'閲覧専用です。記録・修正はiPhoneで行います'); return; }
+  f(t.dataset,t,e); });
+document.getElementById('fileIn').addEventListener('change',e=>{ const f=e.target.files&&e.target.files[0]; onFileChosen(f); });
+document.addEventListener('input',e=>{ if(e.target.id==='expCustom'){ ui.expDraft.custom=e.target.value; const w=document.getElementById('expWarn'); if(w) w.innerHTML=riskNote(e.target.value); const b=document.querySelector('[data-a="expStart"]'); if(b) b.disabled=!e.target.value.trim()||!ui.expDraft.watch.length; } if(e.target.id==='vnote'&&ui.verdict){ ui.verdict.note=e.target.value; } });
+document.addEventListener('toggle',e=>{ const t=e.target; if(t.classList&&t.classList.contains('acc')){ ui.insOpen=ui.insOpen||{}; ui.insOpen[t.dataset.k]=t.open; if(t.dataset.k.startsWith('ov_')) return; const keys=['ev','cnt','mis','alt','unk']; const b=document.querySelector('[data-a="insAll"]'); if(b) b.textContent=keys.every(k=>ui.insOpen[k])?'すべて閉じる':'すべて開く'; } },true);
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'){ if(ui.dlg) A.dlgClose(); else if(ui.sheet==='rec') closeRec(); else if(ui.sheet) A.closeSheet(); } });
+window.matchMedia('(min-width:960px)').addEventListener('change',()=>render());
+function tickDate(){ if(MODE!=='real') return; const t=jstToday(); if(t!==TODAY){ TODAY=t; if(!ui.sheet) render(); fetchWeather(true); } }
+setInterval(tickDate,30000);
+document.addEventListener('visibilitychange',()=>{ if(!document.hidden){ tickDate(); fetchWeather(); } });
+window.addEventListener('online',()=>fetchWeather(true));
+async function boot(){
+  try{ if(!window.indexedDB) throw new Error('この環境では端末内に保存できません'); await loadReal(); }
+  catch(e){ R.fatal=String(e&&e.message||e); document.getElementById('view').innerHTML=`<div class="card" style="margin:24px 0"><h2 class="h2">記録を保存できない状態です</h2><p class="sub" style="margin-top:8px">${esc(R.fatal)}</p><p class="small" style="margin-top:8px">プライベートブラウズや、保存を止める設定になっていないか確認してください。この状態では入力を受け付けません。</p></div>`; return; }
+  try{ if(navigator.storage&&navigator.storage.persist){ R.persisted=await navigator.storage.persisted(); if(!R.persisted) R.persisted=await navigator.storage.persist(); } }catch(e){}
+  TODAY=jstToday(); render(true); fetchWeather();
+  if('serviceWorker' in navigator && (location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1')){ navigator.serviceWorker.register('sw.js').catch(()=>{}); }
+}
+window.__R=R;
+window.__app={R,A,ui,go:(n,p)=>{ui.stack=[];go(n,p||{});},tab:t=>setTab(t),open:(d,o)=>openRec(d,o||{}),makeBackup,readBackupText,onFileChosen,doImport,parseWx,fetchWeather,jstToday,listSnapshots,mode:()=>MODE,today:()=>TODAY,S,flushDone:()=>R.writing||Promise.resolve()};
+window.__demo={store:()=>store,set:k=>A.scn({k}),go:(n,p)=>{ui.stack=[];go(n,p||{});},tab:t=>setTab(t),open:(d,o)=>openRec(d,o||{}),A,ui,reset:()=>{store={cur:'normal',s:{}};if(MODE!=='demo'){MODE='demo';TODAY=DEMO_TODAY;document.body.classList.add('demo-mode');}demoPersist();render(true);}};
+boot();
+</script>
+</body>
+</html>
