@@ -37,13 +37,13 @@ h1,h2,h3,p{margin:0}
 .side{display:none}
 main{min-height:100vh;padding-bottom:calc(var(--tabh) + env(safe-area-inset-bottom) + 24px)}
 .topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:8px;height:56px;padding:0 12px 0 16px;background:rgba(246,243,236,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
-.topbar .brand{font-family:var(--serif);font-weight:600;font-size:18px;letter-spacing:.06em;color:var(--green)}
+.topbar .brand{font-family:var(--serif);font-weight:600;font-size:18px;letter-spacing:.06em;color:var(--green);white-space:nowrap;flex-shrink:0}
 .topbar .ttl{font-weight:700;font-size:17px}
 .topbar .sp{flex:1}
 .iconbtn{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border:0;background:transparent;border-radius:14px;color:var(--ink)}
 .iconbtn:hover{background:rgba(0,0,0,.04)}
 .demochip{display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 12px 0 10px;border-radius:999px;border:1px dashed #A88A5E;background:#FBF4E8;color:var(--amber);font-size:13px;font-weight:700}
-.demochip .dot{width:8px;height:8px;border-radius:50%;background:#C98A3E}
+.demochip .dot{width:8px;height:8px;border-radius:50%;background:#C98A3E;flex:none}
 #view{padding:8px 16px 24px;max-width:720px;margin:0 auto}
 .tabbar{position:fixed;left:0;right:0;bottom:0;z-index:30;display:grid;grid-template-columns:repeat(4,1fr);height:calc(var(--tabh) + env(safe-area-inset-bottom));padding-bottom:env(safe-area-inset-bottom);background:rgba(255,255,255,.96);border-top:1px solid var(--line);backdrop-filter:blur(10px)}
 .tab{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;border:0;background:transparent;color:var(--ink3);font-size:12px;font-weight:600}
@@ -107,7 +107,7 @@ main{min-height:100vh;padding-bottom:calc(var(--tabh) + env(safe-area-inset-bott
 .hello{padding:12px 4px 18px}
 .hello .date{font-size:14px;color:var(--ink3);font-weight:600}
 .hello h1{font-size:28px;margin-top:2px}
-.moods{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:16px}
+.moods{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin-top:16px}
 .mood{display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 2px 10px;min-height:88px;border-radius:16px;border:1px solid var(--line);background:var(--surface2);color:var(--ink2);font-size:13px;font-weight:700;transition:background .15s,border-color .15s,color .15s}
 .mood:hover{border-color:var(--green2);color:var(--green)}
 .mood[aria-pressed="true"]{background:var(--green);border-color:var(--green);color:#fff}
@@ -117,7 +117,8 @@ main{min-height:100vh;padding-bottom:calc(var(--tabh) + env(safe-area-inset-bott
 .sumgrid dt{color:var(--ink3);font-weight:600}
 .sumgrid dd{margin:0}
 .pending{color:var(--ink3)}
-.strip{display:grid;grid-template-columns:repeat(14,1fr);gap:4px;margin-top:14px}
+.strip{display:grid;grid-template-columns:repeat(14,minmax(0,1fr));gap:4px;margin-top:14px}
+@media (max-width:380px){.strip{gap:1px}.strip .dotm{width:14px;height:14px}}  /* 320px幅でも14日分を1行に収める */
 .strip button{display:flex;flex-direction:column;align-items:center;gap:4px;border:0;background:transparent;padding:4px 0;border-radius:10px;min-height:52px}
 .strip button:hover{background:rgba(0,0,0,.04)}
 .strip .wd{font-size:11px;color:var(--ink3);font-weight:600}
@@ -217,6 +218,7 @@ ul.plain li{margin:4px 0}
 .symrow{display:grid;grid-template-columns:1fr auto;align-items:center;gap:8px;padding:10px 0;border-bottom:1px solid var(--line)}
 .symrow .nm{font-weight:700;font-size:15px}
 .symrow .st{display:block;font-size:12px;color:var(--ink3);font-weight:600}
+.symrow .opt-note{display:block;font-size:12px;color:var(--ink3);font-weight:600}
 .symrow .seg{flex-wrap:nowrap;gap:4px}
 .symrow .opt{min-height:40px;padding:0 9px;font-size:14px}
 .slots{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;background:#ECE6DA;border-radius:14px;padding:4px}
@@ -270,10 +272,12 @@ textarea.inp{height:88px;padding:10px 14px;resize:vertical}
 .eyebrow{white-space:nowrap}
 .eyebrow svg{width:18px;height:18px;flex:none}
 .mood span{white-space:nowrap;font-size:12.5px;letter-spacing:-.03em}
+@media (max-width:380px){.moods{gap:4px}.mood span{white-space:normal;word-break:keep-all;line-height:1.25;text-align:center}}  /* 320px幅：「とても／よい」で折り返して枠に収める */
 #toast{width:max-content}
 #toast button{white-space:nowrap;flex:none}
 .topbar .ttl{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
 .demochip{white-space:nowrap;flex:none;max-width:64vw;overflow:hidden;text-overflow:ellipsis}
+@media (max-width:380px){.topbar .demochip{flex:0 1 auto;min-width:0}}  /* 320px幅：題名は1行のまま、デモの札のほうを縮める */
 .checkrow .opt{padding:0 6px;font-size:14.5px;white-space:nowrap}
 @media (max-width:420px){.bigq{font-size:21px}.hello h1{font-size:26px}}
 
@@ -424,7 +428,7 @@ body.demo-mode .topbar{box-shadow:inset 0 3px 0 #C98A3E}
    ・架空データのみ。外部送信なし。保存はこのブラウザ内（デモ用）だけ。
    ・表示する「気づき」はデモ用シナリオ。医学的分析ではありません。
    ========================================================= */
-const APP_VERSION = '1.0.0（初期版候補）';
+const APP_VERSION = '1.0.1（初期版候補）';
 const SCHEMA = 1;                 // 記録の形の版。形を変えるときは MIGRATIONS に変換を足す
 const AUTO_CLASSIFY = false;      // 比較の自動分類・気づきの自動表示（検証が済むまで無効）
 const DEMO_TODAY = '2026-11-22';
@@ -450,10 +454,12 @@ function rng(seed){ return function(){ seed|=0; seed=seed+0x6D2B79F5|0; let t=Ma
 
 /* ---------- 語彙 ---------- */
 const MOODS = ['','つらい','いまいち','ふつう','よい','とてもよい'];
+const moodLabel = v => v===5?'とても<wbr>よい':MOODS[v];   // ボタンの表示用（狭い幅では「とても／よい」で折り返す）
 const MOODC = ['','var(--m1)','var(--m2)','var(--m3)','var(--m4)','var(--m5)'];
 const WAKE = {good:'すっきり',ok:'ふつう',tired:'だるい'};
-const SYMS = [['shoulder','肩こり'],['tired','疲れ・だるさ'],['nose','鼻づまり'],['skin','肌のかゆみ・荒れ'],['voice','声の出しづらさ']];
-const SHORT = {shoulder:'肩こり',tired:'疲れ',nose:'鼻',skin:'肌',voice:'声'};
+const SYMS = [['shoulder','肩こり'],['tired','疲れ・だるさ'],['nose','鼻づまり'],['skin','肌のかゆみ・荒れ'],['voice','声の出しづらさ'],['face','顔のこわばり・緊張']];
+const SHORT = {shoulder:'肩こり',tired:'疲れ',nose:'鼻',skin:'肌',voice:'声',face:'顔のこわばり'};
+const OPT_SYMS = ['face'];  // 気になるときだけ残す項目。「残りをすべてなし」や未記録の件数には含めない
 const WHEN = ['朝','日中','夜'];
 const SYML = Object.fromEntries(SYMS);
 const LV = ['なし','軽い','中','強い'];
@@ -467,7 +473,7 @@ const sleepLabel = v => (SLEEP.find(x=>x[0]===v)||[0,'—'])[1];
 const LMH = {low:'軽い',mid:'ふつう',high:'重い'};
 const ACT = {low:'少ない',mid:'ふつう',high:'多い'};
 const MEDS = ['塗り薬','点鼻薬','飲み薬','その他'];
-const WATCH = {wake:'朝の目覚め',mood:'全体の調子',shoulder:'肩こり',tired:'疲れ・だるさ',nose:'鼻づまり',skin:'肌のかゆみ・荒れ',voice:'声の出しづらさ'};
+const WATCH = {wake:'朝の目覚め',mood:'全体の調子',shoulder:'肩こり',tired:'疲れ・だるさ',nose:'鼻づまり',skin:'肌のかゆみ・荒れ',voice:'声の出しづらさ',face:'顔のこわばり・緊張'};
 const CHECK = {done:'できた',part:'少し',no:'できなかった'};
 const VERDICT = {better:'よくなった気がする',same:'変わらない・分からない',worse:'悪くなった気がする'};
 const WEATHERS = [['sun','晴れ'],['cloud','くもり'],['rain','雨']];
@@ -480,7 +486,7 @@ const ML=['社食の定食','コンビニのおにぎり','ざるそば','ラー
 const MD=['焼き魚定食','鶏むね肉と野菜炒め','カレーライス','湯豆腐と鍋','パスタ','居酒屋で外食'];
 const MS=['チョコレート','せんべい','菓子パン','ナッツ'];
 const MEMOS=['会議が長引いた','外が寒かった','よく眠れた気がする','夕方に肩が重かった','早めに帰れた','残業で遅くなった'];
-function blankRec(){ return {mood:null,wake:null,sym:{shoulder:null,tired:null,nose:null,skin:null,voice:null},tiredWhen:[],meals:{b:{items:[],none:false},l:{items:[],none:false},d:{items:[],none:false},s:{items:[],none:false}},dinnerTime:null,tags:[],tagsNo:[],sleep:null,stress:null,activity:null,posture:null,seitai:null,meds:[],medsNone:false,weight:'',memo:'',savedAt:null}; }
+function blankRec(){ return {mood:null,wake:null,sym:{shoulder:null,tired:null,nose:null,skin:null,voice:null,face:null},tiredWhen:[],meals:{b:{items:[],none:false},l:{items:[],none:false},d:{items:[],none:false},s:{items:[],none:false}},dinnerTime:null,tags:[],tagsNo:[],sleep:null,stress:null,activity:null,posture:null,seitai:null,meds:[],medsNone:false,weight:'',memo:'',savedAt:null}; }
 function demoWeather(date){ const r=rng(parseInt(date.replace(/-/g,''),10)); const w=WEATHERS[Math.floor(r()*3)]; const t=Math.round(8+r()*9), pr=r()<.3?'低め':'ふつう'; const hr=r(); return {i:w[0],l:w[1],t,p:pr,h:w[0]==='rain'?'高め':hr<.32?'乾燥':hr<.85?'ふつう':'高め'}; }
 function genDays(seed,fromAgo,toAgo,o={}){
   const r=rng(seed), days={}; let flare=0; let prev={early:r()<.5,stress:'mid',sweets:false};
@@ -586,12 +592,15 @@ const SCN = {
 /* ===== デモ用の保存（本人の記録とは別。localStorage のみ） ===== */
 const LSKEY='karada-biyori-demo-v3';
 let store={cur:'normal',s:{}};
-try{ const j=localStorage.getItem(LSKEY); if(j){ const o=JSON.parse(j); if(o&&o.s&&SCN[o.cur]) store=o; } }catch(e){}
+try{ const j=localStorage.getItem(LSKEY); if(j){ const o=JSON.parse(j); if(o&&o.s&&SCN[o.cur]){ store=o; Object.values(store.s).forEach(fixState); } } }catch(e){}
 function demoPersist(){ try{ localStorage.setItem(LSKEY,JSON.stringify(store)); }catch(e){} }
 
 /* ===== 本人の記録の保存（IndexedDB：karada-real） ===== */
 const DB_REAL='karada-real';
 const R={db:null,state:null,meta:null,weather:{},readOnly:null,saveErr:null,persisted:null,writing:null,pending:false,fatal:null,wx:{state:'idle'}};
+/* 後から足した体調の項目（顔のこわばり・緊張など）が無い古い記録・バックアップは、その項目を「未記録」(null) として補う。ほかの値は変えない */
+function fixRec(r){ if(!r||typeof r!=='object') return r; if(!r.sym||typeof r.sym!=='object') r.sym={}; for(const [k] of SYMS) if(r.sym[k]===undefined) r.sym[k]=null; return r; }
+function fixState(st){ if(!st||typeof st!=='object') return st; for(const d of Object.keys(st.days||{})) fixRec(st.days[d]); if(st.draft&&st.draft.data) fixRec(st.draft.data); return st; }
 function emptyState(){ return {days:{},history:{b:{},l:{},d:{},s:{}},experiments:[],plans:[],draft:null,welcomeSeen:false,prefs:{}}; }
 function idbOpen(name){ return new Promise((res,rej)=>{ const q=indexedDB.open(name,1);
   q.onupgradeneeded=()=>{ const db=q.result; if(!db.objectStoreNames.contains('kv')) db.createObjectStore('kv'); if(!db.objectStoreNames.contains('weather')) db.createObjectStore('weather'); if(!db.objectStoreNames.contains('snapshots')) db.createObjectStore('snapshots',{keyPath:'id',autoIncrement:true}); };
@@ -618,7 +627,7 @@ async function loadReal(){
   R.meta=await kvGet('meta'); R.state=await kvGet('state');
   if(!R.meta){ R.meta={schema:SCHEMA,createdAt:new Date().toISOString(),role:null,lastBackupAt:null,firstRecordAt:null}; R.state=emptyState(); await kvPut({meta:R.meta,state:R.state}); }
   if(!R.state) R.state=emptyState();
-  await migrateIfNeeded();
+  await migrateIfNeeded(); fixState(R.state);
   const tx=R.db.transaction('weather'); const ws=tx.objectStore('weather'); const [vals,keys]=await Promise.all([idbReq(ws.getAll()),idbReq(ws.getAllKeys())]); keys.forEach((k,i)=>R.weather[k]=vals[i]);
   if(!R.readOnly && R.meta.role==='main' && Object.keys(R.state.days).length){ const all=await listSnapshots(); const last=[...all].reverse().find(x=>x.reason==='日ごとの自動の写し'); if(!last||last.at.slice(0,10)!==new Date().toISOString().slice(0,10)) await addSnapshot('日ごとの自動の写し',R.state); }
 }
@@ -676,7 +685,7 @@ function mealText(rec,k){ const m=rec.meals[k]; if(m.none) return '食べてい�
 function symSummary(rec){
   const on=SYMS.filter(([k])=>rec.sym[k]>0).map(([k,l])=>`${l}（${LV[rec.sym[k]]}）`);
   const none=SYMS.filter(([k])=>rec.sym[k]===0).length;
-  const un=SYMS.filter(([k])=>rec.sym[k]===null).length;
+  const un=SYMS.filter(([k])=>rec.sym[k]==null&&!OPT_SYMS.includes(k)).length;
   if(!on.length && !none) return '<span class="pending">未記録</span>';
   let s=on.length?esc(on.join('、')):'<span class="none0">気になるところなし</span>';
   if(on.length && none) s+=`<span class="small">　ほか${none}項目は「なし」</span>`;
@@ -895,10 +904,10 @@ function recentCard(st){
   ${op?`<div class="recap-b"><dl class="rc"><dt>調子</dt><dd>${bar}${moodLine||'<span class="pending">未記録</span>'}</dd>
   <dt>気になった</dt><dd>${sy.length?sy.map(([l,n,t])=>`${l}：中以上 ${n}日<span class="small">（記録${t}日）</span>`).join('<br>'):'中以上の記録はありません'}</dd>
   ${days}</dl>
-  <button class="btn sec block" style="margin-top:14px" data-a="look">肌・疲れと生活の重なりを見る ${I.chev}</button>
+  <button class="btn sec block" style="margin-top:14px" data-a="look">体調と生活の重なりを見る ${I.chev}</button>
   <p class="small" style="margin-top:10px">記録した日の様子を並べたものです。原因の判断はしていません。</p></div>`:''}</div>`;
 }
-function moodButtons(sel){ return `<div class="moods" role="group" aria-label="今の調子">${[1,2,3,4,5].map(v=>`<button class="mood" data-a="quickMood" data-v="${v}" aria-pressed="${sel===v}">${face(v)}<span>${MOODS[v]}</span></button>`).join('')}</div>`; }
+function moodButtons(sel){ return `<div class="moods" role="group" aria-label="今の調子">${[1,2,3,4,5].map(v=>`<button class="mood" data-a="quickMood" data-v="${v}" aria-pressed="${sel===v}">${face(v)}<span>${moodLabel(v)}</span></button>`).join('')}</div>`; }
 function weekStrip(st){
   const ds=[]; for(let i=13;i>=0;i--) ds.push(addDays(TODAY,-i));
   const n=ds.filter(d=>st.days[d]).length;
@@ -966,7 +975,7 @@ VIEWS.day=({date})=>{
     <div class="card"><p class="sub">この日は記録がありません。分析では「未記録」として扱い、「症状なし」とはみなしません。</p>
     <p class="sub" style="margin-top:8px">思い出せることがあれば、覚えている範囲だけ残せます。無理に埋める必要はありません。</p>
     <div class="row" style="margin-top:16px;flex-wrap:wrap;gap:10px"><button class="btn sec" data-a="openRec" data-date="${date}">${I.plus}覚えている範囲で残す</button><button class="btn ghost" data-a="look" data-date="${date}">前後の日と並べて見る</button></div></div>`;
-  const syms=SYMS.map(([k,l])=>`<dt>${l}</dt><dd>${r.sym[k]===null?'<span class="na">未記録</span>':r.sym[k]===0?'<span class="none0">なし</span>':LV[r.sym[k]]}</dd>`).join('')+((r.tiredWhen||[]).length?`<dt>疲れの時間帯</dt><dd>${r.tiredWhen.join('・')}</dd>`:'');
+  const syms=SYMS.map(([k,l])=>`<dt>${l}</dt><dd>${r.sym[k]==null?'<span class="na">未記録</span>':r.sym[k]===0?'<span class="none0">なし</span>':LV[r.sym[k]]}</dd>`).join('')+((r.tiredWhen||[]).length?`<dt>疲れの時間帯</dt><dd>${r.tiredWhen.join('・')}</dd>`:'');
   const meals=SLOTS.map(([k,l])=>`<dt>${l}${k==='d'&&r.dinnerTime?`<small style="display:block;font-weight:500">${dtLabel(r.dinnerTime)}</small>`:''}</dt><dd>${mealText(r,k)?esc(mealText(r,k)):'<span class="na">未記録</span>'}</dd>`).join('');
   const ex=st.experiments.find(e=>e.check[date]);
   const un='<span class="na">未記録</span>';
@@ -1158,7 +1167,7 @@ async function onFileChosen(file){ if(!file) return;
       acts:[{l:'やめる',a:'dlgClose',cls:'ghost'},{l:viewer?'読み込む':'置き換えて復元',a:'doImport'}]}; renderOverlay();
   }catch(e){ ui.dlg={title:'読み込めませんでした',body:esc(e.message||String(e))+'<br>今の記録は変更していません。',acts:[{l:'閉じる',a:'dlgClose'}]}; renderOverlay(); } }
 async function doImport(){ const r=pendingImport; if(!r) return; pendingImport=null; const viewer=R.meta.role==='viewer';
-  const next={...emptyState(),...clone(r.data),draft:null};
+  const next=fixState({...emptyState(),...clone(r.data),draft:null});
   try{
     if(!viewer){ await addSnapshot('復元の直前',R.state); R.meta.lastRestoreAt=new Date().toISOString(); }
     else { R.meta.viewerLoadedAt=new Date().toISOString(); R.meta.viewerExportedAt=r.head.exportedAt; }
@@ -1169,7 +1178,7 @@ async function doImport(){ const r=pendingImport; if(!r) return; pendingImport=n
     if(viewer) toast(`${Object.keys(next.days).length}日分の記録を読み込みました（閲覧専用）`); else toast(`${Object.keys(next.days).length}日分を復元しました`,{a:'undoRestore',l:'復元前に戻す'});
   }catch(e){ ui.dlg={title:'復元できませんでした',body:esc(e.message||String(e))+'<br>今の記録は変更していません。',acts:[{l:'閉じる',a:'dlgClose'}]}; renderOverlay(); } }
 async function undoRestore(){ const all=await listSnapshots(); const snap=[...all].reverse().find(x=>x.reason==='復元の直前'); if(!snap) return toast('戻せる写しがありません');
-  await addSnapshot('「復元前に戻す」の直前',R.state); await kvPut({state:snap.state}); R.state=snap.state; R.meta.lastRestoreAt=null; await saveMeta(); undoStack=[]; render(true); toast('復元前の記録に戻しました'); }
+  await addSnapshot('「復元前に戻す」の直前',R.state); fixState(snap.state); await kvPut({state:snap.state}); R.state=snap.state; R.meta.lastRestoreAt=null; await saveMeta(); undoStack=[]; render(true); toast('復元前の記録に戻しました'); }
 /* ---- 天気（Open-Meteo） ---- */
 const WMO=c=> c===0?['sun','晴れ']: c<=2?['sun','晴れ時々くもり']: c===3?['cloud','くもり']: c<=48?['cloud','霧']: c<=67?['rain','雨']: c<=77?['cloud','雪']: c<=82?['rain','にわか雨']: c<=86?['cloud','雪']: ['rain','雷雨'];
 function parseWx(j,today){ const d=j.daily, h=j.hourly||{time:[]}; const out={};
@@ -1197,8 +1206,9 @@ async function fetchWeather(force){ if(MODE!=='real'||!R.db||wxBusy) return; if(
   }catch(e){ R.wx={state:'error',msg:String(e&&e.message||e),at:new Date().toISOString()}; }
   finally{ wxBusy=false; if(!ui.sheet&&!ui.dlg) render(); } }
 
-/* ---------- 肌・疲れと生活の重なり（第4版：両方向・要約優先） ---------- */
-const LOOK_SYMS={skin:'肌のかゆみ・荒れ',tired:'疲れ・だるさ'};
+/* ---------- 体調と生活の重なり（第4版：両方向・要約優先） ---------- */
+const LOOK_SYMS={skin:'肌のかゆみ・荒れ',tired:'疲れ・だるさ',face:'顔のこわばり・緊張'};
+const LOOK_BTN={skin:'肌',tired:'疲れ・だるさ',face:'顔のこわばり'};  // 切り替えボタンの短い名前（3つを1行に収める）
 const LAGS=[[0,'当日'],[1,'前日'],[2,'2日前'],[3,'3日前']];
 const LOOK_N=42, MIN_O=5, TH=.3, SIM=.2;
 const FACTORS=[
@@ -1252,11 +1262,11 @@ const GROUPS=[
   ['lack','材料不足の条件','']
 ];
 function lookEntry(st){
-  const k=badDays(st,'skin').length, t=badDays(st,'tired').length;
-  return `<div class="card"><div class="between"><div class="eyebrow">${I.leaf} 肌・疲れと生活の重なり</div><span class="tag gray">原因は決めません</span></div>
+  const k=badDays(st,'skin').length, t=badDays(st,'tired').length, f=badDays(st,'face').length;
+  return `<div class="card"><div class="between" style="flex-wrap:wrap;gap:6px 12px"><div class="eyebrow">${I.leaf} 体調と生活の重なり</div><span class="tag gray">原因は決めません</span></div>
   <p class="sub" style="margin-top:6px">不調の日を選ぶと、その前後の食事・睡眠・仕事・天気・薬を同じ時間軸で見られます。</p>
-  <p class="small" style="margin-top:6px">直近6週で「中・強」の日：肌 ${k}日・疲れ ${t}日</p>
-  <div class="row" style="margin-top:12px;flex-wrap:wrap;gap:8px"><button class="btn sec" data-a="look" data-sym="skin">肌の調子</button><button class="btn sec" data-a="look" data-sym="tired">疲れ・だるさ</button></div></div>`;
+  <p class="small" style="margin-top:6px">直近6週で「中・強」の日：肌 ${k}日・疲れ ${t}日・顔のこわばり ${f}日</p>
+  <div class="row" style="margin-top:12px;flex-wrap:wrap;gap:8px"><button class="btn sec" data-a="look" data-sym="skin">肌の調子</button><button class="btn sec" data-a="look" data-sym="tired">疲れ・だるさ</button><button class="btn sec" data-a="look" data-sym="face">顔のこわばり・緊張</button></div></div>`;
 }
 /* 表のセル：略語を使わず言葉で表示 */
 const LVC=['#E4EDE6','#F1DFC4','#E2AC7E','#B5562E'];
@@ -1270,6 +1280,7 @@ const LANES=[
   ['g','体調'],
   ['肌',(r)=>lvCell(r&&r.sym.skin)],
   ['疲れ・だるさ',(r)=>lvCell(r&&r.sym.tired)],
+  ['顔のこわばり',(r)=>lvCell(r&&r.sym.face)],
   ['朝の目覚め',(r)=>!r||!r.wake?uCell:tCell(WAKE[r.wake],r.wake==='tired')],
   ['g','生活'],
   ['睡眠（前夜・時間）',(r)=>!r||r.sleep==null?uCell:tCell(SLEEP_W[r.sleep],r.sleep<6)],
@@ -1319,6 +1330,7 @@ VIEWS.look=(rt)=>{
   const dayPanel=`<div class="daypanel"><div class="between"><b>${md(sel)}（${wd(sel)}）・${offLabel(date,sel)}の様子</b>${r?`<button class="link" style="padding:4px;font-size:14px" data-a="day" data-date="${sel}">記録を開く</button>`:''}</div>
     ${!r?`<p class="sub" style="margin-top:6px">${sel>TODAY?'まだ来ていない日です。':'この日は未記録です。「何もなかった」とは扱いません。'}</p>`:`<dl class="kv" style="margin-top:8px">
     <dt>肌</dt><dd>${r.sym.skin==null?un:LV[r.sym.skin]}</dd><dt>疲れ・だるさ</dt><dd>${r.sym.tired==null?un:LV[r.sym.tired]}${(r.tiredWhen||[]).length?`（${r.tiredWhen.join('・')}）`:''}</dd>
+    <dt>顔のこわばり・緊張</dt><dd>${r.sym.face==null?un:LV[r.sym.face]}</dd>
     <dt>食事</dt><dd>${SLOTS.map(([k,l])=>mealText(r,k)?`${l}：${esc(mealText(r,k))}`:null).filter(Boolean).join('<br>')||un}</dd>
     <dt>睡眠（前夜）</dt><dd>${r.sleep?sleepLabel(r.sleep):un}</dd><dt>仕事</dt><dd>${r.stress?LMH[r.stress]:un}</dd>
     <dt>薬・塗り薬</dt><dd>${r.meds.length?esc(r.meds.join('、')):r.medsNone?'使っていない':un}</dd>
@@ -1346,8 +1358,8 @@ VIEWS.look=(rt)=>{
     <li>差があっても、それが原因かどうか</li></ul>
     <p class="small" style="margin-top:8px">比べ方の目安（仮）：不調の日・落ち着いた日とも記録${MIN_O}日以上、割合の差${Math.round(TH*100)}ポイント以上で「多かった」に分類。</p>`;
   const sumBad=pick('bad').length, sumCalm=pick('calm').length;
-  return `<div class="hello" style="padding-bottom:8px"><h1 class="serif" style="font-size:24px">肌・疲れと生活の重なり</h1></div>
-  <div class="slots" style="margin-bottom:12px" role="group" aria-label="見る項目">${Object.entries(LOOK_SYMS).map(([k,l])=>`<button class="slot" style="grid-column:span 2" data-a="lookSym" data-v="${k}" aria-pressed="${sym===k}">${l}</button>`).join('')}</div>
+  return `<div class="hello" style="padding-bottom:8px"><h1 class="serif" style="font-size:24px">体調と生活の重なり</h1></div>
+  <div class="slots" style="margin-bottom:12px;grid-template-columns:repeat(${Object.keys(LOOK_SYMS).length},1fr)" role="group" aria-label="見る項目">${Object.entries(LOOK_SYMS).map(([k,l])=>`<button class="slot" style="font-size:14px;padding:4px 2px" data-a="lookSym" data-v="${k}" aria-pressed="${sym===k}" aria-label="${l}">${LOOK_BTN[k]||l}</button>`).join('')}</div>
   <div class="ins-layout"><div>
   ${summary}
   ${fold('f_days','日付から前後を見る',`不調の日 ${bds.length}日・いまは${md(date)}を中心に表示`,daysBody,wide)}
@@ -1519,14 +1531,14 @@ function recSheet(){
   let body='';
   if(R.step===1){
     body=`<div class="q">今の調子は？</div>
-    <div class="moods" style="margin-top:0" role="group" aria-label="今の調子">${[1,2,3,4,5].map(v=>`<button class="mood" data-a="set" data-k="mood" data-v="${v}" aria-pressed="${r.mood===v}">${face(v)}<span>${MOODS[v]}</span></button>`).join('')}</div>
+    <div class="moods" style="margin-top:0" role="group" aria-label="今の調子">${[1,2,3,4,5].map(v=>`<button class="mood" data-a="set" data-k="mood" data-v="${v}" aria-pressed="${r.mood===v}">${face(v)}<span>${moodLabel(v)}</span></button>`).join('')}</div>
     <div class="q">今朝の目覚め <small>任意・朝のだるさはここで</small></div>
     <div class="seg" role="group" aria-label="今朝の目覚め">${Object.entries(WAKE).map(([k,l])=>`<button class="opt" data-a="set" data-k="wake" data-v="${k}" aria-pressed="${r.wake===k}">${l}</button>`).join('')}</div>
     <div class="q between" style="display:flex"><span>気になるところ <small>任意・触れていない項目は「未記録」</small></span></div>
     <p class="small" style="margin:-4px 0 4px">1日1回、思い出したときで大丈夫です。朝と夜に分けて入力する必要はありません。</p>
-    <div>${SYMS.map(([k,l])=>`<div class="symrow"><div><span class="nm">${l}</span><span class="st">${r.sym[k]===null?'未記録':r.sym[k]===0?'なし':LV[r.sym[k]]}</span></div>
+    <div>${SYMS.map(([k,l])=>`<div class="symrow"><div><span class="nm">${l}${OPT_SYMS.includes(k)?'<small class="opt-note">気になるときだけ</small>':''}</span><span class="st">${r.sym[k]==null?'未記録':r.sym[k]===0?'なし':LV[r.sym[k]]}</span></div>
       <div class="seg" role="group" aria-label="${l}">${LV.map((x,i)=>`<button class="opt" data-a="set" data-k="sym.${k}" data-v="${i}" aria-pressed="${r.sym[k]===i}">${x}</button>`).join('')}</div></div>${k==='tired'&&r.sym.tired>=1?`<div class="whenrow"><span class="small">いつ頃？（任意）</span>${WHEN.map(w=>`<button class="chip sm ${(r.tiredWhen||[]).includes(w)?'on':''}" data-a="whenT" data-v="${w}" aria-pressed="${(r.tiredWhen||[]).includes(w)}">${w}</button>`).join('')}</div>`:''}`).join('')}</div>
-    ${SYMS.some(([k])=>r.sym[k]===null)?`<button class="link" data-a="allNone">残りの項目をすべて「なし」にする</button>`:''}`;
+    ${SYMS.some(([k])=>r.sym[k]==null&&!OPT_SYMS.includes(k))?`<button class="link" data-a="allNone">残りの項目をすべて「なし」にする</button>`:''}${SYMS.some(([k])=>OPT_SYMS.includes(k))?`<p class="small face-hint" style="margin-top:2px">気にならなかった日も「なし」を残すと、振り返りやすくなります。押さなければ「未記録」のままです。</p>`:''}`;
   } else if(R.step===2){
     const k=R.slot; const m=r.meals[k];
     const fav=topItems(st,k,6).filter(x=>!m.items.includes(x));
@@ -1636,7 +1648,7 @@ const A={
     if(['mood'].includes(k)||k.startsWith('sym.')) v=+v; if(k==='sleep') v=+v; if(k==='posture'||k==='seitai') v=(v==='true');
     if(k.startsWith('sym.')){ const s=k.slice(4); r.sym[s]= r.sym[s]===v?null:v; } else { r[k]= r[k]===v?null:v; }
     ui.rec.dirty=true; saveDraft(); rerenderSheet(); },
-  allNone:()=>{ for(const [k] of SYMS) if(ui.rec.data.sym[k]===null) ui.rec.data.sym[k]=0; ui.rec.dirty=true; saveDraft(); rerenderSheet(); },
+  allNone:()=>{ for(const [k] of SYMS) if(ui.rec.data.sym[k]==null&&!OPT_SYMS.includes(k)) ui.rec.data.sym[k]=0; ui.rec.dirty=true; saveDraft(); rerenderSheet(); },
   slot:d=>{ ui.rec.slot=d.v; rerenderSheet(); },
   addItem:d=>{ const m=ui.rec.data.meals[ui.rec.slot]; if(!m.items.includes(d.name)) m.items.push(d.name); m.none=false; ui.rec.dirty=true; saveDraft(); rerenderSheet(); },
   addText:()=>{ const el=document.getElementById('mealIn'); const v=(el&&el.value||'').trim(); if(!v){ el&&el.focus(); return; } const m=ui.rec.data.meals[ui.rec.slot]; if(!m.items.includes(v)) m.items.push(v); m.none=false; ui.rec.pending[ui.rec.slot]=''; ui.rec.dirty=true; saveDraft(); rerenderSheet(); const n=document.getElementById('mealIn'); if(n) n.focus(); },
