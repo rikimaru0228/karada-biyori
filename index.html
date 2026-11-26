@@ -402,6 +402,60 @@ body.demo-mode .topbar{box-shadow:inset 0 3px 0 #C98A3E}
 .bkcard{border-color:#E3D3B8}
 .c.w b.wn{color:var(--ink2);font-weight:600}
 </style>
+<style>
+/* 今週のようす（案B）。アプリの他の画面に影響しないよう、すべて .wkv の中だけに効かせる */
+.wkv{--wk-ink:#2B2A26;--wk-ink2:#5C5648;color:var(--wk-ink);max-width:560px;margin:0 auto}
+.wkv .emo{font-family:"Segoe UI Emoji","Apple Color Emoji","Noto Color Emoji",sans-serif;font-style:normal;line-height:1}
+.wkv .nm{word-break:keep-all;overflow-wrap:anywhere}
+.wkv .wk-hero{background:linear-gradient(135deg,#FFE3B8,#FFD0B0);border-radius:26px;padding:18px 20px 20px;margin-top:8px}
+.wkv .wk-hero h1{font-size:27px;font-weight:800;line-height:1.3;margin:0;letter-spacing:.02em}
+.wkv .wk-hero small{display:block;font-size:14px;font-weight:700;color:#7A4E26;letter-spacing:.04em;margin-top:2px}
+.wkv .wk-hero p{font-size:17px;font-weight:700;line-height:1.5;margin:12px 0 0;color:#4A3A2A;background:rgba(255,255,255,.55);border-radius:12px;padding:6px 12px;display:inline-block}
+.wkv #oneline .ph{display:inline-block}
+.wkv .wk-grid{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:16px}
+.wkv .wk-tile{flex:0 0 calc((100% - 24px) / 4);border:0;background:#fff;border-radius:18px;padding:8px 2px 8px;font:inherit;color:inherit;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;box-shadow:0 2px 0 #F0E4D2;min-height:44px}
+.wkv .wk-d{font-size:14px;font-weight:700;color:var(--wk-ink2);line-height:1.2;text-align:center}
+.wkv .wk-tile .face{width:70%;max-width:50px;height:auto;margin-top:4px}
+.wkv .wk-meal{height:40px;display:flex;align-items:center;justify-content:center}
+.wkv .wk-meal .emo{font-size:32px}
+.wkv .wk-na{background:transparent;box-shadow:none;border:2px dashed #D9CCB6}
+.wkv .wk-nt{font-size:14px;color:var(--wk-ink2);line-height:40px}
+.wkv .wk-sec{background:#fff;border-radius:24px;padding:18px 16px;margin-top:18px;box-shadow:0 2px 0 #F0E4D2}
+.wkv .wk-kick{font-size:14px;font-weight:700;color:#B0632A;letter-spacing:.1em;text-align:center}
+.wkv .wk-table{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.wkv .wk-dish{display:flex;flex-direction:column;align-items:center;text-align:center;gap:4px;background:#FFF6E8;border-radius:16px;padding:10px 8px}
+.wkv .wk-dish .emo{font-size:34px;flex:none}
+.wkv .wk-dish b{display:block;font-size:15px;line-height:1.3}
+.wkv .wk-cnt{font-size:14px;color:var(--wk-ink2)}
+.wkv .wk-s{font-size:15px;color:var(--wk-ink2);margin:6px 0 0;text-align:center}
+.wkv .wk-card{text-align:center}
+.wkv .wk-pic{width:88px;height:88px;margin:10px auto 6px;border-radius:50%;background:#FFF1DC;display:flex;align-items:center;justify-content:center;font-size:50px}
+.wkv .wk-card b{display:block;font-size:20px;line-height:1.4}
+.wkv .wk-p{display:inline-block;margin-top:10px;font-size:14px;font-weight:700;color:var(--wk-ink2);background:#F4EDE1;border-radius:999px;padding:0 10px}
+.wkv .wk-more{display:block;width:100%;min-height:48px;margin-top:14px;border:2px solid #2B2A26;background:#fff;border-radius:14px;font:inherit;font-size:16px;font-weight:700;color:var(--wk-ink);cursor:pointer}
+.wkv .wk-h{font-size:22px;line-height:1.4;margin:0;text-align:center}
+.wkv .wk-h2{font-size:17px;margin:0}
+/* 根拠の画面 */
+.wkv .wsub{font-size:16px;color:#4D4A42;margin:4px 0 0;text-align:center}
+.wkv .wchip{display:block;width:fit-content;margin:10px auto 6px;padding:2px 10px;border-radius:999px;background:#EEE8DC;font-size:14px;font-weight:700;color:#5C5648}
+.wkv .wb{margin-top:12px}
+.wkv .wb-l{display:flex;justify-content:space-between;gap:8px;font-size:14px;color:#5C5648}
+.wkv .wb-l b{color:#2B2A26;white-space:nowrap}
+.wkv .wb-t{height:12px;border-radius:6px;background:#ECE6DA;overflow:hidden;margin-top:4px}
+.wkv .wb-t i{display:block;height:100%}
+.wkv .wnote{font-size:14px;color:#5C5648;border-left:3px solid #DDD5C5;padding-left:10px;margin:12px 0 0}
+.wkv .wsmall{font-size:14px;color:#6E685B;margin:2px 0}
+.wkv .wlbl{font-size:14px;font-weight:700;color:#6E685B;margin-top:10px}
+.wkv .wdates{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.wkv .wdates button{min-width:58px;min-height:48px;border-radius:12px;border:1.5px solid #DDD5C5;background:#fff;font:inherit;font-size:15px;font-weight:700;color:#2B2A26;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.15;cursor:pointer}
+.wkv .wdates button small{font-size:14px;font-weight:400;color:#6E685B}
+.wkv .wdates button.g{border-color:#9CC5A4}.wkv .wdates button.b{border-color:#E7AE84}
+.wkv .wnone{font-size:14px;color:#6E685B}
+.wkv .wdet{margin-top:18px;background:#fff;border-radius:16px;padding:0 16px}
+.wkv .wdet summary{min-height:48px;display:flex;align-items:center;font-weight:700;cursor:pointer;font-size:15px}
+.wkv .wdet p{font-size:14px;color:#4D4A42;margin:0 0 10px}
+@media (max-width:360px){.wkv .wk-table{grid-template-columns:1fr}.wkv .wk-dish{flex-direction:row;text-align:left;gap:12px;padding:8px 12px}}
+</style>
 </head>
 <body>
 <div class="app">
@@ -422,13 +476,425 @@ body.demo-mode .topbar{box-shadow:inset 0 3px 0 #C98A3E}
 <input type="file" id="fileIn" accept="application/json,.json" hidden>
 
 <script>
+/* 集計.js（試作_振り返り）：振り返りの集計。AIなし */
+/* からだ日和：記録の振り返り（集計・項目の選び方・定型文。AIは使わない）
+   - 端末の中で、決まった規則で数えるだけ。
+   - 「未記録」は数えない（「なかった」「なし」とは扱わない）。
+   - すべての数に、数えた日付（根拠の日）を付ける。
+   ブラウザでは <script src="集計.js">、Node では require('./集計.js') で使う。 */
+(function (root) {
+'use strict';
+const SYMS = [['shoulder','肩こり'],['tired','疲れ・だるさ'],['nose','鼻づまり'],['skin','肌のかゆみ・荒れ'],['voice','声の出しづらさ'],['face','顔のこわばり・緊張']];
+const SYML = Object.fromEntries(SYMS);
+const TAGS = ['甘いもの','お酒','揚げ物・脂っこい','麺・パン','乳製品'];
+const SLOTS = ['b','l','d','s'];
+const SET = { MIN_N: 5, TH: 0.3, MIN_DISH_DAYS: 3, RANGE: 56, OV_TH: 0.3, OV_MIN: 3 };
+
+/* 何を「体調のよい日」とするか（見るもの） */
+const OUTCOMES = {
+  mood: { label:'全体の調子', good:'調子が「よい」以上の日', bad:'調子が「いまいち」以下の日', mid:'調子が「ふつう」の日',
+          val: r => r && r.mood != null ? r.mood : null, cls: v => v >= 4 ? 'good' : v <= 2 ? 'bad' : 'mid' }
+};
+for (const [k, l] of SYMS) OUTCOMES[k] = { label:l, good:`${l}が「なし・軽い」の日`, bad:`${l}が「中・強い」の日`, mid:null,
+  val: r => r && r.sym && r.sym[k] != null ? r.sym[k] : null, cls: v => v <= 1 ? 'good' : 'bad', sym:k };
+
+const iso = d => d.toISOString().slice(0, 10);
+const addDays = (s, n) => { const d = new Date(s + 'T00:00:00Z'); d.setUTCDate(d.getUTCDate() + n); return iso(d); };
+const norm = s => String(s || '').normalize('NFKC').replace(/\s+/g, '').trim();
+
+/* 料理名：原文はそのまま。分類（本人や決まった規則が決めたまとめ方）で「保留」以外ならまとめ先で数える */
+function canonDish(name, cls) {
+  const c = cls && (cls[name] || cls[norm(name)]);
+  return c && c.to && c.state !== '保留' ? c.to : norm(name);
+}
+function mealsKnown(r) { return !!r && !!r.meals && SLOTS.some(k => r.meals[k] && (r.meals[k].items.length || r.meals[k].none)); }
+function dishesOf(r, cls) { const s = new Set(); if (!r || !r.meals) return s; for (const k of SLOTS) for (const it of (r.meals[k] ? r.meals[k].items : [])) s.add(canonDish(it, cls)); return s; }
+function tagState(r, t) { if (!r) return null; if ((r.tags || []).includes(t)) return true; if ((r.tagsNo || []).includes(t)) return false; return null; }
+function wx(W, d) { return W && W[d] ? W[d] : null; }
+function presDrop(W, d) { const a = wx(W, d), b = wx(W, addDays(d, -1)); return a && b && a.pres != null && b.pres != null ? Math.round((a.pres - b.pres) * 10) / 10 : null; }
+
+/* 比べる条件。v(D,W,date) は true／false／null（未記録・不明） */
+function buildFactors(D, W, dates, cls, outcomeKey) {
+  const F = [];
+  // 食事：期間内に3日以上出てきた料理
+  const cnt = {};
+  for (const d of dates) for (const n of dishesOf(D[d], cls)) cnt[n] = (cnt[n] || 0) + 1;
+  for (const [n, c] of Object.entries(cnt).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])))
+    if (c >= SET.MIN_DISH_DAYS) F.push({ key:'dish:' + n, group:'食事', label:`${n}を食べた`, dish:n, lags:[0,1],
+      v: (D, W, d) => mealsKnown(D[d]) ? dishesOf(D[d], cls).has(n) : null });
+  for (const t of TAGS) F.push({ key:'tag:' + t, group:'食事の傾向', label:`${t}があった`, lags:[0,1], v: (D, W, d) => tagState(D[d], t) });
+  F.push({ key:'late', group:'食事の傾向', label:'夕食が21時以降', lags:[0,1],
+    v: (D, W, d) => { const r = D[d]; if (!r) return null; if (r.meals && r.meals.d && r.meals.d.none) return false; return r.dinnerTime ? r.dinnerTime >= '21:00' : null; } });
+  F.push({ key:'sleepShort', group:'睡眠', family:'sleep', label:'前夜の睡眠が6時間未満', lags:[0], v: (D, W, d) => D[d] && D[d].sleep != null ? D[d].sleep < 6 : null });
+  F.push({ key:'sleepLong', group:'睡眠', family:'sleep', label:'前夜の睡眠が7時間以上', lags:[0], v: (D, W, d) => D[d] && D[d].sleep != null ? D[d].sleep >= 7 : null });
+  F.push({ key:'workHeavy', group:'仕事', label:'仕事の負担が重い', lags:[0,1], v: (D, W, d) => D[d] && D[d].stress ? D[d].stress === 'high' : null });
+  F.push({ key:'dry', group:'天気', family:'hum', label:'空気が乾燥（湿度40%未満）', lags:[0,1], v: (D, W, d) => { const w = wx(W, d); return w && w.hum != null ? w.hum < 40 : null; } });
+  F.push({ key:'humid', group:'天気', family:'hum', label:'湿度が高め（70%以上）', lags:[0,1], v: (D, W, d) => { const w = wx(W, d); return w && w.hum != null ? w.hum >= 70 : null; } });
+  F.push({ key:'pdrop', group:'天気', label:'気圧が前日より4hPa以上下がった', lags:[0,1], v: (D, W, d) => { const p = presDrop(W, d); return p == null ? null : p <= -4; } });
+  // ほかの体調（同じ日）。見ているもの自身は除く
+  for (const [k, l] of SYMS) if (k !== outcomeKey)
+    F.push({ key:'sym:' + k, group:'ほかの体調', label:`${l}が中以上`, lags:[0], v: (D, W, d) => D[d] && D[d].sym && D[d].sym[k] != null ? D[d].sym[k] >= 2 : null });
+  return F;
+}
+
+const LAGL = ['当日', '前日'];
+function tally(F, L, days, D, W) {
+  const known = [], yes = [], unknown = [];
+  for (const d of days) { const v = F.v(D, W, addDays(d, -L)); if (v === null || v === undefined) unknown.push(d); else { known.push(d); if (v) yes.push(d); } }
+  return { n: known.length, k: yes.length, days: yes, noDays: known.filter(d => !yes.includes(d)), unknownDays: unknown };
+}
+const pct = (k, n) => n ? Math.round(k / n * 100) : null;
+
+/* 集計の本体。state={days, weather, cls}、opts={outcome, today, range} */
+function analyze(state, opts) {
+  // rule：まとめに出す目安。'perm'＝入れ替え確認（基本）／'now'＝各5日・差30ポイントだけ（これまで。比べる確認用）
+  // permMethod：入れ替え方。基本は 'shift'＝体調の並びを7日以上ずらして重ねる（連続する日の似かたを保つ。連続する日_確認.js の結果で決めた）
+  //   'day'＝日ごとにばらばらに入れ替える（前の版。連続する日が似ていると偶然の差を少なく見積もる）／'week'＝週ごとに入れ替える
+  const o = Object.assign({ outcome:'mood', range:SET.RANGE, perm:400, seed:1, rule:'perm', permMethod:'shift' }, opts || {});
+  const OC = OUTCOMES[o.outcome]; if (!OC) throw new Error('見るものが不明です：' + o.outcome);
+  const D = state.days || {}, W = state.weather || {}, cls = state.cls || {};
+  const today = o.today || Object.keys(D).sort().pop();
+  // 期間：直近 range 日。ただし記録を始めた日より前は含めない（経過した日数と記録した日数を分けて示すため）
+  const first = Object.keys(D).sort()[0] || today;
+  const dates = []; for (let i = o.range - 1; i >= 0; i--) { const d = addDays(today, -i); if (d >= first) dates.push(d); }
+  const rec = dates.filter(d => D[d]);
+  const g = { good:[], bad:[], mid:[], unknown:[] };
+  for (const d of rec) { const v = OC.val(D[d]); if (v == null) g.unknown.push(d); else g[OC.cls(v)].push(d); }
+  const factors = buildFactors(D, W, dates, cls, OC.sym);
+  const facts = []; let i = 0;
+  for (const F of factors) for (const L of F.lags) {
+    const gd = tally(F, L, g.good, D, W), bd = tally(F, L, g.bad, D, W);
+    const vec = dates.map(d => { const v = F.v(D, W, addDays(d, -L)); return v === null || v === undefined ? null : !!v; });
+    const enough = gd.n >= SET.MIN_N && bd.n >= SET.MIN_N;
+    const diff = enough ? (gd.k / gd.n) - (bd.k / bd.n) : null;
+    const status = !enough ? 'lack' : diff >= SET.TH ? 'good_more' : diff <= -SET.TH ? 'bad_more' : 'small';
+    if (gd.k + bd.k === 0 && status !== 'lack') continue;   // どちらの日にも一度も出てこない条件は並べない
+    facts.push({ id:'F' + (++i), key:F.key, group:F.group, label:F.label, dish:F.dish || null, lag:L, lagLabel:LAGL[L],
+      good:gd, bad:bd, goodPct:pct(gd.k, gd.n), badPct:pct(bd.k, bd.n), diff: diff == null ? null : Math.round(diff * 100) / 100, status, vec });
+  }
+  // 重なり：差が見えた条件どうし・睡眠・仕事が、同じ日に重なっていないか（どちらが関わるかは分けられない）
+  const flagged = facts.filter(f => f.status === 'good_more' || f.status === 'bad_more');
+  const fmap = Object.fromEntries(factors.map(F => [F.key, F]));
+  const others = [...new Set([...flagged.map(f => f.key + '|' + f.lag), 'sleepLong|0', 'sleepShort|0', 'workHeavy|0'])];
+  const overlaps = []; let j = 0; const seen = new Set();
+  for (const f of flagged) for (const ok of others) {
+    const [k2, l2] = ok.split('|'); const L2 = +l2; if (k2 === f.key) continue;
+    const A = fmap[f.key], B = fmap[k2]; if (!B) continue;
+    if (A.family && A.family === B.family) continue;   // 同時には起きない組（睡眠の短い・長い など）は重なりとして扱わない
+    const pk = [f.key + '|' + f.lag, ok].sort().join('~'); if (seen.has(pk)) continue;   // A×B と B×A は1つにする
+    const both = rec.map(d => [d, A.v(D, W, addDays(d, -f.lag)), B.v(D, W, addDays(d, -L2))]).filter(x => x[1] !== null && x[2] !== null);
+    const w = both.filter(x => x[1]), wo = both.filter(x => !x[1]);
+    if (w.length < SET.OV_MIN || wo.length < SET.OV_MIN) continue;
+    const rw = w.filter(x => x[2]).length / w.length, rwo = wo.filter(x => x[2]).length / wo.length;
+    if (Math.abs(rw - rwo) < SET.OV_TH) continue;
+    seen.add(pk);
+    overlaps.push({ id:'O' + (++j), of:f.id, ofLabel:f.label, ofLag:f.lagLabel, other:B.label, otherLag:LAGL[L2],
+      withN:w.length, withK:w.filter(x => x[2]).length, withDays:w.filter(x => x[2]).map(x => x[0]),
+      withoutN:wo.length, withoutK:wo.filter(x => x[2]).length, dir: rw > rwo ? 'more' : 'less' });
+  }
+  for (const f of facts) f.overlaps = overlaps.filter(x => x.of === f.id).map(x => x.id);
+  // 偶然でも出る差かどうかの手がかり（表示の目安の案で使う）
+  const mid = dates[Math.floor(dates.length / 2)];
+  for (const f of facts) {
+    f.p = f.status === 'lack' ? null : fisherP(f.good.k, f.good.n - f.good.k, f.bad.k, f.bad.n - f.bad.k);
+    // 前半・後半に分けても同じ向きか（各半分で両方の日が3日以上あるときだけ）
+    const half = early => { const inH = d => early ? d < mid : d >= mid;
+      const gk = f.good.days.filter(inH).length, gn = gk + f.good.noDays.filter(inH).length, bk = f.bad.days.filter(inH).length, bn = bk + f.bad.noDays.filter(inH).length;
+      return gn >= 3 && bn >= 3 ? gk / gn - bk / bn : null; };
+    f.half = [half(true), half(false)];
+  }
+  let permP = null;
+  const cvec = dates.map(d => !D[d] ? null : g.good.includes(d) ? 'good' : g.bad.includes(d) ? 'bad' : null);
+  // 各項目の「全体で見たときの偶然の割合」＝数え直しのうち、どれか1つの項目でこの項目以上に強い差が出た割合（同じ強さも数える）
+  let nPerm = 0;
+  if (o.perm > 0) { const mins = permThreshold(facts, g, o.perm, o.seed || 1, o.permMethod, cvec); nPerm = mins.length;
+    permP = mins.length ? mins[Math.floor(mins.length * 0.1)] : null;
+    for (const f of facts) f.adjP = f.p == null || !mins.length ? null : (mins.filter(x => x <= f.p * (1 + 1e-9)).length + 1) / (mins.length + 1); }
+  for (const f of facts) delete f.vec;
+  // 段階：clear＝記録の中で差が見られた（まとめに出す）／weak＝差はあるが偶然でも出る程度（詳しい表だけ）／small＝差は小さい／lack＝材料不足
+  const RU = RULES[o.rule] || RULES.perm, pseudo = { meta:{ permP } };
+  for (const f of facts) f.level = f.status === 'lack' ? 'lack' : f.status === 'small' ? 'small' : RU.show(f, pseudo) ? 'clear' : 'weak';
+  // 注意（決まった規則で付ける）
+  const notes = [];
+  const cmp = facts.filter(f => f.status !== 'lack').length;
+  if (g.good.length < 10 || g.bad.length < 10) notes.push(`比べる日が少なめです（よい日 ${g.good.length}日・そうでない日 ${g.bad.length}日）。数日の違いで結果が変わります。`);
+  if (g.unknown.length >= rec.length * 0.3) notes.push(`記録した${rec.length}日のうち${g.unknown.length}日は「${OC.label}」が未記録で、数えていません。` + (OC.sym === 'face' ? '気になるときだけ残す項目なので、気になった日ほど記録されやすく、「なし・軽い」の日が少なく数えられている可能性があります。' : ''));
+  const nWeak = facts.filter(f => f.level === 'weak').length, nClear = facts.filter(f => f.level === 'clear').length;
+  if (o.rule === 'now') { if (cmp >= 20) notes.push(`${cmp}の組み合わせを比べました。これだけ比べると、偶然でも差が出るものがあります（この目安では区別していません）。`); }
+  return {
+    notes,
+    meta: { outcome:o.outcome, outcomeLabel:OC.label, goodLabel:OC.good, badLabel:OC.bad, midLabel:OC.mid,
+      from:dates[0], to:today, rangeDays:dates.length, range:o.range, recordedDays:rec.length, firstRecord:first,
+      usedDays:g.good.length + g.bad.length, can16: first <= addDays(today, -56), permMethod:o.permMethod,
+      goodN:g.good.length, badN:g.bad.length, midN:g.mid.length, unknownN:g.unknown.length,
+      minN:SET.MIN_N, threshold:SET.TH, comparisons:facts.filter(f => f.status !== 'lack').length, permP, nPerm, perm:o.perm || 0, rule:o.rule, ruleLabel:RU.label, nClear, nWeak, nFlag:nClear + nWeak },
+    groups:g, facts, overlaps
+  };
+}
+
+/* フィッシャーの正確確率（両側）：よい日とそうでない日で、当てはまる割合がこれ以上違うことが、偶然で起きる確率 */
+const LF = [0]; function lf(n) { for (let i = LF.length; i <= n; i++) LF[i] = LF[i - 1] + Math.log(i); return LF[n]; }
+function fisherP(a, b, c, d) {
+  const r1 = a + b, r2 = c + d, c1 = a + c, n = r1 + r2;
+  const pr = x => Math.exp(lf(r1) + lf(r2) + lf(c1) + lf(n - c1) - lf(n) - lf(x) - lf(r1 - x) - lf(c1 - x) - lf(r2 - c1 + x));
+  const p0 = pr(a); let p = 0;
+  for (let x = Math.max(0, c1 - r2); x <= Math.min(r1, c1); x++) { const q = pr(x); if (q <= p0 * (1 + 1e-7)) p += q; }
+  return Math.min(1, p);
+}
+function rng(a) { return function () { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+/* 入れ替え確認：よい日・そうでない日の札を入れ替えて（関係をなくして）数え直すことを何百回も行い、
+   「比べたすべての条件のうち、どれか1つでも、これより強い差が偶然に出る」のが10回に1回以下になる線を求める。
+   すべての条件（50〜60の組み合わせ）をまとめて見て決める線なので、たくさん比べることによる偶然の差を抑える。
+   入れ替え方（method）
+   - 'day'  ：日ごとにばらばらに入れ替える。連続する日が似ている（調子の悪い日が数日続く・忙しい週が続く）と、
+              偶然の差を少なく見積もる（線がゆるくなる）
+   - 'shift'：体調の並び（よい日・そうでない日・未記録）を、そのまま7日以上ずらして重ねる。連続する日の似かたを保つ
+   - 'week' ：7日ずつの区切りの順番を入れ替える */
+function permThreshold(facts, g, times, seed, method, cvec) {
+  const R = rng(seed), mins = [], use = facts.filter(f => f.status !== 'lack');
+  const minP = lab => {   // lab[i]：i番目の日の札（'good'／'bad'／null）
+    let m = 1;
+    for (const f of use) {
+      let gk = 0, gn = 0, bk = 0, bn = 0;
+      for (let i = 0; i < lab.length; i++) { const v = f.vec[i]; if (v === null || !lab[i]) continue; if (lab[i] === 'good') { gn++; if (v) gk++; } else { bn++; if (v) bk++; } }
+      if (gn < SET.MIN_N || bn < SET.MIN_N || Math.abs(gk / gn - bk / bn) < SET.TH) continue;
+      const p = fisherP(gk, gn - gk, bk, bn - bk); if (p < m) m = p;
+    }
+    return m;
+  };
+  const N = cvec.length;
+  if (method === 'shift') {
+    for (let k = 7; k <= N - 7; k++) mins.push(minP(cvec.map((_, i) => cvec[(i + k) % N])));
+  } else if (method === 'week') {
+    const blocks = []; for (let i = 0; i < N; i += 7) blocks.push(cvec.slice(i, i + 7));
+    for (let t = 0; t < times; t++) {
+      const b = blocks.slice(); for (let i = b.length - 1; i > 0; i--) { const j = Math.floor(R() * (i + 1)); [b[i], b[j]] = [b[j], b[i]]; }
+      mins.push(minP([].concat(...b).slice(0, N).concat(Array(Math.max(0, N - [].concat(...b).length)).fill(null))));
+    }
+  } else {
+    const idx = cvec.map((c, i) => c ? i : -1).filter(i => i >= 0), labs = idx.map(i => cvec[i]);
+    for (let t = 0; t < times; t++) {
+      const sh = labs.slice(); for (let i = sh.length - 1; i > 0; i--) { const j = Math.floor(R() * (i + 1)); [sh[i], sh[j]] = [sh[j], sh[i]]; }
+      const lab = Array(N).fill(null); idx.forEach((i, j) => lab[i] = sh[j]); mins.push(minP(lab));
+    }
+  }
+  mins.sort((a, b) => a - b);
+  return mins;
+}
+/* まとめに出す目安。基本は perm（入れ替え確認）。now はこれまでの目安で、比べる確認のためだけに残す */
+const isMore = f => f.status === 'good_more' || f.status === 'bad_more';
+const RULES = {
+  now:  { label:'これまで（各5日・差30ポイント）', show: f => isMore(f) },
+  perm: { label:'各5日・差30ポイント＋入れ替え確認（全体で10%）', show: f => isMore(f) && f.adjP != null && f.adjP <= 0.1 },
+};
+const MAX_SUMMARY = 3;
+/* まとめ：記録の中で差が見られた項目を、差の大きい順に最大3件。満たす項目がなければ空のまま（無理に埋めない） */
+function summary(A) {
+  return A.facts.filter(f => f.level === 'clear').sort((a, b) => Math.abs(b.diff) - Math.abs(a.diff) || a.p - b.p).slice(0, MAX_SUMMARY)
+    .map(f => ({ fact:f, overlaps: A.overlaps.filter(o => o.of === f.id).slice(0, 1) }));
+}
+const EMPTY = { none:'今の記録では、はっきりした傾向はまだ見えていません。', lack:'比べるには記録がまだ足りません。' };
+function emptyText(A) { return A.facts.some(f => f.status !== 'lack') ? EMPTY.none : EMPTY.lack; }
+
+/* 数字と向きを含む文は、いつも端末の定型文で作る */
+const DIRL = { good_more:'よい日に多い', bad_more:'そうでない日に多い', small:'差は小さい', lack:'比べるには記録が足りない' };
+/* 段階の呼び方（画面と文で同じものを使う） */
+const LEVELL = { clear:null, weak:'偶然でも出る程度', small:'差は小さい', lack:'材料不足' };
+function levelText(f) { return f.level === 'clear' ? DIRL[f.status] : f.level === 'weak' ? DIRL[f.status] + '。ただし偶然でも出る程度' : LEVELL[f.level] || DIRL[f.status]; }
+/* 「よい日」「そうでない日」が何を指すかは、まとめの上に1回だけ書く（defineLine）。文の中では短い呼び方を使う */
+function defineLine(A) { const m = A.meta; return `よい日＝${m.goodLabel}（${m.goodN}日）／そうでない日＝${m.badLabel}（${m.badN}日）`; }
+function factSentence(A, f) {
+  return `「${f.label}」${f.lag ? '（前日）' : ''}：よい日 ${f.good.n}日のうち${f.good.k}日、そうでない日 ${f.bad.n}日のうち${f.bad.k}日（${levelText(f)}）。`;
+}
+function overlapSentence(A, o) {
+  return `「${o.ofLabel}」${o.ofLag === '前日' ? '（前日）' : ''}の日は「${o.other}」${o.otherLag === '前日' ? '（前日）' : ''}と重なることが${o.dir === 'more' ? '多い' : '少ない'}（${o.withN}日のうち${o.withK}日、ほかの日は${o.withoutN}日のうち${o.withoutK}日）。どちらが関わるかは分けられません。`;
+}
+/* まとめの定型文（画面と同じ選び方・同じ文） */
+function templateText(A) {
+  const out = [{ 文: defineLine(A), 根拠:[] }], S = summary(A);
+  if (!S.length) out.push({ 文: emptyText(A), 根拠:[] });
+  for (const s of S) {
+    out.push({ 文: factSentence(A, s.fact), 根拠:[s.fact.id] });
+    for (const o of s.overlaps) out.push({ 文: overlapSentence(A, o), 根拠:[s.fact.id, o.id] });
+  }
+  for (const n of A.notes) out.push({ 文:n, 根拠:[], 注意:true });
+  return out;
+}
+
+const api = { SYMS, SYML, TAGS, SET, OUTCOMES, DIRL, LEVELL, RULES, MAX_SUMMARY, EMPTY, fisherP, levelText, defineLine, analyze, summary, emptyText, templateText, factSentence, overlapSentence, canonDish, addDays, presDrop };
+root.KaradaAnalysis = api;
+if (typeof module !== 'undefined' && module.exports) module.exports = api;
+})(typeof globalThis !== 'undefined' ? globalThis : this);
+
+</script>
+<script>
+/* 週の振り返り.js（試作_振り返り）：今週のようすの部品 */
+/* からだ日和：1週間の振り返り（2案で共通の部品。AIなし・決まった規則だけ）
+   - 今週7日分の調子・食べたもの（事実だけ）
+   - 今週のひとこと（事実だけの短い1文。責めない・無理に明るくしない）
+   - 気づき（直近8週間の集計から最大1件。集計.js の summary の先頭）
+   - 根拠の画面（数字・割合・選び方の説明・日付）と、その日の記録の画面
+   ブラウザで 集計.js・見本データ.js のあとに読み込む */
+(function (root) {
+'use strict';
+const K = root.KaradaAnalysis, SM = root.KaradaSample;
+const WD = ['日','月','火','水','木','金','土'];
+const md = d => `${+d.slice(5,7)}/${+d.slice(8,10)}`;
+const wdOf = d => WD[new Date(d + 'T00:00:00Z').getUTCDay()];
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const MOODS = ['', 'つらい', 'いまいち', 'ふつう', 'よい', 'とてもよい'], LV = ['なし','軽い','中','強い'];
+const SLEEPL = {4.5:'5時間未満',5.5:'5〜6時間',6.5:'6〜7時間',7.5:'7時間以上'}, WORK = {low:'軽い',mid:'ふつう',high:'重い'};
+
+/* ---- 見本（架空）：同じ見本を2案で使う ---- */
+const TODAY = '2026-11-22';
+const SEEDS = [20261122, 2001, 2002, 2003, 2004, 2005];
+const KINDS = [['planted','ふだんの週'],['null','傾向の出ない週'],['few','記録が少ない週']];
+const cache = {};
+function sample(kind, seedI) {
+  const k = kind + seedI; if (cache[k]) return cache[k];
+  const st = SM.make(SEEDS[seedI] || SEEDS[0], TODAY, 126, { noLink: kind === 'null' });
+  if (kind === 'few') {   // 今週は3日だけ記録。うち1日は調子が未記録
+    for (const n of [6, 5, 3, 1]) delete st.days[K.addDays(TODAY, -n)];
+    const d4 = K.addDays(TODAY, -4); if (!st.days[d4]) st.days[d4] = JSON.parse(JSON.stringify(st.days[K.addDays(TODAY, -7)]));
+    st.days[d4].mood = null;
+    for (const n of [0, 2]) if (!st.days[K.addDays(TODAY, -n)]) st.days[K.addDays(TODAY, -n)] = JSON.parse(JSON.stringify(st.days[K.addDays(TODAY, -8)]));
+  }
+  return cache[k] = st;
+}
+
+/* ---- 絵 ---- */
+// 調子の顔：色だけでなく、口・目の形で5段階を分ける。未記録は点線の丸（顔を描かない）
+const FACEC = { 5:'#5E9E73', 4:'#9CC5A4', 3:'#E3D6B8', 2:'#E7AE84', 1:'#CF7B5C' };
+function face(v, size) {
+  const s = size || 44;
+  if (v == null) return `<svg class="face na" width="${s}" height="${s}" viewBox="0 0 48 48" role="img" aria-label="未記録"><circle cx="24" cy="24" r="21" fill="#fff" stroke="#A9A090" stroke-width="2.2" stroke-dasharray="4 4"/><circle cx="17" cy="25" r="1.8" fill="#A9A090"/><circle cx="24" cy="25" r="1.8" fill="#A9A090"/><circle cx="31" cy="25" r="1.8" fill="#A9A090"/></svg>`;
+  const ink = '#2B2A26';
+  const eyes = v === 5 ? `<path d="M13 21q4-5 8 0M27 21q4-5 8 0" stroke="${ink}" stroke-width="2.6" fill="none" stroke-linecap="round"/>`
+             : `<circle cx="17" cy="20" r="2.6" fill="${ink}"/><circle cx="31" cy="20" r="2.6" fill="${ink}"/>`;
+  const brows = v === 1 ? `<path d="M12 16l8-4M36 16l-8-4" stroke="${ink}" stroke-width="2.4" stroke-linecap="round"/>` : '';
+  const mouth = { 5:'M13 28q11 12 22 0z', 4:'M15 29q9 7 18 0', 3:'M16 31h16', 2:'M16 34q8-5 16 0', 1:'M15 36q9-9 18 0' }[v];
+  return `<svg class="face" width="${s}" height="${s}" viewBox="0 0 48 48" role="img" aria-label="${MOODS[v]}"><circle cx="24" cy="24" r="22" fill="${FACEC[v]}"/>${eyes}${brows}<path d="${mouth}" stroke="${ink}" stroke-width="2.6" fill="${v === 5 ? ink : 'none'}" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+}
+const DISH = [[/ラーメン|そば|うどん/, '🍜'], [/パスタ/, '🍝'], [/焼き?魚|鮭/, '🐟'], [/カレー/, '🍛'], [/居酒屋/, '🏮'], [/鍋|湯豆腐/, '🍲'], [/野菜炒め|サラダ/, '🥗'],
+  [/生姜焼き|肉/, '🍖'], [/おにぎり/, '🍙'], [/弁当|定食/, '🍱'], [/トースト|パン/, '🍞'], [/ヨーグルト|乳/, '🥛'], [/ごはん|納豆/, '🍚'], [/チョコ/, '🍫'], [/せんべい/, '🍘'], [/アイス/, '🍨']];
+function dishIcon(n) { for (const [re, e] of DISH) if (re.test(n)) return e; return '🍽️'; }
+function factIcon(f) {
+  if (f.dish) return dishIcon(f.dish);
+  const m = { sleepLong:'🛏️', sleepShort:'🛏️', workHeavy:'💼', late:'🌙', dry:'💧', humid:'💧', pdrop:'🌀', 'tag:お酒':'🍶', 'tag:甘いもの':'🍰', 'tag:揚げ物・脂っこい':'🍤', 'tag:麺・パン':'🍜', 'tag:乳製品':'🥛', 'sym:tired':'🥱', 'sym:face':'😣' };
+  return m[f.key] || '📝';
+}
+/* 料理名・項目名の折り返し：語の途中（「ヨーグル／ト」「外／食」）では切らず、「と・の・で・・・、」のあとなど区切りでだけ改行する。
+   区切りのない長い名前は、入りきらないときだけ途中で折り返す（CSS：.nm{word-break:keep-all;overflow-wrap:anywhere}） */
+function nameHTML(n) {   // 助詞（と・の・で・が・を）は、漢字・カタカナのあとにあるときだけ区切りにする（「おでん」「のり弁」は切らない）
+  return `<span class="nm">${String(n ?? '').split(/(?<=[\p{sc=Han}\p{sc=Katakana}ー][とのでがを])|(?<=[・、\/（）()])/u).map(x => `<span class="nms">${esc(x)}</span>`).join('<wbr>')}</span>`; }
+const icon = (e, label) => `<span class="emo" role="img" aria-label="${esc(label)}">${e}</span>`;
+
+/* ---- 今週（事実だけ） ---- */
+function week(st) {
+  const today = st.today, days = [];
+  for (let i = 6; i >= 0; i--) {
+    const d = K.addDays(today, -i), r = st.days[d] || null;
+    const meals = r ? ['b','l','d','s'].flatMap(k => r.meals[k].items.map(n => K.canonDish(n, st.cls))) : [];
+    const main = r ? (r.meals.d.items[0] || r.meals.l.items[0] || null) : null;
+    days.push({ date:d, wd:wdOf(d), md:md(d), rec:!!r, mood: r && r.mood != null ? r.mood : null, main, meals });   // main は記録したままの名前（絵は名前から選ぶ）
+  }
+  const cnt = {}; for (const x of days) for (const n of new Set(x.meals)) cnt[n] = (cnt[n] || 0) + 1;
+  const dishes = Object.entries(cnt).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).map(([n, c]) => ({ name:n, count:c, icon:dishIcon(n) }));
+  return { from:days[0].date, to:today, days, dishes, recN: days.filter(x => x.rec).length, moodN: days.filter(x => x.mood != null).length,
+    good: days.filter(x => x.mood >= 4).length, bad: days.filter(x => x.mood != null && x.mood <= 2).length, mid: days.filter(x => x.mood === 3).length };
+}
+/* 今週のひとこと：決まった規則で、事実だけの短い1文。記録の少なさを責めない・無理に明るくしない */
+function oneLine(w) {
+  // parts：改行してよい区切り（文節）。画面では区切りの間だけで改行する
+  const L = (parts, kind) => ({ text: parts.join(''), parts, kind });
+  const ds = w.days;
+  if (!w.recN) return L(['今週の記録は、', 'まだありません'], 'none');
+  if (w.moodN < 3) return L(['今週は', `${w.recN}日分の`, '記録があります'], 'few');
+  // 調子のよい日が続いたところ（いちばん長いもの）
+  let best = null, cur = null;
+  for (const x of ds) { if (x.mood >= 4) { cur = cur ? { s:cur.s, n:cur.n + 1 } : { s:x, n:1 }; if (!best || cur.n > best.n) best = cur; } else cur = null; }
+  if (w.good >= w.bad && w.good >= w.mid && w.good >= 2) return best && best.n >= 3 ? L([`${best.s.wd}曜から、`, '調子のよい日が', `${best.n}日続きました`], 'good') : L(['調子のよい日が', `${w.good}日ありました`], 'good');
+  if (w.bad > w.good && w.bad >= w.mid) return L(['調子がいまいちの日が', `${w.bad}日ありました`], 'bad');
+  return L(['「ふつう」の日が', '多い一週間でした'], 'mid');
+}
+const lineHTML = l => l.parts.map(p => `<span class="ph">${esc(p)}</span>`).join('<wbr>');
+/* 気づき：直近8週間の集計から最大1件（集計.js と同じ規則） */
+function insight(st) {
+  const A = K.analyze(st, { outcome:'mood', today:st.today, range:56 }), S = K.summary(A);
+  if (!S.length) return { A, f:null };
+  const f = S[0].fact;
+  return { A, f, overlap:S[0].overlaps[0] || null, icon:factIcon(f), head: f.label + (f.lag ? '（前の日）' : ''),
+    sub: f.status === 'good_more' ? '調子のよい日に、多く見られました' : '調子がいまいちの日に、多く見られました',
+    period: `直近${K.addDays(st.today, -55) >= A.meta.from ? '8週間' : Math.round(A.meta.rangeDays / 7) + '週間'}の記録から` };
+}
+
+/* ---- 根拠の画面・その日の記録（2案で共通） ---- */
+function bar(lab, k, n, col) { const p = n ? k / n * 100 : 0; return `<div class="wb"><div class="wb-l"><span>${esc(lab)}</span><b>${n ? `${n}日のうち ${k}日` : '記録なし'}</b></div><div class="wb-t"><i style="width:${p}%;background:${col}"></i></div></div>`; }
+function insightSheet(st, I) {
+  const f = I.f, A = I.A, m = A.meta;
+  const ds = (list, y) => list.length ? `<div class="wdates">${list.map(d => `<button class="${y}" data-day="${d}">${md(d)}<small>${wdOf(d)}</small></button>`).join('')}</div>` : '<p class="wnone">なし</p>';
+  return `<div class="whead"><span class="wbig">${I.icon}</span><button class="wx" data-close="1">閉じる</button></div>
+    <h2>${esc(I.head)}</h2><p class="wsub">${esc(I.sub)}</p>
+    <p class="wchip">${md(m.from)}〜${md(m.to)}・${esc(I.period)}</p>
+    ${bar(`調子のよい日（${MOODS[4]}以上）`, f.good.k, f.good.n, '#5E9E73')}
+    ${bar(`調子がいまいちの日（${MOODS[2]}以下）`, f.bad.k, f.bad.n, '#CF7B5C')}
+    ${I.overlap ? `<p class="wnote">「${esc(I.overlap.other)}」と同じ日に重なることが${I.overlap.dir === 'more' ? '多く' : '少なく'}、どちらが関わるかは分けられません。</p>` : ''}
+    <h3>当てはまった日</h3><p class="wsmall">日付を押すと、その日の記録が出ます。${f.lag ? '（条件はその前の日の記録で数えています）' : ''}</p>
+    <div class="wlbl">調子のよい日</div>${ds(f.good.days, 'g')}
+    <div class="wlbl">調子がいまいちの日</div>${ds(f.bad.days, 'b')}
+    <div id="wday"></div>
+    <details class="wdet"><summary>どうやって選んだか</summary>
+      <p>直近8週間の記録で、調子のよい日といまいちの日を比べ、当てはまった日の割合の差が30ポイント以上の項目を探しました（よい日 ${m.goodN}日・いまいちの日 ${m.badN}日・比べた組み合わせ ${m.comparisons}）。</p>
+      <p>そのうえで、体調の並びを何日かずらして重ね、偶然でも同じくらいの差が出ないかを確かめ、残った中から差のいちばん大きい1件を出しています。</p>
+      <p>関係が何もなくても、10回に1回ほどは何かが出ます。原因や効き目を示すものではありません。未記録の日は数えていません。</p></details>`;
+}
+function dayRecord(st, d) {
+  const r = st.days[d], w = st.weather[d], un = '<span class="wna">未記録</span>';
+  if (!r) return `<div class="wcard"><div class="wday-h">${face(null, 40)}<div><b>${md(d)}（${wdOf(d)}）</b><span>記録はありません</span></div></div></div>`;
+  const meal = k => { const it = r.meals[k].items; return it.length ? it.map(n => `${dishIcon(K.canonDish(n, st.cls))} ${esc(n)}`).join('、') : r.meals[k].none ? '食べていない' : un; };
+  const p = K.presDrop(st.weather, d);
+  return `<div class="wcard"><div class="wday-h">${face(r.mood, 48)}<div><b>${md(d)}（${wdOf(d)}）</b><span>調子：${r.mood ? MOODS[r.mood] : '未記録'}</span></div></div>
+    ${r.meals.d.items.length ? `<p class="wmain">${r.meals.d.items.map(n => `<span class="emo">${dishIcon(K.canonDish(n, st.cls))}</span><span>夕食：${esc(n)}</span>`).join('')}</p>` : ''}
+    <dl class="wkv"><dt>朝</dt><dd>${meal('b')}</dd><dt>昼</dt><dd>${meal('l')}</dd><dt>夜</dt><dd>${meal('d')}${r.dinnerTime ? `<small>（${r.dinnerTime}ごろ）</small>` : ''}</dd><dt>間食</dt><dd>${meal('s')}</dd>
+    <dt>睡眠</dt><dd>${r.sleep ? SLEEPL[r.sleep] : un}</dd><dt>仕事</dt><dd>${r.stress ? WORK[r.stress] : un}</dd>
+    <dt>顔のこわばり</dt><dd>${r.sym.face != null ? LV[r.sym.face] : un}</dd><dt>疲れ</dt><dd>${r.sym.tired != null ? LV[r.sym.tired] : un}</dd>
+    <dt>お酒</dt><dd>${r.tags.includes('お酒') ? 'あった' : r.tagsNo.includes('お酒') ? 'なかった' : un}</dd>
+    <dt>天気</dt><dd>${w ? `湿度 ${w.hum}%・気圧 ${w.pres}hPa${p != null ? `（前日比 ${p > 0 ? '+' : ''}${p}）` : ''}` : un}</dd></dl></div>`;
+}
+/* シート（下から出る画面）。ページに1つだけ作り、押されたものに応じて中身を入れる */
+function mountSheet(getState) {
+  const sh = document.createElement('div'); sh.className = 'wsheet'; sh.setAttribute('role', 'dialog'); sh.setAttribute('aria-modal', 'true');
+  sh.innerHTML = '<div class="win" id="win"></div>'; document.body.appendChild(sh);
+  const open = html => { document.getElementById('win').innerHTML = html; sh.classList.add('on'); document.getElementById('win').scrollTop = 0; };
+  const close = () => sh.classList.remove('on');
+  document.addEventListener('click', e => {
+    if (e.target === sh) return close();
+    const b = e.target.closest('[data-insight],[data-day],[data-close],[data-open-day]'); if (!b) return;
+    const S = getState();
+    if (b.dataset.close) close();
+    else if (b.dataset.insight) open(insightSheet(S.st, S.ins));
+    else if (b.dataset.openDay) open(`<div class="whead"><span class="wsmall">その日の記録</span><button class="wx" data-close="1">閉じる</button></div>${dayRecord(S.st, b.dataset.openDay)}`);
+    else if (b.dataset.day) { document.querySelectorAll('.wdates button').forEach(x => x.classList.toggle('sel', x === b));
+      const box = document.getElementById('wday'); box.innerHTML = dayRecord(S.st, b.dataset.day); box.scrollIntoView({ block:'nearest' }); }
+  });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+}
+function params() { const q = new URLSearchParams(location.search); return { kind: KINDS.some(k => k[0] === q.get('kind')) ? q.get('kind') : 'planted', seedI: Math.min(SEEDS.length - 1, Math.max(0, +q.get('seed') || 0)) }; }
+
+const api = { nameHTML, lineHTML, TODAY, SEEDS, KINDS, MOODS, sample, face, dishIcon, factIcon, icon, week, oneLine, insight, insightSheet, dayRecord, mountSheet, params, esc, md, wdOf };
+root.KaradaWeek = api;
+if (typeof module !== 'undefined' && module.exports) module.exports = api;
+})(typeof globalThis !== 'undefined' ? globalThis : this);
+
+</script>
+<script>
 "use strict";
 /* =========================================================
    からだ日和 — 触れるモックアップ（デモ）
    ・架空データのみ。外部送信なし。保存はこのブラウザ内（デモ用）だけ。
    ・表示する「気づき」はデモ用シナリオ。医学的分析ではありません。
    ========================================================= */
-const APP_VERSION = '1.0.1（初期版候補）';
+const APP_VERSION = '1.1.0';
 const SCHEMA = 1;                 // 記録の形の版。形を変えるときは MIGRATIONS に変換を足す
 const AUTO_CLASSIFY = false;      // 比較の自動分類・気づきの自動表示（検証が済むまで無効）
 const DEMO_TODAY = '2026-11-22';
@@ -1133,7 +1599,7 @@ VIEWS.settings=()=>{
   <div class="card"><div class="eyebrow">デモ</div><p class="sub" style="margin-top:6px">架空データで画面の動きを確かめられます。あなたの記録とは別に保存され、混ざりません。</p><button class="btn sec" style="margin-top:10px" data-a="enterDemo">デモを見る（架空データ）</button></div>
   <div class="card flat"><div class="eyebrow">このアプリについて</div><ul class="plain" style="margin-top:6px;color:var(--ink2);font-size:14px">
     <li>医学的な判断はしません。記録上の重なりは、行動のおすすめではありません。</li>
-    <li>比較の自動分類は、検証が済むまで表示しません。</li>
+    <li>振り返りの「ひとつの気づき」は、直近8週間の記録を決まった規則で数えたものです。原因や効き目を示すものではありません。</li>
     <li>端末の不具合や紛失、操作の誤りで記録を失う可能性があります。定期的なバックアップをおすすめします。</li></ul></div>
   </div></div>`;
 };
@@ -1736,6 +2202,53 @@ async function boot(){
   TODAY=jstToday(); render(true); fetchWeather();
   if('serviceWorker' in navigator && (location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1')){ navigator.serviceWorker.register('sw.js').catch(()=>{}); }
 }
+/* ===== 今週のようす（振り返りタブの最初の画面・案B） =====
+   - 記録は読むだけ。保存・変更・削除はしない（persist も kvPut も呼ばない）
+   - 自分の記録（MODE='real'）とデモ（架空データ）は、S() で切り替わる別々の記録。混ぜない
+   - 天気は自分の記録の天気（R.weather）だけを使う。デモでは天気の条件は「未記録」になる
+   - 集計・気づきは 集計.js（決まった規則・AIなし）。外部への送信なし */
+function wkSrc(){ const st=S(); return { days: st.days||{}, weather: MODE==='real' ? (R.weather||{}) : {}, cls:{}, today: TODAY }; }
+function wkTile(d){
+  const KW=KaradaWeek, lab=`${d.md}（${d.wd}） 調子：${d.mood?MOODS[d.mood]:'未記録'}${d.main?'・夕食：'+esc(d.main):''}`;
+  if(!d.rec) return `<button class="wk-tile wk-na" data-a="day" data-date="${d.date}" data-mood="none" aria-label="${d.md}（${d.wd}） 未記録"><span class="wk-d">${d.wd}<br>${d.md}</span>${KW.face(null,50)}<span class="wk-nt">未記録</span></button>`;
+  return `<button class="wk-tile" data-a="day" data-date="${d.date}" data-mood="${d.mood??'none'}" aria-label="${lab}"><span class="wk-d">${d.wd}<br>${d.md}</span>${KW.face(d.mood,50)}${d.main?`<span class="wk-meal">${KW.icon(KW.dishIcon(d.main),d.main)}</span>`:`<span class="wk-nt">${d.mood==null?'未記録':'　'}</span>`}</button>`;
+}
+VIEWS.insights=()=>{
+  const KW=KaradaWeek, src=wkSrc(), w=KW.week(src), L=KW.oneLine(w), ins=KW.insight(src), st=S();
+  return `<div class="wkv">
+  <section class="wk-hero"><h1>今週のようす</h1><small>${KW.md(w.from)} – ${KW.md(w.to)}</small><p id="oneline">${KW.lineHTML(L)}</p></section>
+  <div class="wk-grid" role="list" aria-label="7日分の調子と夕食">${w.days.map(wkTile).join('')}</div>
+  <section class="wk-sec" aria-label="今週の食卓"><div class="wk-kick">今週の食卓</div>
+    ${w.dishes.length?`<div class="wk-table">${w.dishes.slice(0,4).map(d=>`<div class="wk-dish">${KW.icon(d.icon,d.name)}<div><b>${KW.nameHTML(d.name)}</b><span class="wk-cnt">${d.count}回</span></div></div>`).join('')}</div>`:'<p class="wk-s">食事の記録はまだありません</p>'}</section>
+  ${ins.f?`<section class="wk-sec wk-card" aria-label="気づき"><div class="wk-kick">ひとつの気づき</div><div class="wk-pic">${KW.icon(ins.icon,ins.head)}</div>
+    <b>${KW.nameHTML(ins.head)}</b><p class="wk-s">${esc(ins.sub)}</p><span class="wk-p">${esc(ins.period)}</span>
+    <button class="wk-more" data-a="wkIns">根拠の日付を見る</button></section>`:''}
+  </div>${Object.keys(st.days).length?lookEntry(st):''}`;
+};
+VIEWS.wkIns=()=>{
+  const KW=KaradaWeek, src=wkSrc(), I=KW.insight(src);
+  if(!I.f) return `<div class="wkv"><div class="wk-sec"><p class="wk-s">今の記録では、はっきりした傾向はまだ見えていません。</p></div></div>`;
+  const f=I.f, m=I.A.meta;
+  const bar=(lab,k,n,col)=>`<div class="wb"><div class="wb-l"><span>${esc(lab)}</span><b>${n?`${n}日のうち ${k}日`:'記録なし'}</b></div><div class="wb-t"><i style="width:${n?k/n*100:0}%;background:${col}"></i></div></div>`;
+  const ds=(list,y)=>list.length?`<div class="wdates">${list.map(d=>`<button class="${y}" data-a="day" data-date="${d}">${KW.md(d)}<small>${KW.wdOf(d)}</small></button>`).join('')}</div>`:'<p class="wnone">なし</p>';
+  return `<div class="wkv"><div class="wk-sec">
+    <div class="wk-pic" style="margin:0 0 6px">${KW.icon(I.icon,I.head)}</div>
+    <h1 class="wk-h">${KW.nameHTML(I.head)}</h1><p class="wsub">${esc(I.sub)}</p>
+    <p class="wchip">${KW.md(m.from)}〜${KW.md(m.to)}・${esc(I.period)}</p>
+    ${bar('調子のよい日（よい以上）',f.good.k,f.good.n,'#5E9E73')}
+    ${bar('調子がいまいちの日（いまいち以下）',f.bad.k,f.bad.n,'#CF7B5C')}
+    ${I.overlap?`<p class="wnote">「${esc(I.overlap.other)}」と同じ日に重なることが${I.overlap.dir==='more'?'多く':'少なく'}、どちらが関わるかは分けられません。</p>`:''}</div>
+  <div class="wk-sec"><h2 class="wk-h2">当てはまった日</h2><p class="wsmall">日付を押すと、その日の記録を開きます。${f.lag?'（条件はその前の日の記録で数えています）':''}</p>
+    <div class="wlbl">調子のよい日</div>${ds(f.good.days,'g')}
+    <div class="wlbl">調子がいまいちの日</div>${ds(f.bad.days,'b')}</div>
+  <details class="wdet"><summary>どうやって選んだか</summary>
+    <p>直近8週間の記録で、調子のよい日といまいちの日を比べ、当てはまった日の割合の差が30ポイント以上の項目を探しました（よい日 ${m.goodN}日・いまいちの日 ${m.badN}日・比べた組み合わせ ${m.comparisons}）。</p>
+    <p>そのうえで、体調の並びを何日かずらして重ね、偶然でも同じくらいの差が出ないかを確かめ、残った中から差のいちばん大きい1件を出しています。</p>
+    <p>関係が何もなくても、10回に1回ほどは何かが出ます。原因や効き目を示すものではありません。未記録の日は数えていません。</p></details></div>`;
+};
+TITLES.wkIns='ひとつの気づき';
+A.wkIns=()=>go('wkIns');
+
 window.__R=R;
 window.__app={R,A,ui,go:(n,p)=>{ui.stack=[];go(n,p||{});},tab:t=>setTab(t),open:(d,o)=>openRec(d,o||{}),makeBackup,readBackupText,onFileChosen,doImport,parseWx,fetchWeather,jstToday,listSnapshots,mode:()=>MODE,today:()=>TODAY,S,flushDone:()=>R.writing||Promise.resolve()};
 window.__demo={store:()=>store,set:k=>A.scn({k}),go:(n,p)=>{ui.stack=[];go(n,p||{});},tab:t=>setTab(t),open:(d,o)=>openRec(d,o||{}),A,ui,reset:()=>{store={cur:'normal',s:{}};if(MODE!=='demo'){MODE='demo';TODAY=DEMO_TODAY;document.body.classList.add('demo-mode');}demoPersist();render(true);}};
